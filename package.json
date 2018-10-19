@@ -1,6 +1,6 @@
 {
   "name": "@berkeleybross/restclient",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Simple middleware based REST client",
   "main": "dist/restclient.js",
   "module": "dist/restclient.mjs",
