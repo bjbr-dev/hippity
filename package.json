@@ -1,0 +1,58 @@
+{
+  "name": "restclient",
+  "version": "0.1.0",
+  "description": "Simple middleware based REST client",
+  "main": "dist/restclient.js",
+  "module": "dist/restclient.mjs",
+  "jsnext:main": "dist/restclient.mjs",
+  "scripts": {
+    "build": "cross-env NODE_ENV=production BUILD=production npm-run-all clean -p build:* lint test --aggregate-output",
+    "build:rollup": "rollup -c",
+    "clean": "rimraf dist/*",
+    "lint": "eslint --ext .js --ignore-path .gitignore .",
+    "test": "cross-env NODE_ENV=test BUILD=production jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/berkeleybross/restclient.js.git"
+  },
+  "author": "berkeleybross",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/berkeleybross/restclient.js/issues"
+  },
+  "homepage": "https://github.com/berkeleybross/restclient.js#readme",
+  "dependencies": {
+    "axios": "^0.18.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^23.6.0",
+    "babel-preset-jest": "^23.2.0",
+    "babelrc-rollup": "^3.0.0",
+    "cross-env": "^5.2.0",
+    "eslint": "^5.7.0",
+    "eslint-config-prettier": "^3.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-prettier": "^3.0.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "jest": "^23.6.0",
+    "npm-run-all": "^4.1.3",
+    "prettier": "^1.14.3",
+    "rimraf": "^2.6.2",
+    "rollup": "^0.66.6",
+    "rollup-plugin-babel": "^4.0.3"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true
+  }
+}

@@ -1,0 +1,8 @@
+# Build artifacts
+.nuxt/
+build/
+dist/
+node_modules/
+
+# Invisible OS files
+*.DS_Store
