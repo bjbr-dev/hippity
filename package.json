@@ -8,6 +8,9 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "cross-env NODE_ENV=production BUILD=production npm-run-all clean -p build:* lint test --aggregate-output",
     "build:rollup": "rollup -c",
