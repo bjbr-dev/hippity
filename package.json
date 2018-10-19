@@ -1,10 +1,13 @@
 {
-  "name": "restclient",
+  "name": "@berkeleybross/restclient",
   "version": "0.1.0",
   "description": "Simple middleware based REST client",
   "main": "dist/restclient.js",
   "module": "dist/restclient.mjs",
   "jsnext:main": "dist/restclient.mjs",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "cross-env NODE_ENV=production BUILD=production npm-run-all clean -p build:* lint test --aggregate-output",
     "build:rollup": "rollup -c",
