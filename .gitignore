@@ -1,5 +1,7 @@
 # Build artifacts
+coverage/
 dist/
+es/
 node_modules/
 
 # Invisible OS files

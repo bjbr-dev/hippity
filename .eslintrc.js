@@ -1,15 +1,19 @@
 module.exports = {
   root: true,
   parserOptions: {
-    ecmaVersion: 2018,
+    ecmaVersion: 8,
     sourceType: 'module'
   },
-  env: { browser: true, node: true },
-  extends: ['plugin:prettier/recommended'],
-  plugins: [],
+  env: {
+    browser: true,
+    commonjs: true,
+    es6: true,
+    'jest/globals': true
+  },
+  extends: ['standard', 'plugin:prettier/recommended'],
+  plugins: ['jest'],
   globals: {},
   rules: {
-    // This claims to be the default, but doesn't currently enforce without it be explicitly set.
     quotes: ['error', 'single', { avoidEscape: true }]
   }
 }

@@ -122,7 +122,7 @@ export class RestClient {
       return result.body
     }
 
-    if (result.status == 404 || result.status == 410) {
+    if (result.status === 404 || result.status === 410) {
       return result.body
     }
 
