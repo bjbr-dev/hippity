@@ -14,7 +14,10 @@ function buildParams(
   }
 }
 
-export function resolve(path: string, params?: RouteValues): string {
+export function resolve(
+  path: string,
+  params?: RouteValues | undefined | null
+): string {
   if (typeof path !== 'string') {
     throw new TypeError('Path must be a string')
   }
@@ -82,13 +85,13 @@ export const normalizeMethodMiddleware: Middleware = (context, next) => {
 }
 
 export const resolvingMiddleware = (
-  resolve: (path: string, params: RouteValues) => string
+  resolve: (path: string, params: RouteValues | undefined) => string
 ): Middleware => {
   return function(context, next) {
     if (Array.isArray(context.uri)) {
       return next({
         ...context,
-        uri: resolve(context.uri[0] as string, context.uri[1] as RouteValues)
+        uri: resolve(context.uri[0], context.uri[1])
       })
     } else {
       return next()

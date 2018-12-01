@@ -26,7 +26,7 @@ describe('resolve', () => {
     ['~/foo/bar', { foo: 'bar' }, '/foo/bar?foo=bar']
   ])('Removes leading tilde (%j, %j, %j)', (path, params, expected) => {
     // Act
-    var result = resolve(path, params)
+    const result = resolve(path, params)
 
     // Assert
     expect(result).toBe(expected)
@@ -36,7 +36,7 @@ describe('resolve', () => {
     'Does nothing if params is undefined (%j)',
     params => {
       // Act
-      var result = resolve('/foo', params)
+      const result = resolve('/foo', params)
 
       // Assert
       expect(result).toBe('/foo')
@@ -45,7 +45,7 @@ describe('resolve', () => {
 
   it('Url encodes query parameters', () => {
     // Act
-    var result = resolve('/foo', {
+    const result = resolve('/foo', {
       'this should': "be url encoded ;,/?:@&=+$ -_.!~*'() #"
     })
 
@@ -57,7 +57,7 @@ describe('resolve', () => {
 
   it('Allows multiple query parameters', () => {
     // Act
-    var result = resolve('/foo', { a: 1, b: 2 })
+    const result = resolve('/foo', { a: 1, b: 2 })
 
     // Assert
     expect(result).toBe('/foo?a=1&b=2')
@@ -65,7 +65,7 @@ describe('resolve', () => {
 
   it('Allows property to be an array', () => {
     // Act
-    var result = resolve('/foo', { a: [1, 2, 3] })
+    const result = resolve('/foo', { a: [1, 2, 3] })
 
     // Assert
     expect(result).toBe('/foo?a=1&a=2&a=3')
@@ -79,7 +79,7 @@ describe('resolve', () => {
     ['/{foo}/{foo}/baz', '/bar/bar/baz']
   ])('Replaces named placeholders (%j %j)', (path, expected) => {
     // Act
-    var result = resolve('/{foo}', { foo: 'bar' })
+    const result = resolve('/{foo}', { foo: 'bar' })
 
     // Assert
     expect(result).toBe('/bar')
@@ -87,7 +87,7 @@ describe('resolve', () => {
 
   it('Url encodes parameters', () => {
     // Act
-    var result = resolve('/{foo}', {
+    const result = resolve('/{foo}', {
       foo: "should be url encoded ;,/?:@&=+$ -_.!~*'() #"
     })
 
@@ -99,7 +99,7 @@ describe('resolve', () => {
 
   it('Puts remaining parameters in query string', () => {
     // Act
-    var result = resolve('/{foo}', {
+    const result = resolve('/{foo}', {
       foo: 'bar',
       baz: 'qux'
     })
@@ -110,7 +110,7 @@ describe('resolve', () => {
 
   it('Adds extra query parameters if path contains query string', () => {
     // Act
-    var result = resolve('/foo?bar=baz', { baz: 'qux' })
+    const result = resolve('/foo?bar=baz', { baz: 'qux' })
 
     // Assert
     expect(result).toBe('/foo?bar=baz&baz=qux')
@@ -120,7 +120,7 @@ describe('resolve', () => {
 describe('normalizeMethodMiddleware', () => {
   it('Does nothing if method already exists', () => {
     // Arrange
-    let context = { GET: 'url', method: 'POST', uri: 'other' }
+    const context = { GET: 'url', method: 'POST', uri: 'other' }
 
     // Act
     normalizeMethodMiddleware(context, () => ({}))
@@ -133,7 +133,7 @@ describe('normalizeMethodMiddleware', () => {
     'Normalizes methods',
     method => {
       // Arrange
-      let context = { [method]: 'url' }
+      const context = { [method]: 'url' }
 
       // Act
       normalizeMethodMiddleware(context, () => ({}))
@@ -145,7 +145,7 @@ describe('normalizeMethodMiddleware', () => {
 
   it('Only normalizes one method', () => {
     // Arrange
-    let context = { GET: 'url', POST: 'other' }
+    const context = { GET: 'url', POST: 'other' }
 
     // Act
     normalizeMethodMiddleware(context, () => ({}))
