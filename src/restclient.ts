@@ -48,9 +48,7 @@ export class RestClient {
       throw new Error('Middleware must be a function')
     }
 
-    let newStack = this.stack.slice()
-    newStack.push(middleware)
-    return new RestClient(newStack)
+    return new RestClient([...this.stack, middleware])
   }
 
   useIf(predicate: boolean, middleware: Middleware) {
