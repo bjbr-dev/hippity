@@ -4,3 +4,6 @@ extends:
   - 'tslint-config-prettier'
 rules:
   strict-type-predicates: false
+  no-empty:
+    - true
+    - 'allow-empty-functions'
