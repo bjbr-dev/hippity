@@ -4,6 +4,7 @@ import {
   resolvingMiddleware,
   defaultUriRootMiddleware
 } from './uriHelpers'
+import { HttpResponse } from './restclient'
 
 describe('resolve', () => {
   test.each([[[]], [null], [undefined], ['header']])(
@@ -25,7 +26,7 @@ describe('resolve', () => {
     ['~/foo/bar', { foo: 'bar' }, '/foo/bar?foo=bar']
   ])('Removes leading tilde (%j, %j, %j)', (path, params, expected) => {
     // Act
-    var result = resolve(path, params)
+    const result = resolve(path, params)
 
     // Assert
     expect(result).toBe(expected)
@@ -35,7 +36,7 @@ describe('resolve', () => {
     'Does nothing if params is undefined (%j)',
     params => {
       // Act
-      var result = resolve('/foo', params)
+      const result = resolve('/foo', params)
 
       // Assert
       expect(result).toBe('/foo')
@@ -44,7 +45,7 @@ describe('resolve', () => {
 
   it('Url encodes query parameters', () => {
     // Act
-    var result = resolve('/foo', {
+    const result = resolve('/foo', {
       'this should': "be url encoded ;,/?:@&=+$ -_.!~*'() #"
     })
 
@@ -56,7 +57,7 @@ describe('resolve', () => {
 
   it('Allows multiple query parameters', () => {
     // Act
-    var result = resolve('/foo', { a: 1, b: 2 })
+    const result = resolve('/foo', { a: 1, b: 2 })
 
     // Assert
     expect(result).toBe('/foo?a=1&b=2')
@@ -64,7 +65,7 @@ describe('resolve', () => {
 
   it('Allows property to be an array', () => {
     // Act
-    var result = resolve('/foo', { a: [1, 2, 3] })
+    const result = resolve('/foo', { a: [1, 2, 3] })
 
     // Assert
     expect(result).toBe('/foo?a=1&a=2&a=3')
@@ -78,7 +79,7 @@ describe('resolve', () => {
     ['/{foo}/{foo}/baz', '/bar/bar/baz']
   ])('Replaces named placeholders (%j %j)', (path, expected) => {
     // Act
-    var result = resolve('/{foo}', { foo: 'bar' })
+    const result = resolve('/{foo}', { foo: 'bar' })
 
     // Assert
     expect(result).toBe('/bar')
@@ -86,7 +87,7 @@ describe('resolve', () => {
 
   it('Url encodes parameters', () => {
     // Act
-    var result = resolve('/{foo}', {
+    const result = resolve('/{foo}', {
       foo: "should be url encoded ;,/?:@&=+$ -_.!~*'() #"
     })
 
@@ -98,7 +99,7 @@ describe('resolve', () => {
 
   it('Puts remaining parameters in query string', () => {
     // Act
-    var result = resolve('/{foo}', {
+    const result = resolve('/{foo}', {
       foo: 'bar',
       baz: 'qux'
     })
@@ -109,7 +110,7 @@ describe('resolve', () => {
 
   it('Adds extra query parameters if path contains query string', () => {
     // Act
-    var result = resolve('/foo?bar=baz', { baz: 'qux' })
+    const result = resolve('/foo?bar=baz', { baz: 'qux' })
 
     // Assert
     expect(result).toBe('/foo?bar=baz&baz=qux')
@@ -119,38 +120,38 @@ describe('resolve', () => {
 describe('normalizeMethodMiddleware', () => {
   it('Does nothing if method already exists', () => {
     // Arrange
-    let context = { GET: 'url', method: 'POST', uri: 'other' }
+    const request = { GET: 'url', method: 'POST', uri: 'other' }
 
     // Act
-    normalizeMethodMiddleware(context, () => ({}))
+    normalizeMethodMiddleware(request, () => ({}))
 
     // Assert
-    expect(context).toEqual({ GET: 'url', method: 'POST', uri: 'other' })
+    expect(request).toEqual({ GET: 'url', method: 'POST', uri: 'other' })
   })
 
   it.each([['HEAD', 'GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE']])(
     'Normalizes methods',
     method => {
       // Arrange
-      let context = { [method]: 'url' }
+      const request = { [method]: 'url' }
 
       // Act
-      normalizeMethodMiddleware(context, () => ({}))
+      normalizeMethodMiddleware(request, () => ({}))
 
       // Assert
-      expect(context).toEqual({ method: method, uri: 'url' })
+      expect(request).toEqual({ method: method, uri: 'url' })
     }
   )
 
   it('Only normalizes one method', () => {
     // Arrange
-    let context = { GET: 'url', POST: 'other' }
+    const request = { GET: 'url', POST: 'other' }
 
     // Act
-    normalizeMethodMiddleware(context, () => ({}))
+    normalizeMethodMiddleware(request, () => ({}))
 
     // Assert
-    expect(context).toEqual({ method: 'GET', uri: 'url', POST: 'other' })
+    expect(request).toEqual({ method: 'GET', uri: 'url', POST: 'other' })
   })
 })
 
@@ -159,105 +160,75 @@ describe('resolvingMiddleware', () => {
     // Arrange
     let sut = resolvingMiddleware(resolve)
     let next = jest.fn(() => ({ result: true }))
-    let context = { uri: 'uri' }
+    let request = { uri: 'uri' }
 
     // Act
-    let result = sut(context, next)
+    let result = sut(request, next)
 
     // Assert
     expect(result).toEqual({ result: true })
     expect(next).toBeCalledWith()
-    expect(context).toEqual({ uri: 'uri' })
+    expect(request).toEqual({ uri: 'uri' })
   })
 
   it('Does nothing if uri is not an array or object', () => {
     // Arrange
     let sut = resolvingMiddleware(resolve)
     let next = jest.fn(() => ({ result: true }))
-    let context = { uri: function() {} }
+    let request: any = { uri: function() {} }
 
     // Act
-    let result = sut(context, next)
+    let result = sut(request, next)
 
     // Assert
     expect(result).toEqual({ result: true })
     expect(next).toBeCalledWith()
-    expect(context).toEqual({ uri: expect.any(Function) })
+    expect(request).toEqual({ uri: expect.any(Function) })
   })
 
   it('Resolves array with just a path', () => {
     // Arrange
     let sut = resolvingMiddleware(resolve)
     let next = jest.fn(() => ({ result: true }))
-    let context = { uri: ['path'] }
+    let request: any = { uri: ['path'] }
 
     // Act
-    let result = sut(context, next)
+    let result = sut(request, next)
 
     // Assert
     expect(result).toEqual({ result: true })
     expect(next).toBeCalledWith({ uri: 'path' })
-    expect(context).toEqual({ uri: ['path'] })
+    expect(request).toEqual({ uri: ['path'] })
   })
 
   it('Resolves array with just a path', () => {
     // Arrange
     let sut = resolvingMiddleware(resolve)
     let next = jest.fn(() => ({ result: true }))
-    let context = { uri: ['path'] }
+    let request: any = { uri: ['path'] }
 
     // Act
-    let result = sut(context, next)
+    let result = sut(request, next)
 
     // Assert
     expect(result).toEqual({ result: true })
     expect(next).toBeCalledWith({ uri: 'path' })
-    expect(context).toEqual({ uri: ['path'] })
+    expect(request).toEqual({ uri: ['path'] })
   })
 
   it('Resolves array with path and parameters', () => {
     // Arrange
     let sut = resolvingMiddleware(resolve)
     let next = jest.fn(() => ({ result: true }))
-    let context = { uri: ['path', { foo: 'bar' }] }
+    let request: any = { uri: ['path', { foo: 'bar' }] }
 
     // Act
-    let result = sut(context, next)
+    let result = sut(request, next)
 
     // Assert
     expect(result).toEqual({ result: true })
     expect(next).toBeCalledWith({ uri: 'path?foo=bar' })
-    expect(context).toEqual({ uri: ['path', { foo: 'bar' }] })
-  })
-
-  it('Resolves object with route', () => {
-    // Arrange
-    let sut = resolvingMiddleware(resolve)
-    let next = jest.fn(() => ({ result: true }))
-    let context = { uri: { route: 'path' } }
-
-    // Act
-    let result = sut(context, next)
-
-    // Assert
-    expect(result).toEqual({ result: true })
-    expect(next).toBeCalledWith({ uri: 'path' })
-    expect(context).toEqual({ uri: { route: 'path' } })
-  })
-
-  it('Resolves object with route and parameters', () => {
-    // Arrange
-    let sut = resolvingMiddleware(resolve)
-    let next = jest.fn(() => ({ result: true }))
-    let context = { uri: { route: 'path', params: { foo: 'bar' } } }
-
-    // Act
-    let result = sut(context, next)
-
-    // Assert
-    expect(result).toEqual({ result: true })
-    expect(next).toBeCalledWith({ uri: 'path?foo=bar' })
-    expect(context).toEqual({ uri: { route: 'path', params: { foo: 'bar' } } })
+    expect(request).toEqual({ uri: ['path', { foo: 'bar' }] })
   })
 })
 
@@ -265,39 +236,39 @@ describe('defaultUriRootMiddleware', () => {
   it('Adds in default root', () => {
     // Arrange
     let sut = defaultUriRootMiddleware('www.root.com')
-    let context = {}
+    let request = {}
 
     // Act
-    let result = sut(context, c => c)
+    let result = sut(request, r => r as HttpResponse)
 
     // Assert
-    expect(context).toEqual({})
+    expect(request).toEqual({})
     expect(result).toEqual({ uriRoot: 'www.root.com' })
   })
 
   it('Does not override explicit root', () => {
     // Arrange
     let sut = defaultUriRootMiddleware('www.root.com')
-    let context = { uriRoot: 'explicit' }
+    let request = { uriRoot: 'explicit' }
 
     // Act
-    let result = sut(context, c => c)
+    let result = sut(request, r => r as HttpResponse)
 
     // Assert
-    expect(context).toEqual({ uriRoot: 'explicit' })
+    expect(request).toEqual({ uriRoot: 'explicit' })
     expect(result).toEqual({ uriRoot: 'explicit' })
   })
 
   it('Does not override null root', () => {
     // Arrange
     let sut = defaultUriRootMiddleware('www.root.com')
-    let context = { uriRoot: null }
+    let request = { uriRoot: null }
 
     // Act
-    let result = sut(context, c => c)
+    let result = sut(request, r => r as HttpResponse)
 
     // Assert
-    expect(context).toEqual({ uriRoot: null })
+    expect(request).toEqual({ uriRoot: null })
     expect(result).toEqual({ uriRoot: null })
   })
 })
