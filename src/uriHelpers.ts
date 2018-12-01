@@ -60,8 +60,8 @@ export function resolve(
   return path + (path.indexOf('?') < 0 ? '?' : '&') + queryParameters.join('&')
 }
 
-export const normalizeMethodMiddleware: Middleware = (context, next) => {
-  if (!context.method) {
+export const normalizeMethodMiddleware: Middleware = (request, next) => {
+  if (!request.method) {
     for (let method of [
       'HEAD',
       'GET',
@@ -71,10 +71,10 @@ export const normalizeMethodMiddleware: Middleware = (context, next) => {
       'PATCH',
       'DELETE'
     ]) {
-      if (context.hasOwnProperty(method)) {
-        context.method = method
-        context.uri = context[method]
-        delete context[method]
+      if (request.hasOwnProperty(method)) {
+        request.method = method
+        request.uri = request[method]
+        delete request[method]
 
         break
       }
@@ -87,11 +87,11 @@ export const normalizeMethodMiddleware: Middleware = (context, next) => {
 export const resolvingMiddleware = (
   resolve: (path: string, params: RouteValues | undefined) => string
 ): Middleware => {
-  return function(context, next) {
-    if (Array.isArray(context.uri)) {
+  return function(request, next) {
+    if (Array.isArray(request.uri)) {
       return next({
-        ...context,
-        uri: resolve(context.uri[0], context.uri[1])
+        ...request,
+        uri: resolve(request.uri[0], request.uri[1])
       })
     } else {
       return next()
@@ -100,7 +100,7 @@ export const resolvingMiddleware = (
 }
 
 export const defaultUriRootMiddleware = (root: string): Middleware => {
-  return function(context, next) {
-    return next({ uriRoot: root, ...context })
+  return function(request, next) {
+    return next({ uriRoot: root, ...request })
   }
 }

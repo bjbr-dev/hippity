@@ -18,7 +18,7 @@ const axiosOptions = {
 
 const axios = Axios.create(axiosOptions)
 
-export const axiosMiddleware: Middleware = async function(context) {
+export const axiosMiddleware: Middleware = async function(request) {
   let {
     // The root of the uri, if uri is not absolute
     uriRoot,
@@ -95,7 +95,7 @@ export const axiosMiddleware: Middleware = async function(context) {
     // `cancelToken` specifies a cancel token that can be used to cancel the request
     // (see Cancellation section below for details)
     cancelToken
-  } = context
+  } = request
 
   let axiosRequest = {
     url: uri,

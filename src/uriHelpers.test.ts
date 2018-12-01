@@ -120,38 +120,38 @@ describe('resolve', () => {
 describe('normalizeMethodMiddleware', () => {
   it('Does nothing if method already exists', () => {
     // Arrange
-    const context = { GET: 'url', method: 'POST', uri: 'other' }
+    const request = { GET: 'url', method: 'POST', uri: 'other' }
 
     // Act
-    normalizeMethodMiddleware(context, () => ({}))
+    normalizeMethodMiddleware(request, () => ({}))
 
     // Assert
-    expect(context).toEqual({ GET: 'url', method: 'POST', uri: 'other' })
+    expect(request).toEqual({ GET: 'url', method: 'POST', uri: 'other' })
   })
 
   it.each([['HEAD', 'GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE']])(
     'Normalizes methods',
     method => {
       // Arrange
-      const context = { [method]: 'url' }
+      const request = { [method]: 'url' }
 
       // Act
-      normalizeMethodMiddleware(context, () => ({}))
+      normalizeMethodMiddleware(request, () => ({}))
 
       // Assert
-      expect(context).toEqual({ method: method, uri: 'url' })
+      expect(request).toEqual({ method: method, uri: 'url' })
     }
   )
 
   it('Only normalizes one method', () => {
     // Arrange
-    const context = { GET: 'url', POST: 'other' }
+    const request = { GET: 'url', POST: 'other' }
 
     // Act
-    normalizeMethodMiddleware(context, () => ({}))
+    normalizeMethodMiddleware(request, () => ({}))
 
     // Assert
-    expect(context).toEqual({ method: 'GET', uri: 'url', POST: 'other' })
+    expect(request).toEqual({ method: 'GET', uri: 'url', POST: 'other' })
   })
 })
 
@@ -160,75 +160,75 @@ describe('resolvingMiddleware', () => {
     // Arrange
     let sut = resolvingMiddleware(resolve)
     let next = jest.fn(() => ({ result: true }))
-    let context = { uri: 'uri' }
+    let request = { uri: 'uri' }
 
     // Act
-    let result = sut(context, next)
+    let result = sut(request, next)
 
     // Assert
     expect(result).toEqual({ result: true })
     expect(next).toBeCalledWith()
-    expect(context).toEqual({ uri: 'uri' })
+    expect(request).toEqual({ uri: 'uri' })
   })
 
   it('Does nothing if uri is not an array or object', () => {
     // Arrange
     let sut = resolvingMiddleware(resolve)
     let next = jest.fn(() => ({ result: true }))
-    let context: any = { uri: function() {} }
+    let request: any = { uri: function() {} }
 
     // Act
-    let result = sut(context, next)
+    let result = sut(request, next)
 
     // Assert
     expect(result).toEqual({ result: true })
     expect(next).toBeCalledWith()
-    expect(context).toEqual({ uri: expect.any(Function) })
+    expect(request).toEqual({ uri: expect.any(Function) })
   })
 
   it('Resolves array with just a path', () => {
     // Arrange
     let sut = resolvingMiddleware(resolve)
     let next = jest.fn(() => ({ result: true }))
-    let context: any = { uri: ['path'] }
+    let request: any = { uri: ['path'] }
 
     // Act
-    let result = sut(context, next)
+    let result = sut(request, next)
 
     // Assert
     expect(result).toEqual({ result: true })
     expect(next).toBeCalledWith({ uri: 'path' })
-    expect(context).toEqual({ uri: ['path'] })
+    expect(request).toEqual({ uri: ['path'] })
   })
 
   it('Resolves array with just a path', () => {
     // Arrange
     let sut = resolvingMiddleware(resolve)
     let next = jest.fn(() => ({ result: true }))
-    let context: any = { uri: ['path'] }
+    let request: any = { uri: ['path'] }
 
     // Act
-    let result = sut(context, next)
+    let result = sut(request, next)
 
     // Assert
     expect(result).toEqual({ result: true })
     expect(next).toBeCalledWith({ uri: 'path' })
-    expect(context).toEqual({ uri: ['path'] })
+    expect(request).toEqual({ uri: ['path'] })
   })
 
   it('Resolves array with path and parameters', () => {
     // Arrange
     let sut = resolvingMiddleware(resolve)
     let next = jest.fn(() => ({ result: true }))
-    let context: any = { uri: ['path', { foo: 'bar' }] }
+    let request: any = { uri: ['path', { foo: 'bar' }] }
 
     // Act
-    let result = sut(context, next)
+    let result = sut(request, next)
 
     // Assert
     expect(result).toEqual({ result: true })
     expect(next).toBeCalledWith({ uri: 'path?foo=bar' })
-    expect(context).toEqual({ uri: ['path', { foo: 'bar' }] })
+    expect(request).toEqual({ uri: ['path', { foo: 'bar' }] })
   })
 })
 
@@ -236,39 +236,39 @@ describe('defaultUriRootMiddleware', () => {
   it('Adds in default root', () => {
     // Arrange
     let sut = defaultUriRootMiddleware('www.root.com')
-    let context = {}
+    let request = {}
 
     // Act
-    let result = sut(context, c => <HttpResponse>c)
+    let result = sut(request, r => r as HttpResponse)
 
     // Assert
-    expect(context).toEqual({})
+    expect(request).toEqual({})
     expect(result).toEqual({ uriRoot: 'www.root.com' })
   })
 
   it('Does not override explicit root', () => {
     // Arrange
     let sut = defaultUriRootMiddleware('www.root.com')
-    let context = { uriRoot: 'explicit' }
+    let request = { uriRoot: 'explicit' }
 
     // Act
-    let result = sut(context, c => <HttpResponse>c)
+    let result = sut(request, r => r as HttpResponse)
 
     // Assert
-    expect(context).toEqual({ uriRoot: 'explicit' })
+    expect(request).toEqual({ uriRoot: 'explicit' })
     expect(result).toEqual({ uriRoot: 'explicit' })
   })
 
   it('Does not override null root', () => {
     // Arrange
     let sut = defaultUriRootMiddleware('www.root.com')
-    let context = { uriRoot: null }
+    let request = { uriRoot: null }
 
     // Act
-    let result = sut(context, c => <HttpResponse>c)
+    let result = sut(request, r => r as HttpResponse)
 
     // Assert
-    expect(context).toEqual({ uriRoot: null })
+    expect(request).toEqual({ uriRoot: null })
     expect(result).toEqual({ uriRoot: null })
   })
 })

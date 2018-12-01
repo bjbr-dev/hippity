@@ -69,7 +69,7 @@ describe('RestClient', () => {
       expect(order).toEqual('123')
     })
 
-    it('Lets middleware switch context', () => {
+    it('Lets middleware switch request', () => {
       // Arrange
       let middleware = jest.fn((c, n) => ({}))
       let sut = new RestClient()
@@ -101,7 +101,7 @@ describe('RestClient', () => {
       expect(middleware).not.toBeCalled()
     })
 
-    it('Uses current context if middleware calls next without a context', () => {
+    it('Uses current request if middleware calls next without a request', () => {
       // Arrange
       let middleware = jest.fn((c, n) => ({}))
 

@@ -12,7 +12,7 @@ export const defaultHeaderMiddleware = (defaultHeaders: {
   }
 
   return (request, next) => {
-    let nextContext = {
+    return next({
       ...request,
       headers: {
         ...defaultHeaders['common'],
@@ -21,8 +21,6 @@ export const defaultHeaderMiddleware = (defaultHeaders: {
           : null),
         ...request.headers
       }
-    }
-
-    return next(nextContext)
+    })
   }
 }
