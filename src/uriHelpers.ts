@@ -1,4 +1,10 @@
-function buildParams(prefix, obj, add) {
+import { Middleware, RouteValue, RouteValues } from './restclient'
+
+function buildParams(
+  prefix: string,
+  obj: RouteValue | RouteValue[],
+  add: (prefix: string, obj: RouteValue) => void
+) {
   if (Array.isArray(obj)) {
     for (let i = 0; i < obj.length; i++) {
       add(prefix, obj[i])
@@ -8,7 +14,7 @@ function buildParams(prefix, obj, add) {
   }
 }
 
-export function resolve(path, params) {
+export function resolve(path: string, params?: RouteValues): string {
   if (typeof path !== 'string') {
     throw new TypeError('Path must be a string')
   }
@@ -21,12 +27,12 @@ export function resolve(path, params) {
     return path
   }
 
-  const queryParameters = []
-  let pushQueryParameter = function(key, value) {
+  const queryParameters: string[] = []
+  let pushQueryParameter = function(key: string, value: RouteValue) {
     queryParameters.push(
       encodeURIComponent(key) +
         '=' +
-        encodeURIComponent(value == null ? '' : value)
+        encodeURIComponent(value == null ? '' : value.toString())
     )
   }
 
@@ -36,7 +42,7 @@ export function resolve(path, params) {
       const placeholder = `{${key}}`
 
       if (path.indexOf(placeholder) !== -1) {
-        path = path.replace(placeholder, encodeURIComponent(value))
+        path = path.replace(placeholder, encodeURIComponent(value as string))
       } else {
         buildParams(key, value, pushQueryParameter)
       }
@@ -51,7 +57,7 @@ export function resolve(path, params) {
   return path + (path.indexOf('?') < 0 ? '?' : '&') + queryParameters.join('&')
 }
 
-export function normalizeMethodMiddleware(context, next) {
+export const normalizeMethodMiddleware: Middleware = (context, next) => {
   if (!context.method) {
     for (let method of [
       'HEAD',
@@ -75,20 +81,22 @@ export function normalizeMethodMiddleware(context, next) {
   return next()
 }
 
-export function resolvingMiddleware(resolve) {
+export const resolvingMiddleware = (
+  resolve: (path: string, params: RouteValues) => string
+): Middleware => {
   return function(context, next) {
     if (Array.isArray(context.uri)) {
-      return next({ ...context, uri: resolve(context.uri[0], context.uri[1]) })
-    } else if (typeof context.uri === 'object') {
-      let uri = resolve(context.uri.route, context.uri.params)
-      return next({ ...context, uri: uri })
+      return next({
+        ...context,
+        uri: resolve(context.uri[0] as string, context.uri[1] as RouteValues)
+      })
     } else {
       return next()
     }
   }
 }
 
-export function defaultUriRootMiddleware(root) {
+export const defaultUriRootMiddleware = (root: string): Middleware => {
   return function(context, next) {
     return next({ uriRoot: root, ...context })
   }

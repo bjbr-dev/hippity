@@ -4,6 +4,7 @@ import {
   resolvingMiddleware,
   defaultUriRootMiddleware
 } from './uriHelpers'
+import { HttpResponse } from './restclient'
 
 describe('resolve', () => {
   test.each([[[]], [null], [undefined], ['header']])(
@@ -174,7 +175,7 @@ describe('resolvingMiddleware', () => {
     // Arrange
     let sut = resolvingMiddleware(resolve)
     let next = jest.fn(() => ({ result: true }))
-    let context = { uri: function() {} }
+    let context: any = { uri: function() {} }
 
     // Act
     let result = sut(context, next)
@@ -189,7 +190,7 @@ describe('resolvingMiddleware', () => {
     // Arrange
     let sut = resolvingMiddleware(resolve)
     let next = jest.fn(() => ({ result: true }))
-    let context = { uri: ['path'] }
+    let context: any = { uri: ['path'] }
 
     // Act
     let result = sut(context, next)
@@ -204,7 +205,7 @@ describe('resolvingMiddleware', () => {
     // Arrange
     let sut = resolvingMiddleware(resolve)
     let next = jest.fn(() => ({ result: true }))
-    let context = { uri: ['path'] }
+    let context: any = { uri: ['path'] }
 
     // Act
     let result = sut(context, next)
@@ -219,7 +220,7 @@ describe('resolvingMiddleware', () => {
     // Arrange
     let sut = resolvingMiddleware(resolve)
     let next = jest.fn(() => ({ result: true }))
-    let context = { uri: ['path', { foo: 'bar' }] }
+    let context: any = { uri: ['path', { foo: 'bar' }] }
 
     // Act
     let result = sut(context, next)
@@ -228,36 +229,6 @@ describe('resolvingMiddleware', () => {
     expect(result).toEqual({ result: true })
     expect(next).toBeCalledWith({ uri: 'path?foo=bar' })
     expect(context).toEqual({ uri: ['path', { foo: 'bar' }] })
-  })
-
-  it('Resolves object with route', () => {
-    // Arrange
-    let sut = resolvingMiddleware(resolve)
-    let next = jest.fn(() => ({ result: true }))
-    let context = { uri: { route: 'path' } }
-
-    // Act
-    let result = sut(context, next)
-
-    // Assert
-    expect(result).toEqual({ result: true })
-    expect(next).toBeCalledWith({ uri: 'path' })
-    expect(context).toEqual({ uri: { route: 'path' } })
-  })
-
-  it('Resolves object with route and parameters', () => {
-    // Arrange
-    let sut = resolvingMiddleware(resolve)
-    let next = jest.fn(() => ({ result: true }))
-    let context = { uri: { route: 'path', params: { foo: 'bar' } } }
-
-    // Act
-    let result = sut(context, next)
-
-    // Assert
-    expect(result).toEqual({ result: true })
-    expect(next).toBeCalledWith({ uri: 'path?foo=bar' })
-    expect(context).toEqual({ uri: { route: 'path', params: { foo: 'bar' } } })
   })
 })
 
@@ -268,7 +239,7 @@ describe('defaultUriRootMiddleware', () => {
     let context = {}
 
     // Act
-    let result = sut(context, c => c)
+    let result = sut(context, c => <HttpResponse>c)
 
     // Assert
     expect(context).toEqual({})
@@ -281,7 +252,7 @@ describe('defaultUriRootMiddleware', () => {
     let context = { uriRoot: 'explicit' }
 
     // Act
-    let result = sut(context, c => c)
+    let result = sut(context, c => <HttpResponse>c)
 
     // Assert
     expect(context).toEqual({ uriRoot: 'explicit' })
@@ -294,7 +265,7 @@ describe('defaultUriRootMiddleware', () => {
     let context = { uriRoot: null }
 
     // Act
-    let result = sut(context, c => c)
+    let result = sut(context, c => <HttpResponse>c)
 
     // Assert
     expect(context).toEqual({ uriRoot: null })

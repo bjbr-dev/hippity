@@ -1,5 +1,35 @@
+export type RouteValue = string | number
+export type RouteValues = { [name: string]: RouteValue | RouteValue[] }
+export type Route = string | [string, RouteValues?]
+
+export type HttpRequest = {
+  method?: string
+  uri?: Route
+  message?: string
+  headers?: Object
+  body?: any
+  [key: string]: any
+}
+
+export type HttpResponse = {
+  status?: number
+  message?: string
+  headers?: Object
+  body?: any
+  [key: string]: any
+}
+
+export type MiddlewareDelegate = (
+  request?: HttpRequest
+) => Promise<HttpResponse> | HttpResponse
+
+export type Middleware = (
+  request: HttpRequest,
+  next: MiddlewareDelegate
+) => Promise<HttpResponse> | HttpResponse
+
 export class RestClient {
-  constructor(stack = []) {
+  constructor(private stack: Middleware[] = []) {
     if (!Array.isArray(stack)) {
       throw new TypeError('Middleware stack must be an array')
     }
@@ -13,7 +43,7 @@ export class RestClient {
     this.stack = stack
   }
 
-  use(middleware) {
+  use(middleware: Middleware) {
     if (typeof middleware !== 'function') {
       throw new Error('Middleware must be a function')
     }
@@ -23,7 +53,7 @@ export class RestClient {
     return new RestClient(newStack)
   }
 
-  useIf(predicate, middleware) {
+  useIf(predicate: boolean, middleware: Middleware) {
     if (predicate === true) {
       return this.use(middleware)
     }
@@ -31,94 +61,102 @@ export class RestClient {
     return this
   }
 
-  send(context) {
+  send(request: HttpRequest): Promise<HttpResponse> | HttpResponse {
     const middlewares = this.stack
 
-    return dispatch(context, 0)
+    return dispatch(request, 0)
 
-    function dispatch(currentContext, index) {
+    function dispatch(currentRequest: HttpRequest, index: number) {
       if (index === middlewares.length) {
         throw new Error(
           'Reached end of pipeline. Use a middleware which terminates the pipeline.'
         )
       } else {
-        let next = function(nextContext) {
-          if (!nextContext) {
-            nextContext = currentContext
+        let next: MiddlewareDelegate = function(request?: HttpRequest) {
+          if (!request) {
+            request = currentRequest
           }
 
-          return dispatch(nextContext, index + 1)
+          return dispatch(request, index + 1)
         }
 
-        return middlewares[index](currentContext, next)
+        return middlewares[index](currentRequest, next)
       }
     }
   }
 
-  async $send(context) {
-    let result = await this.send(context)
-    if (result.status >= 200 && result.status < 300) {
+  async $send(request: HttpRequest) {
+    let result = await this.send(request)
+    if (
+      typeof result.status === 'number' &&
+      result.status >= 200 &&
+      result.status < 300
+    ) {
       return result.body
     }
 
     throw new Error('Unexpected status code: ' + result.status)
   }
 
-  get(uri, options) {
+  get(uri: Route, options?: Object) {
     return this.send({ method: 'GET', uri: uri, ...options })
   }
 
-  $get(uri, options) {
+  $get(uri: Route, options?: Object) {
     return this.$send({ method: 'GET', uri: uri, ...options })
   }
 
-  head(uri, options) {
+  head(uri: Route, options?: Object) {
     return this.send({ method: 'HEAD', uri: uri, ...options })
   }
 
-  $head(uri, options) {
+  $head(uri: Route, options?: Object) {
     return this.$send({ method: 'HEAD', uri: uri, ...options })
   }
 
-  options(uri, options) {
+  options(uri: Route, options?: Object) {
     return this.send({ method: 'OPTIONS', uri: uri, ...options })
   }
 
-  $options(uri, options) {
+  $options(uri: Route, options?: Object) {
     return this.$send({ method: 'OPTIONS', uri: uri, ...options })
   }
 
-  post(uri, body, options) {
+  post(uri: Route, body: any, options?: Object) {
     return this.send({ method: 'POST', uri: uri, body: body, ...options })
   }
 
-  $post(uri, body, options) {
+  $post(uri: Route, body: any, options?: Object) {
     return this.$send({ method: 'POST', uri: uri, body: body, ...options })
   }
 
-  put(uri, body, options) {
+  put(uri: Route, body: any, options?: Object) {
     return this.send({ method: 'PUT', uri: uri, body: body, ...options })
   }
 
-  $put(uri, body, options) {
+  $put(uri: Route, body: any, options?: Object) {
     return this.$send({ method: 'PUT', uri: uri, body: body, ...options })
   }
 
-  patch(uri, body, options) {
+  patch(uri: Route, body: any, options?: Object) {
     return this.send({ method: 'PATCH', uri: uri, body: body, ...options })
   }
 
-  $patch(uri, body, options) {
+  $patch(uri: Route, body: any, options?: Object) {
     return this.$send({ method: 'PATCH', uri: uri, body: body, ...options })
   }
 
-  del(uri, options) {
+  del(uri: Route, options?: Object) {
     return this.send({ method: 'DELETE', uri: uri, ...options })
   }
 
-  async $del(uri, options) {
+  async $del(uri: Route, options?: Object) {
     let result = await this.send({ method: 'DELETE', uri: uri, ...options })
-    if (result.status >= 200 && result.status < 300) {
+    if (
+      typeof result.status === 'number' &&
+      result.status >= 200 &&
+      result.status < 300
+    ) {
       return result.body
     }
 

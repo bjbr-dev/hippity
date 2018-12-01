@@ -1,4 +1,5 @@
 import Axios from 'axios'
+import { Middleware } from './restclient'
 
 const axiosOptions = {
   // Create fresh objects for all default header scopes
@@ -17,7 +18,7 @@ const axiosOptions = {
 
 const axios = Axios.create(axiosOptions)
 
-export default async function(context) {
+export const axiosMiddleware: Middleware = async function(context) {
   let {
     // The root of the uri, if uri is not absolute
     uriRoot,
@@ -99,7 +100,7 @@ export default async function(context) {
   let axiosRequest = {
     url: uri,
     baseURL: uriRoot,
-    method: method.toLowerCase(),
+    method: typeof method === 'string' ? method.toLowerCase() : method,
     headers: headers,
     data: body,
     timeout: timeout,
@@ -129,7 +130,7 @@ export default async function(context) {
   })
 }
 
-function removeUndefinedProperties(obj) {
+function removeUndefinedProperties(obj: { [key: string]: any }): Object {
   Object.keys(obj).forEach(
     key => typeof obj[key] === 'undefined' && delete obj[key]
   )
