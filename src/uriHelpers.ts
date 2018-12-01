@@ -22,10 +22,6 @@ export function resolve(
     throw new TypeError('Path must be a string')
   }
 
-  if (path.indexOf('~/') === 0) {
-    path = path.substring(1)
-  }
-
   if (typeof params === 'undefined' || params === null) {
     return path
   }
@@ -85,7 +81,7 @@ export const normalizeMethodMiddleware: Middleware = (request, next) => {
 }
 
 export const resolvingMiddleware = (
-  resolve: (path: string, params: RouteValues | undefined) => string
+  resolve: (path: string, params?: RouteValues | undefined) => string
 ): Middleware => {
   return function(request, next) {
     if (Array.isArray(request.uri)) {
