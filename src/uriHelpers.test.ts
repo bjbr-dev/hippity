@@ -18,12 +18,14 @@ describe('resolve', () => {
   )
 
   it.each([
-    ['~/', null, '/'],
-    ['~/foo', null, '/foo'],
-    ['~/foo/bar', null, '/foo/bar'],
-    ['~/', { foo: 'bar' }, '/?foo=bar'],
-    ['~/foo', { foo: 'bar' }, '/foo?foo=bar'],
-    ['~/foo/bar', { foo: 'bar' }, '/foo/bar?foo=bar']
+    ['', null, ''],
+    ['', { foo: 'bar' }, '?foo=bar'],
+    ['foo', null, 'foo'],
+    ['foo', { foo: 'bar' }, 'foo?foo=bar'],
+    ['foo/bar', null, 'foo/bar'],
+    ['foo/bar', { foo: 'bar' }, 'foo/bar?foo=bar'],
+    ['/foo/bar', null, '/foo/bar'],
+    ['/foo/bar', { foo: 'bar' }, '/foo/bar?foo=bar']
   ])('Removes leading tilde (%j, %j, %j)', (path, params, expected) => {
     // Act
     const result = resolve(path, params)
