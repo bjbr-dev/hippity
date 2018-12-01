@@ -1,4 +1,4 @@
-import { RestClient } from './restClient'
+import { RestClient } from './restclient'
 
 describe('RestClient', () => {
   describe('constructor', () => {
@@ -32,7 +32,7 @@ describe('RestClient', () => {
 
     it('Throws if no middleware terminates', () => {
       // Arrange
-      let sut = new RestClient().use((c, n) => n(c))
+      let sut = new RestClient().use((r, n) => n(r))
 
       // Act
       let act = () => sut.send({})
@@ -49,15 +49,15 @@ describe('RestClient', () => {
       // Arrange
       let order = ''
       let sut = new RestClient()
-        .use((c, n) => {
+        .use((r, n) => {
           order += '1'
-          return n(c)
+          return n(r)
         })
-        .use((c, n) => {
+        .use((r, n) => {
           order += '2'
-          return n(c)
+          return n(r)
         })
-        .use((c, n) => {
+        .use((r, n) => {
           order += '3'
           return {}
         })
@@ -71,9 +71,9 @@ describe('RestClient', () => {
 
     it('Lets middleware switch request', () => {
       // Arrange
-      let middleware = jest.fn((c, n) => ({}))
+      let middleware = jest.fn((r, n) => ({}))
       let sut = new RestClient()
-        .use((c, n) => {
+        .use((r, n) => {
           return n({ changed: true })
         })
         .use(middleware)
@@ -89,7 +89,7 @@ describe('RestClient', () => {
       // Arrange
       let middleware = jest.fn()
       let sut = new RestClient()
-        .use((c, n) => {
+        .use((r, n) => {
           return {}
         })
         .use(middleware)
@@ -103,7 +103,7 @@ describe('RestClient', () => {
 
     it('Uses current request if middleware calls next without a request', () => {
       // Arrange
-      let middleware = jest.fn((c, n) => ({}))
+      let middleware = jest.fn((r, n) => ({}))
 
       let sut = new RestClient().use((_, n) => n()).use(middleware)
 
