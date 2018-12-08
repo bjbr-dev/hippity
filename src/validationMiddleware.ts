@@ -30,7 +30,7 @@ function isValid(request: HttpRequest, response: HttpResponse): boolean {
 
     if (
       request.method === 'DELETE' &&
-      (response.status == 404 || response.status == 410)
+      (response.status === 404 || response.status === 410)
     ) {
       return true
     }
