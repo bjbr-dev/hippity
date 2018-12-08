@@ -130,22 +130,15 @@ describe('RestClient', () => {
       expect(response).toBe('body')
     })
 
-    test.each([[199, 300, 301]])(
-      'Throws error if status indicates failure (%j)',
-      async status => {
-        // Arrange
-        let sut = new RestClient().use(() =>
-          Promise.resolve({ status: status, body: 'body' })
-        )
+    test('Requires validation', async () => {
+      // Arrange
+      let sut = new RestClient().use(r => Promise.resolve({ body: r }))
 
-        // Act
-        let act = sut.$send({})
+      // Act
+      let act = await sut.$send({})
 
-        // Assert
-        await expect(act).rejects.toThrow(
-          new Error('Unexpected status code: ' + status)
-        )
-      }
-    )
+      // Assert
+      expect(act).toEqual({ validate: true })
+    })
   })
 })

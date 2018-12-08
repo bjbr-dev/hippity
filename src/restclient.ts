@@ -84,16 +84,8 @@ export class RestClient {
   }
 
   async $send(request: HttpRequest) {
-    let result = await this.send(request)
-    if (
-      typeof result.status === 'number' &&
-      result.status >= 200 &&
-      result.status < 300
-    ) {
-      return result.body
-    }
-
-    throw new Error('Unexpected status code: ' + result.status)
+    let result = await this.send({ validate: true, ...request })
+    return result.body
   }
 
   get(uri: Route, options?: Object) {
@@ -149,19 +141,6 @@ export class RestClient {
   }
 
   async $del(uri: Route, options?: Object) {
-    let result = await this.send({ method: 'DELETE', uri: uri, ...options })
-    if (
-      typeof result.status === 'number' &&
-      result.status >= 200 &&
-      result.status < 300
-    ) {
-      return result.body
-    }
-
-    if (result.status === 404 || result.status === 410) {
-      return result.body
-    }
-
-    throw new Error('Unexpected status code: ' + result.status)
+    return this.$send({ method: 'DELETE', uri: uri, ...options })
   }
 }
