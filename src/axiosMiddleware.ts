@@ -1,7 +1,7 @@
-import Axios from 'axios'
+import Axios, { AxiosInstance } from 'axios'
 import { Middleware } from './restclient'
 
-export const axiosMiddleware = function(options: Object): Middleware {
+export const defaultAxiosMiddleware = function(options: Object): Middleware {
   const axiosOptions = {
     // Create fresh objects for all default header scopes
     // Axios creates only one which is shared across SSR requests!
@@ -18,8 +18,10 @@ export const axiosMiddleware = function(options: Object): Middleware {
     ...options
   }
 
-  const axios = Axios.create(axiosOptions)
+  return axiosMiddleware(Axios.create(axiosOptions))
+}
 
+export const axiosMiddleware = function(axios: AxiosInstance): Middleware {
   return async function(request) {
     let {
       // The root of the uri, if uri is not absolute
