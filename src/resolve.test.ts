@@ -1,16 +1,6 @@
 import { resolve } from './resolve'
 
 describe('resolve', () => {
-  test.each([[[]], [null], [undefined], ['header']])(
-    'Throws when default headers is not an object (%j)',
-    value => {
-      // Act
-      // let act = () => defaultHeaderMiddleware(value)
-      // // Assert
-      // expect(act).toThrow(new TypeError('Default headers should be an object'))
-    }
-  )
-
   it.each([
     ['', null, ''],
     ['', { foo: 'bar' }, '?foo=bar'],
