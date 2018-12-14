@@ -121,10 +121,12 @@ describe('RestClient', () => {
   describe('$send', () => {
     it('Returns body of result', async () => {
       // Arrange
-      let sut = new RestClient().use(() => ({ status: 200, body: 'body' }))
+      let sut = new RestClient().use(req => {
+        return Promise.resolve({ body: 'body', success: true })
+      })
 
       // Act
-      let response = await sut.$send({})
+      let response = await sut.$send({ GET: 'foo' })
 
       // Assert
       expect(response).toBe('body')
@@ -132,13 +134,26 @@ describe('RestClient', () => {
 
     test('Requires validation', async () => {
       // Arrange
-      let sut = new RestClient().use(r => Promise.resolve({ body: r }))
+      let sut = new RestClient().use(r =>
+        Promise.resolve({
+          success: false,
+          status: 200,
+          message: 'OK',
+          body: true
+        })
+      )
 
       // Act
-      let act = await sut.$send({})
+      let act = sut.$send({ method: 'DELETE' })
 
       // Assert
-      expect(act).toEqual({ validate: true })
+      await expect(act).rejects.toThrow(
+        new Error(
+          'Response does not indicate success\n\n' +
+            'Request: {\n  "method": "DELETE"\n}\n\n' +
+            'Response: {\n  "success": false,\n  "status": 200,\n  "message": "OK",\n  "body": true\n}'
+        )
+      )
     })
   })
 })

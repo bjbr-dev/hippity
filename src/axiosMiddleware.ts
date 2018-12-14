@@ -1,27 +1,31 @@
 import Axios, { AxiosInstance } from 'axios'
 import { Middleware } from './restclient'
 
-export const defaultAxiosMiddleware = function(options: Object): Middleware {
-  const axiosOptions = {
-    // Create fresh objects for all default header scopes
-    // Axios creates only one which is shared across SSR requests!
-    // https://github.com/mzabriskie/axios/blob/master/lib/defaults.js
-    headers: {
-      common: {},
-      delete: {},
-      get: {},
-      head: {},
-      post: {},
-      put: {},
-      patch: {}
-    },
-    ...options
+export function isSuccess(method: string, status: number): boolean {
+  if (typeof status !== 'number') {
+    return false
   }
 
-  return axiosMiddleware(Axios.create(axiosOptions))
+  if (status >= 200 && status < 300) {
+    return true
+  }
+
+  if (method === 'DELETE' && (status === 404 || status === 410)) {
+    return true
+  }
+
+  return false
 }
 
 export const axiosMiddleware = function(axios: AxiosInstance): Middleware {
+  if (axios === null) {
+    throw new Error('Axios must not be null: ')
+  }
+
+  if (typeof axios !== 'function') {
+    throw new Error('Axios must be a function but was: ' + typeof axios)
+  }
+
   return async function(request) {
     let {
       // The root of the uri, if uri is not absolute
@@ -126,11 +130,11 @@ export const axiosMiddleware = function(axios: AxiosInstance): Middleware {
     let axiosResponse = await axios(removeUndefinedProperties(axiosRequest))
 
     return removeUndefinedProperties({
+      success: isSuccess(request.method || '', axiosResponse.status),
       body: axiosResponse.data,
       status: axiosResponse.status,
       message: axiosResponse.statusText,
-      headers: axiosResponse.headers,
-      rawRequest: axiosResponse.request
+      headers: axiosResponse.headers
     })
   }
 }
@@ -140,4 +144,24 @@ function removeUndefinedProperties(obj: { [key: string]: any }): Object {
     key => typeof obj[key] === 'undefined' && delete obj[key]
   )
   return obj
+}
+
+export const defaultAxiosMiddleware = function(options: Object): Middleware {
+  const axiosOptions = {
+    // Create fresh objects for all default header scopes
+    // Axios creates only one which is shared across SSR requests!
+    // https://github.com/mzabriskie/axios/blob/master/lib/defaults.js
+    headers: {
+      common: {},
+      delete: {},
+      get: {},
+      head: {},
+      post: {},
+      put: {},
+      patch: {}
+    },
+    ...options
+  }
+
+  return axiosMiddleware(Axios.create(axiosOptions))
 }

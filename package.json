@@ -45,6 +45,9 @@
       "tsx",
       "js"
     ],
+    "moduleNameMapper": {
+      "^~/(.*)$": "<rootDir>/$1"
+    },
     "coveragePathIgnorePatterns": [
       "/node_modules/",
       "/.test.ts$/"

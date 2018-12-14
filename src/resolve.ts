@@ -1,4 +1,4 @@
-import { Middleware, RouteValue, RouteValues } from './restclient'
+import { RouteValue, RouteValues } from './restclient'
 
 function buildParams(
   prefix: string,
@@ -54,49 +54,4 @@ export function resolve(
 
   // Check if the url already has a query string
   return path + (path.indexOf('?') < 0 ? '?' : '&') + queryParameters.join('&')
-}
-
-export const normalizeMethodMiddleware: Middleware = (request, next) => {
-  if (!request.method) {
-    for (let method of [
-      'HEAD',
-      'GET',
-      'OPTIONS',
-      'POST',
-      'PUT',
-      'PATCH',
-      'DELETE'
-    ]) {
-      if (request.hasOwnProperty(method)) {
-        request.method = method
-        request.uri = request[method]
-        delete request[method]
-
-        break
-      }
-    }
-  }
-
-  return next()
-}
-
-export const resolvingMiddleware = (
-  resolve: (path: string, params?: RouteValues | undefined) => string
-): Middleware => {
-  return function(request, next) {
-    if (Array.isArray(request.uri)) {
-      return next({
-        ...request,
-        uri: resolve(request.uri[0], request.uri[1])
-      })
-    } else {
-      return next()
-    }
-  }
-}
-
-export const defaultUriRootMiddleware = (root: string): Middleware => {
-  return function(request, next) {
-    return next({ uriRoot: root, ...request })
-  }
 }

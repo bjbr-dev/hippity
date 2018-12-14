@@ -19,13 +19,13 @@ export type HttpResponse = {
   [key: string]: any
 }
 
-export type MiddlewareDelegate = (
+export type NextMiddlewareDelegate = (
   request?: HttpRequest
 ) => Promise<HttpResponse> | HttpResponse
 
 export type Middleware = (
   request: HttpRequest,
-  next: MiddlewareDelegate
+  next: NextMiddlewareDelegate
 ) => Promise<HttpResponse> | HttpResponse
 
 export class RestClient {
@@ -70,7 +70,7 @@ export class RestClient {
           'Reached end of pipeline. Use a middleware which terminates the pipeline.'
         )
       } else {
-        let next: MiddlewareDelegate = function(request?: HttpRequest) {
+        let next: NextMiddlewareDelegate = function(request?: HttpRequest) {
           if (!request) {
             request = currentRequest
           }
@@ -84,8 +84,17 @@ export class RestClient {
   }
 
   async $send(request: HttpRequest) {
-    let result = await this.send({ validate: true, ...request })
-    return result.body
+    let response = await this.send(request)
+
+    if (response.success) {
+      return response.body
+    } else {
+      throw new Error(
+        `Response does not indicate success\n\n` +
+          `Request: ${JSON.stringify(request, null, 2)}\n\n` +
+          `Response: ${JSON.stringify(response, null, 2)}`
+      )
+    }
   }
 
   get(uri: Route, options?: Object) {
