@@ -1,4 +1,4 @@
-import { axiosMiddleware, isSuccess } from './axiosMiddleware'
+import { axiosMiddleware, isSuccess } from './axios-middleware'
 
 describe('axiosMiddleware', () => {
   it('Exports axiosMiddleware', () => {

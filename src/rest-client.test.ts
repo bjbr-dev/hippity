@@ -1,4 +1,4 @@
-import { RestClient } from './restclient'
+import { RestClient } from './rest-client'
 
 describe('RestClient', () => {
   describe('constructor', () => {

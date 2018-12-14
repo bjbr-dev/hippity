@@ -1,7 +1,7 @@
 import { RequestTransform } from '~/src/transform-middleware'
-import { RouteValues } from '~/src/restclient'
+import { RouteValues } from '~/src/rest-client'
 
-export const resolvingTransform = (
+export const uriResolver = (
   resolve: (path: string, params?: RouteValues | undefined) => string
 ): RequestTransform => {
   return function(request) {

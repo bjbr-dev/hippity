@@ -1,4 +1,4 @@
-import { Middleware, HttpRequest, HttpResponse } from './restclient'
+import { Middleware, HttpRequest, HttpResponse } from './rest-client'
 
 export type RequestTransform = (request: HttpRequest) => HttpRequest
 export type ResponseTransform = (

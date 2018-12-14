@@ -1,4 +1,4 @@
-import { resolvingTransform as sut } from './resolving-transform'
+import { uriResolver as sut } from './uri-resolver'
 import { resolve } from '~/src/resolve'
 
 it('does nothing if uri is a string', () => {

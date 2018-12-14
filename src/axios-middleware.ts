@@ -1,5 +1,5 @@
 import Axios, { AxiosInstance } from 'axios'
-import { Middleware } from './restclient'
+import { Middleware } from './rest-client'
 
 export function isSuccess(method: string, status: number): boolean {
   if (typeof status !== 'number') {

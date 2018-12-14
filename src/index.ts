@@ -1,5 +1,5 @@
-export { axiosMiddleware } from './axiosMiddleware'
+export { axiosMiddleware } from './axios-middleware'
 export * from './request-transformers'
 export * from './resolve'
-export * from './restclient'
+export * from './rest-client'
 export * from './transform-middleware'

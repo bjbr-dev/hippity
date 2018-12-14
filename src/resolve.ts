@@ -1,4 +1,4 @@
-import { RouteValue, RouteValues } from './restclient'
+import { RouteValue, RouteValues } from './rest-client'
 
 function buildParams(
   prefix: string,
