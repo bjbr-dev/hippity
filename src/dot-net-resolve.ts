@@ -1,20 +1,32 @@
 import { RouteValue, RouteValues } from './rest-client'
 
 function buildParams(
-  prefix: string,
-  obj: RouteValue | RouteValue[],
-  add: (prefix: string, obj: RouteValue) => void
+  key: string,
+  value: RouteValue,
+  add: (key: string, value: any) => void
 ) {
-  if (Array.isArray(obj)) {
-    for (let i = 0; i < obj.length; i++) {
-      add(prefix, obj[i])
+  if (typeof value === 'undefined') {
+    return
+  }
+
+  if (value !== null && typeof value === 'object') {
+    if (Array.isArray(value)) {
+      for (let i = 0; i < value.length; i++) {
+        buildParams(`${key}[${i}]`, value[i], add)
+      }
+    } else {
+      for (var subKey in value) {
+        if (value.hasOwnProperty(subKey)) {
+          buildParams(`${key}.${subKey}`, value[subKey], add)
+        }
+      }
     }
   } else {
-    add(prefix, obj)
+    add(key, value)
   }
 }
 
-export function resolve(
+export function dotNetResolve(
   path: string,
   params?: RouteValues | undefined | null
 ): string {

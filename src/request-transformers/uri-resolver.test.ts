@@ -1,5 +1,5 @@
 import { uriResolver as sut } from './uri-resolver'
-import { resolve } from '~/src/resolve'
+import { dotNetResolve as resolve } from '~/src/dot-net-resolve'
 
 it('does nothing if uri is a string', () => {
   // Arrange

@@ -8,7 +8,7 @@ import {
 } from './request-transformers/index'
 
 import { defaultAxiosMiddleware } from './axios-middleware'
-import { resolve as defaultResolve } from './resolve'
+import { dotNetResolve } from './dot-net-resolve'
 import {
   transformMiddleware,
   RequestTransform,
@@ -21,7 +21,7 @@ export type DefaultClientOptions = {
 
   /**
    * Function to transform a url template and its parameters into a url.
-   * Defaults to the standard resolve if not set.
+   * Defaults to dotNetResolve if not set.
    * If set explicitly to null, then resolving urls is disabled
    */
   resolve?: ResolveDelegate
@@ -116,7 +116,7 @@ export class RestClientBuilder {
     let requestTransforms = [methodNormalizer]
 
     if (this.resolve !== null) {
-      requestTransforms.push(uriResolver(this.resolve || defaultResolve))
+      requestTransforms.push(uriResolver(this.resolve || dotNetResolve))
     }
 
     if (this.baseUri) {

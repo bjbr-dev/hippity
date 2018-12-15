@@ -59,7 +59,7 @@ describe('RestClient', () => {
         })
         .use((r, n) => {
           order += '3'
-          return {}
+          return {} as any
         })
 
       // Act
@@ -90,7 +90,7 @@ describe('RestClient', () => {
       let middleware = jest.fn()
       let sut = new RestClient()
         .use((r, n) => {
-          return {}
+          return {} as any
         })
         .use(middleware)
 
@@ -122,7 +122,7 @@ describe('RestClient', () => {
     it('Returns body of result', async () => {
       // Arrange
       let sut = new RestClient().use(req => {
-        return Promise.resolve({ body: 'body', success: true })
+        return Promise.resolve({ body: 'body', success: true } as any)
       })
 
       // Act

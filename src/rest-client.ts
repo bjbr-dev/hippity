@@ -1,4 +1,13 @@
-export type RouteValue = string | number
+export type RouteValue =
+  | string
+  | number
+  | boolean
+  | null
+  | undefined
+  | RouteValueArray
+  | { [key: string]: RouteValue }
+
+export interface RouteValueArray extends Array<RouteValue> {}
 export type RouteValues = { [name: string]: RouteValue | RouteValue[] }
 export type Route = string | [string, RouteValues?]
 

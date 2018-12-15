@@ -1,4 +1,4 @@
-import { resolve } from './resolve'
+import { dotNetResolve as sut } from './dot-net-resolve'
 
 describe('resolve', () => {
   it.each([
@@ -12,7 +12,7 @@ describe('resolve', () => {
     ['/foo/bar', { foo: 'bar' }, '/foo/bar?foo=bar']
   ])('Removes leading tilde (%j, %j, %j)', (path, params, expected) => {
     // Act
-    const result = resolve(path, params)
+    const result = sut(path, params)
 
     // Assert
     expect(result).toBe(expected)
@@ -22,7 +22,7 @@ describe('resolve', () => {
     'Does nothing if params is undefined (%j)',
     params => {
       // Act
-      const result = resolve('/foo', params)
+      const result = sut('/foo', params)
 
       // Assert
       expect(result).toBe('/foo')
@@ -31,7 +31,7 @@ describe('resolve', () => {
 
   it('Url encodes query parameters', () => {
     // Act
-    const result = resolve('/foo', {
+    const result = sut('/foo', {
       'this should': "be url encoded ;,/?:@&=+$ -_.!~*'() #"
     })
 
@@ -43,7 +43,7 @@ describe('resolve', () => {
 
   it('Allows multiple query parameters', () => {
     // Act
-    const result = resolve('/foo', { a: 1, b: 2 })
+    const result = sut('/foo', { a: 1, b: 2 })
 
     // Assert
     expect(result).toBe('/foo?a=1&b=2')
@@ -51,10 +51,26 @@ describe('resolve', () => {
 
   it('Allows property to be an array', () => {
     // Act
-    const result = resolve('/foo', { a: [1, 2, 3] })
+    const result = sut('/foo', { a: [1, 2, 3] })
 
     // Assert
-    expect(result).toBe('/foo?a=1&a=2&a=3')
+    expect(result).toBe('/foo?a%5B0%5D=1&a%5B1%5D=2&a%5B2%5D=3')
+  })
+
+  it('Allows nested parameters', () => {
+    // Act
+    const result = sut('/foo', { a: { b: 'bar' } })
+
+    // Assert
+    expect(result).toBe('/foo?a.b=bar')
+  })
+
+  it('Allows nested parameters in array', () => {
+    // Act
+    const result = sut('/foo', { a: [{ b: 'bar' }] })
+
+    // Assert
+    expect(result).toBe('/foo?a%5B0%5D.b=bar')
   })
 
   it.each([
@@ -65,7 +81,7 @@ describe('resolve', () => {
     ['/{foo}/{foo}/baz', '/bar/bar/baz']
   ])('Replaces named placeholders (%j %j)', (path, expected) => {
     // Act
-    const result = resolve('/{foo}', { foo: 'bar' })
+    const result = sut('/{foo}', { foo: 'bar' })
 
     // Assert
     expect(result).toBe('/bar')
@@ -73,7 +89,7 @@ describe('resolve', () => {
 
   it('Url encodes parameters', () => {
     // Act
-    const result = resolve('/{foo}', {
+    const result = sut('/{foo}', {
       foo: "should be url encoded ;,/?:@&=+$ -_.!~*'() #"
     })
 
@@ -85,7 +101,7 @@ describe('resolve', () => {
 
   it('Puts remaining parameters in query string', () => {
     // Act
-    const result = resolve('/{foo}', {
+    const result = sut('/{foo}', {
       foo: 'bar',
       baz: 'qux'
     })
@@ -96,7 +112,7 @@ describe('resolve', () => {
 
   it('Adds extra query parameters if path contains query string', () => {
     // Act
-    const result = resolve('/foo?bar=baz', { baz: 'qux' })
+    const result = sut('/foo?bar=baz', { baz: 'qux' })
 
     // Assert
     expect(result).toBe('/foo?bar=baz&baz=qux')
