@@ -12,7 +12,8 @@ export type HttpRequest = {
 }
 
 export type HttpResponse = {
-  status?: number
+  success: boolean
+  status: number
   message?: string
   headers?: Object
   body?: any
@@ -29,26 +30,26 @@ export type Middleware = (
 ) => Promise<HttpResponse> | HttpResponse
 
 export class RestClient {
-  constructor(private stack: Middleware[] = []) {
-    if (!Array.isArray(stack)) {
+  constructor(private middleware: Middleware[] = []) {
+    if (!Array.isArray(middleware)) {
       throw new TypeError('Middleware stack must be an array')
     }
 
-    for (const middleware of stack) {
-      if (typeof middleware !== 'function') {
+    for (const m of middleware) {
+      if (typeof m !== 'function') {
         throw new Error('Middleware must be a function')
       }
     }
 
-    this.stack = stack
+    this.middleware = middleware
   }
 
-  use(middleware: Middleware) {
-    if (typeof middleware !== 'function') {
-      throw new Error('Middleware must be a function')
+  use(middleware: Middleware | Middleware[]) {
+    if (Array.isArray(middleware)) {
+      return new RestClient([...this.middleware, ...middleware])
+    } else {
+      return new RestClient([...this.middleware, middleware])
     }
-
-    return new RestClient([...this.stack, middleware])
   }
 
   useIf(predicate: boolean, middleware: Middleware) {
@@ -60,7 +61,7 @@ export class RestClient {
   }
 
   send(request: HttpRequest): Promise<HttpResponse> | HttpResponse {
-    const middlewares = this.stack
+    const middlewares = this.middleware
 
     return dispatch(request, 0)
 

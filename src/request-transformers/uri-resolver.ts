@@ -1,10 +1,13 @@
 import { RequestTransform } from '~/src/transform-middleware'
 import { RouteValues } from '~/src/rest-client'
 
-export const uriResolver = (
-  resolve: (path: string, params?: RouteValues | undefined) => string
-): RequestTransform => {
-  return function(request) {
+export type ResolveDelegate = (
+  path: string,
+  params?: RouteValues | undefined
+) => string
+
+export const uriResolver = (resolve: ResolveDelegate): RequestTransform => {
+  return request => {
     if (Array.isArray(request.uri)) {
       return {
         ...request,

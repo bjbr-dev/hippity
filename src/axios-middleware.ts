@@ -29,7 +29,7 @@ export const axiosMiddleware = function(axios: AxiosInstance): Middleware {
   return async function(request) {
     let {
       // The root of the uri, if uri is not absolute
-      uriRoot,
+      baseUri,
 
       // The uri of the resource
       uri,
@@ -107,7 +107,7 @@ export const axiosMiddleware = function(axios: AxiosInstance): Middleware {
 
     let axiosRequest = {
       url: uri,
-      baseURL: uriRoot,
+      baseURL: baseUri,
       method: typeof method === 'string' ? method.toLowerCase() : method,
       headers: headers,
       data: body,
@@ -139,14 +139,16 @@ export const axiosMiddleware = function(axios: AxiosInstance): Middleware {
   }
 }
 
-function removeUndefinedProperties(obj: { [key: string]: any }): Object {
+function removeUndefinedProperties(obj: { [key: string]: any }): any {
   Object.keys(obj).forEach(
     key => typeof obj[key] === 'undefined' && delete obj[key]
   )
   return obj
 }
 
-export const defaultAxiosMiddleware = function(options: Object): Middleware {
+export const defaultAxiosMiddleware = function(
+  options: Object = {}
+): Middleware {
   const axiosOptions = {
     // Create fresh objects for all default header scopes
     // Axios creates only one which is shared across SSR requests!
