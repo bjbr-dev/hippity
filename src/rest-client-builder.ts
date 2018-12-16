@@ -7,7 +7,7 @@ import {
   baseUriApplier
 } from './request-transformers/index'
 
-import { defaultAxiosMiddleware } from './axios-middleware'
+import { defaultAxiosMiddleware } from './terminators/axios-middleware'
 import { dotNetResolve } from './dot-net-resolve'
 import {
   transformMiddleware,

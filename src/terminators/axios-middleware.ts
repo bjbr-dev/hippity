@@ -1,21 +1,6 @@
 import Axios, { AxiosInstance } from 'axios'
-import { Middleware } from './rest-client'
-
-export function isSuccess(method: string, status: number): boolean {
-  if (typeof status !== 'number') {
-    return false
-  }
-
-  if (status >= 200 && status < 300) {
-    return true
-  }
-
-  if (method === 'DELETE' && (status === 404 || status === 410)) {
-    return true
-  }
-
-  return false
-}
+import { Middleware, HttpResponse } from '~/src/rest-client'
+import { isSuccess } from './is-success'
 
 export const axiosMiddleware = function(axios: AxiosInstance): Middleware {
   if (axios === null) {
@@ -79,31 +64,19 @@ export const axiosMiddleware = function(axios: AxiosInstance): Middleware {
       // If set to 0, no redirects will be followed.
       maxRedirects,
 
-      // `socketPath` defines a UNIX Socket to be used in node.js.
-      // e.g. '/var/run/docker.sock' to send requests to the docker daemon.
-      // Only either `socketPath` or `proxy` can be specified.
-      // If both are specified, `socketPath` is used.
-      // null is default
-      socketPath,
-
-      // `httpAgent` and `httpsAgent` define a custom agent to be used when performing http
-      // and https requests, respectively, in node.js. This allows options to be added like
-      // `keepAlive` that are not enabled by default.
-      httpAgent,
-      httpsAgent,
-
-      // 'proxy' defines the hostname and port of the proxy server
-      // Use `false` to disable proxies, ignoring environment variables.
-      // `auth` indicates that HTTP Basic auth should be used to connect to the proxy, and
-      // supplies credentials.
-      // This will set an `Proxy-Authorization` header, overwriting any existing
-      // `Proxy-Authorization` custom headers you have set using `headers`.
-      proxy,
-
-      // `cancelToken` specifies a cancel token that can be used to cancel the request
-      // (see Cancellation section below for details)
-      cancelToken
+      cancel
     } = request
+
+    let cancelToken
+    if (cancel) {
+      let source = Axios.CancelToken.source()
+
+      cancel.onCancel(e => {
+        source.cancel()
+      })
+
+      cancelToken = source.token
+    }
 
     let axiosRequest = {
       url: uri,
@@ -119,10 +92,6 @@ export const axiosMiddleware = function(axios: AxiosInstance): Middleware {
       onDownloadProgress: onDownloadProgress,
       maxContentLength: responseMaxContentLength,
       maxRedirects: maxRedirects,
-      socketPath: socketPath,
-      httpAgent: httpAgent,
-      httpsAgent: httpsAgent,
-      proxy: proxy,
       cancelToken: cancelToken,
       validateStatus: null
     }
@@ -135,7 +104,7 @@ export const axiosMiddleware = function(axios: AxiosInstance): Middleware {
       status: axiosResponse.status,
       message: axiosResponse.statusText,
       headers: axiosResponse.headers
-    })
+    } as HttpResponse)
   }
 }
 

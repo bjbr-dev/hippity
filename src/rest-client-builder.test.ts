@@ -2,7 +2,7 @@ import { RestClientBuilder as Sut, Route } from './index'
 
 let axiosMiddleware: jest.Mock<{}>
 
-jest.mock('./axios-middleware', () => ({
+jest.mock('./terminators/axios-middleware', () => ({
   defaultAxiosMiddleware: jest.fn(() => axiosMiddleware)
 }))
 

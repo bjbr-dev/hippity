@@ -1,3 +1,6 @@
+import { CancellationToken } from '~/src/cancel-token'
+import { HeadersCollection } from '~/src/terminators/parse-headers'
+
 export type RouteValue =
   | string
   | number
@@ -15,16 +18,17 @@ export type HttpRequest = {
   method?: string
   uri?: Route
   message?: string
-  headers?: Object
+  headers?: HeadersCollection
   body?: any
+  cancel?: CancellationToken
   [key: string]: any
 }
 
 export type HttpResponse = {
   success: boolean
-  status: number
+  status?: number
   message?: string
-  headers?: Object
+  headers?: HeadersCollection
   body?: any
   [key: string]: any
 }
