@@ -58,3 +58,15 @@ test('Calls all callbacks on cancel', () => {
   expect(callbacks[0]).toBeCalled()
   expect(callbacks[1]).toBeCalled()
 })
+
+test('Serializes token to JSON nicely', () => {
+  // Arrange
+  let source = new CancellationTokenSource()
+  let token = source.token
+
+  // Act
+  let json = JSON.stringify({ token: token })
+
+  // Assert
+  expect(json).toEqual('{"token":{"cancelled":false}}')
+})

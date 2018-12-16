@@ -35,6 +35,10 @@ class CancellationTokenImpl implements CancellationToken {
   get cancelled(): boolean {
     return this.cancelReason !== null
   }
+
+  toJSON() {
+    return { cancelled: this.cancelled }
+  }
 }
 
 export class CancellationTokenSource {
