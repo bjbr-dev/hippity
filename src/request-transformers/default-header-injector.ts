@@ -1,8 +1,8 @@
-import { Middleware } from './restclient'
+import { RequestTransform } from '~/src/transform-middleware'
 
-export const defaultHeaderMiddleware = (defaultHeaders: {
-  [x: string]: Object
-}): Middleware => {
+export const defaultHeaderInjector = (defaultHeaders: {
+  [x: string]: { [x: string]: string | string[] }
+}): RequestTransform => {
   if (
     typeof defaultHeaders !== 'object' ||
     defaultHeaders === null ||
@@ -11,8 +11,8 @@ export const defaultHeaderMiddleware = (defaultHeaders: {
     throw new TypeError('Default headers should be an object')
   }
 
-  return (request, next) => {
-    return next({
+  return request => {
+    return {
       ...request,
       headers: {
         ...defaultHeaders['common'],
@@ -21,6 +21,6 @@ export const defaultHeaderMiddleware = (defaultHeaders: {
           : null),
         ...request.headers
       }
-    })
+    }
   }
 }

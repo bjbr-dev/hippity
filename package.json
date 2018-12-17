@@ -1,6 +1,6 @@
 {
   "name": "@berkeleybross/restclient",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "description": "Simple middleware based REST client",
   "main": "dist/@berkeleybross/restclient.umd.js",
   "module": "dist/@berkeleybross/restclient.es5.js",
@@ -45,6 +45,9 @@
       "tsx",
       "js"
     ],
+    "moduleNameMapper": {
+      "^~/(.*)$": "<rootDir>/$1"
+    },
     "coveragePathIgnorePatterns": [
       "/node_modules/",
       "/.test.ts$/"

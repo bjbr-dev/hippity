@@ -1,4 +1,16 @@
-export type RouteValue = string | number
+import { CancellationToken } from '~/src/cancel-token'
+import { HeadersCollection } from '~/src/terminators/parse-headers'
+
+export type RouteValue =
+  | string
+  | number
+  | boolean
+  | null
+  | undefined
+  | RouteValueArray
+  | { [key: string]: RouteValue }
+
+export interface RouteValueArray extends Array<RouteValue> {}
 export type RouteValues = { [name: string]: RouteValue | RouteValue[] }
 export type Route = string | [string, RouteValues?]
 
@@ -6,49 +18,51 @@ export type HttpRequest = {
   method?: string
   uri?: Route
   message?: string
-  headers?: Object
+  headers?: HeadersCollection
   body?: any
+  cancel?: CancellationToken
   [key: string]: any
 }
 
 export type HttpResponse = {
+  success: boolean
   status?: number
   message?: string
-  headers?: Object
+  headers?: HeadersCollection
   body?: any
   [key: string]: any
 }
 
-export type MiddlewareDelegate = (
+export type NextMiddlewareDelegate = (
   request?: HttpRequest
 ) => Promise<HttpResponse> | HttpResponse
 
 export type Middleware = (
   request: HttpRequest,
-  next: MiddlewareDelegate
+  next: NextMiddlewareDelegate
 ) => Promise<HttpResponse> | HttpResponse
 
 export class RestClient {
-  constructor(private stack: Middleware[] = []) {
-    if (!Array.isArray(stack)) {
+  constructor(private middleware: Middleware[] = []) {
+    if (!Array.isArray(middleware)) {
       throw new TypeError('Middleware stack must be an array')
     }
 
-    for (const middleware of stack) {
-      if (typeof middleware !== 'function') {
+    for (const m of middleware) {
+      if (typeof m !== 'function') {
         throw new Error('Middleware must be a function')
       }
     }
 
-    this.stack = stack
+    this.middleware = middleware
   }
 
-  use(middleware: Middleware) {
-    if (typeof middleware !== 'function') {
-      throw new Error('Middleware must be a function')
+  use(middleware: Middleware | Middleware[]) {
+    if (Array.isArray(middleware)) {
+      return new RestClient([...this.middleware, ...middleware])
+    } else {
+      return new RestClient([...this.middleware, middleware])
     }
-
-    return new RestClient([...this.stack, middleware])
   }
 
   useIf(predicate: boolean, middleware: Middleware) {
@@ -60,7 +74,7 @@ export class RestClient {
   }
 
   send(request: HttpRequest): Promise<HttpResponse> | HttpResponse {
-    const middlewares = this.stack
+    const middlewares = this.middleware
 
     return dispatch(request, 0)
 
@@ -70,7 +84,7 @@ export class RestClient {
           'Reached end of pipeline. Use a middleware which terminates the pipeline.'
         )
       } else {
-        let next: MiddlewareDelegate = function(request?: HttpRequest) {
+        let next: NextMiddlewareDelegate = function(request?: HttpRequest) {
           if (!request) {
             request = currentRequest
           }
@@ -84,8 +98,17 @@ export class RestClient {
   }
 
   async $send(request: HttpRequest) {
-    let result = await this.send({ validate: true, ...request })
-    return result.body
+    let response = await this.send(request)
+
+    if (response.success) {
+      return response.body
+    } else {
+      throw new Error(
+        `Response does not indicate success\n\n` +
+          `Request: ${JSON.stringify(request, null, 2)}\n\n` +
+          `Response: ${JSON.stringify(response, null, 2)}`
+      )
+    }
   }
 
   get(uri: Route, options?: Object) {
