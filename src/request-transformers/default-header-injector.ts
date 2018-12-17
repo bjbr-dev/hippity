@@ -1,7 +1,7 @@
 import { RequestTransform } from '~/src/transform-middleware'
 
 export const defaultHeaderInjector = (defaultHeaders: {
-  [x: string]: Object
+  [x: string]: { [x: string]: string | string[] }
 }): RequestTransform => {
   if (
     typeof defaultHeaders !== 'object' ||
