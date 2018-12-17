@@ -1,5 +1,7 @@
 # RestClient
 
+[![npm version](https://img.shields.io/npm/v/@berkeleybross/restclient.svg?style=flat-square)](https://www.npmjs.org/package/@berkeleybross/restclient)
+[![npm downloads](https://img.shields.io/npm/dm/@berkeleybross/restclient.svg?style=flat-square)](http://npm-stat.com/charts.html?package=@berkeleybross/restclient)
 [![Build Status](https://travis-ci.org/berkeleybross/restclient.js.svg?branch=master)](https://travis-ci.org/berkeleybross/restclient.js)
 
 Perform HTTP requests (preferably REST style!) from NodeJS or client-side javascript.
@@ -7,8 +9,8 @@ Perform HTTP requests (preferably REST style!) from NodeJS or client-side javasc
 ## Features
 
 - Simple interface backed by _middleware_ for complete flexibility
-- [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) based
-- Automatic content-type serialization
+- [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) based, with cancellation support
+- Automatic JSON serialization
 - Optional, automatic validation of server responses
 
 ## Browser Support
