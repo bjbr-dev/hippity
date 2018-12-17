@@ -4,7 +4,7 @@
 
 export type HeadersCollection = { [key: string]: string | string[] }
 
-var ignoreDuplicateOf = [
+const ignoreDuplicateOf = [
   'age',
   'authorization',
   'content-length',
@@ -25,7 +25,7 @@ var ignoreDuplicateOf = [
 ]
 
 export function parseHeaders(headers: string): HeadersCollection {
-  var parsed: HeadersCollection = {}
+  const parsed: HeadersCollection = {}
 
   if (!headers) {
     return parsed

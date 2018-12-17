@@ -15,7 +15,7 @@ function buildParams(
         buildParams(`${key}[${i}]`, value[i], add)
       }
     } else {
-      for (var subKey in value) {
+      for (let subKey in value) {
         if (value.hasOwnProperty(subKey)) {
           buildParams(`${key}.${subKey}`, value[subKey], add)
         }
