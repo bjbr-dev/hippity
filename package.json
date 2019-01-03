@@ -1,6 +1,6 @@
 {
   "name": "@berkeleybross/restclient",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Simple middleware based REST client",
   "main": "dist/@berkeleybross/restclient.umd.js",
   "module": "dist/@berkeleybross/restclient.es5.js",
@@ -14,9 +14,8 @@
   "scripts": {
     "build": "cross-env NODE_ENV=production npm-run-all clean -p build:prod lint test --aggregate-output",
     "build:prod": "npm-run-all -s build:prod:*",
-    "build:prod:ts": "tsc --module commonjs",
+    "build:prod:ts": "tsc --module commonjs --emitDeclarationOnly",
     "build:prod:rollup": "rollup -c rollup.config.ts",
-    "build:prod:docs": "typedoc --out docs --target es6 --theme minimal --mode file src",
     "clean": "rimraf dist coverage",
     "lint": "tslint  --project tsconfig.json -t codeFrame 'src/**/*.ts'",
     "test": "cross-env NODE_ENV=test jest --coverage"
@@ -39,7 +38,7 @@
       ".(ts|tsx)": "ts-jest"
     },
     "testEnvironment": "node",
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "testRegex": "(/src/.*\\.(test|spec))\\.(ts|tsx|js)$",
     "moduleFileExtensions": [
       "ts",
       "tsx",
@@ -88,7 +87,6 @@
     "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.15.0",
     "tslint-config-standard": "^8.0.1",
-    "typedoc": "^0.12.0",
     "typescript": "^3.0.3"
   },
   "prettier": {
