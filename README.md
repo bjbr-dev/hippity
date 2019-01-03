@@ -43,10 +43,11 @@ It will throw an error only if their was an HTTP transport error (e.g. network d
 
 ```js
 async function example() {
-  const response = await this.client.$put(['/api/users/{id}', { id: 5 }], {
+  const response = await this.client.put(['/api/users/{id}', { id: 5 }], {
     name: 'John Smith'
   })
 
+  // Could also check response.success
   if (response.status === 201) {
     return 'Created'
   } else {

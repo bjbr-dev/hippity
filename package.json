@@ -1,6 +1,6 @@
 {
   "name": "@berkeleybross/restclient",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Simple middleware based REST client",
   "main": "dist/@berkeleybross/restclient.umd.js",
   "module": "dist/@berkeleybross/restclient.es5.js",
@@ -14,7 +14,7 @@
   "scripts": {
     "build": "cross-env NODE_ENV=production npm-run-all clean -p build:prod lint test --aggregate-output",
     "build:prod": "npm-run-all -s build:prod:*",
-    "build:prod:ts": "tsc --module commonjs",
+    "build:prod:ts": "tsc --module commonjs --emitDeclarationOnly",
     "build:prod:rollup": "rollup -c rollup.config.ts",
     "clean": "rimraf dist coverage",
     "lint": "tslint  --project tsconfig.json -t codeFrame 'src/**/*.ts'",
