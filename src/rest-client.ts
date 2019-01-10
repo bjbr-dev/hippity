@@ -100,7 +100,7 @@ export class RestClient {
   async $send(request: HttpRequest) {
     let response = await this.send(request)
 
-    if (response.success) {
+    if (response.success !== false) {
       return response.body
     } else {
       throw new Error(

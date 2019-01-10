@@ -47,7 +47,7 @@ async function example() {
     name: 'John Smith'
   })
 
-  // Could also check response.success
+  // Could also check response.success !== false
   if (response.status === 201) {
     return 'Created'
   } else {
