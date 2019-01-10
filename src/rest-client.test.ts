@@ -122,7 +122,7 @@ describe('RestClient', () => {
     it('Returns body of result', async () => {
       // Arrange
       let sut = new RestClient().use(req => {
-        return Promise.resolve({ body: 'body', success: true } as any)
+        return Promise.resolve({ body: 'body' } as any)
       })
 
       // Act
