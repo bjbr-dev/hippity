@@ -1,4 +1,19 @@
 {
   "version": "2.0.0",
-  "tasks": []
+  "tasks": [
+    {
+      "label": "Install NPM packages",
+      "type": "npm",
+      "group": "build",
+      "script": "install",
+      "problemMatcher": []
+    },
+    {
+      "label": "Commit test",
+      "type": "npm",
+      "group": "build",
+      "script": "build",
+      "problemMatcher": ["$eslint-stylish", "$tsc"]
+    }
+  ]
 }
