@@ -2,51 +2,40 @@
   "name": "@berkeleybross/restclient",
   "version": "0.4.0",
   "description": "Simple middleware based REST client",
-  "main": "dist/@berkeleybross/restclient.umd.js",
-  "module": "dist/@berkeleybross/restclient.es5.js",
-  "typings": "dist/types/restclient.d.ts",
-  "files": [
-    "dist"
-  ],
-  "publishConfig": {
-    "access": "public"
-  },
-  "scripts": {
-    "build": "cross-env NODE_ENV=production npm-run-all clean -p build:prod lint test --aggregate-output",
-    "build:prod": "npm-run-all -s build:prod:*",
-    "build:prod:ts": "tsc --module commonjs --emitDeclarationOnly",
-    "build:prod:rollup": "rollup -c rollup.config.ts",
-    "clean": "rimraf dist coverage",
-    "lint": "tslint  --project tsconfig.json -t codeFrame 'src/**/*.ts'",
-    "test": "cross-env NODE_ENV=test jest --coverage"
+  "homepage": "https://github.com/berkeleybross/restclient.js#readme",
+  "bugs": {
+    "url": "https://github.com/berkeleybross/restclient.js/issues"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/berkeleybross/restclient.js.git"
   },
-  "author": "berkeleybross",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/berkeleybross/restclient.js/issues"
+  "author": "berkeleybross",
+  "files": [
+    "dist"
+  ],
+  "main": "dist/@berkeleybross/restclient.umd.js",
+  "module": "dist/@berkeleybross/restclient.es5.js",
+  "typings": "dist/types/restclient.d.ts",
+  "scripts": {
+    "build": "cross-env NODE_ENV=production npm-run-all clean -p build:prod lint test --aggregate-output",
+    "build:prod": "npm-run-all -s build:prod:*",
+    "build:prod:rollup": "rollup -c rollup.config.ts",
+    "build:prod:ts": "tsc --module commonjs --emitDeclarationOnly",
+    "clean": "rimraf dist coverage",
+    "lint": "tslint  --project tsconfig.json -t codeFrame 'src/**/*.ts'",
+    "sort": "npx sort-package-json",
+    "test": "cross-env NODE_ENV=test jest --coverage"
   },
-  "homepage": "https://github.com/berkeleybross/restclient.js#readme",
-  "engines": {
-    "node": ">=6.0.0"
+  "prettier": {
+    "semi": false,
+    "singleQuote": true
   },
   "jest": {
-    "transform": {
-      ".(ts|tsx)": "ts-jest"
-    },
-    "testEnvironment": "node",
-    "testRegex": "(/src/.*\\.(test|spec))\\.(ts|tsx|js)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js"
+    "collectCoverageFrom": [
+      "src/*.{js,ts}"
     ],
-    "moduleNameMapper": {
-      "^~/(.*)$": "<rootDir>/$1"
-    },
     "coveragePathIgnorePatterns": [
       "/node_modules/",
       "/.test.ts$/"
@@ -59,9 +48,19 @@
         "statements": 10
       }
     },
-    "collectCoverageFrom": [
-      "src/*.{js,ts}"
-    ]
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "moduleNameMapper": {
+      "^~/(.*)$": "<rootDir>/$1"
+    },
+    "testEnvironment": "node",
+    "testRegex": "(/src/.*\\.(test|spec))\\.(ts|tsx|js)$",
+    "transform": {
+      ".(ts|tsx)": "ts-jest"
+    }
   },
   "dependencies": {
     "axios": "^0.18.0"
@@ -89,8 +88,10 @@
     "tslint-config-standard": "^8.0.1",
     "typescript": "^3.0.3"
   },
-  "prettier": {
-    "semi": false,
-    "singleQuote": true
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
