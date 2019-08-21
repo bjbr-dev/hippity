@@ -1,23 +1,22 @@
 {
+  // https://www.typescriptlang.org/docs/handbook/compiler-options.html
   "compilerOptions": {
-    "moduleResolution": "node",
+    "module": "commonjs",
     "target": "es5",
-    "module": "es2015",
-    "lib": ["es2015", "es2016", "es2017", "dom"],
-    "strict": true,
-    "sourceMap": true,
     "declaration": true,
-    "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "declarationDir": "dist/types",
-    "outDir": "dist/lib",
-    "typeRoots": ["node_modules/@types"],
+    "outDir": "dist",
+    "strict": true,
+
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+
     "baseUrl": "./",
     "paths": {
-      "~/*": ["./*"]
-    }
-  },
-  "include": ["src"],
-  "exclude": ["**/*.test.ts"]
+      "~/*": ["./src/*"]
+    },
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true
+  }
 }

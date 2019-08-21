@@ -1,5 +1,5 @@
-import { CancellationToken } from '~/src/cancel-token'
-import { HeadersCollection } from '~/src/terminators/parse-headers'
+import { CancellationToken } from '~/cancel-token'
+import { HeadersCollection } from '~/terminators/parse-headers'
 
 export type RouteValue =
   | string

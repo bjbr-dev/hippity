@@ -1,5 +1,5 @@
-import { RequestTransform } from '~/src/transform-middleware'
-import { RouteValues } from '~/src/rest-client'
+import { RequestTransform } from '~/transform-middleware'
+import { RouteValues } from '~/rest-client'
 
 export type ResolveDelegate = (
   path: string,

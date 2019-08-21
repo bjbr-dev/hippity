@@ -15,20 +15,46 @@
   "files": [
     "dist"
   ],
-  "main": "dist/@berkeleybross/restclient.umd.js",
-  "module": "dist/@berkeleybross/restclient.es5.js",
-  "typings": "dist/types/restclient.d.ts",
+  "main": "dist/restclient.umd.js",
+  "module": "dist/restclient.es5.js",
+  "typings": "dist/restclient.d.ts",
   "scripts": {
-    "build": "cross-env NODE_ENV=production npm-run-all clean -p build:prod lint test --aggregate-output",
-    "build:prod": "npm-run-all -s build:prod:*",
-    "build:prod:rollup": "rollup -c rollup.config.ts",
-    "build:prod:ts": "tsc --module commonjs --emitDeclarationOnly",
+    "build": "cross-env NODE_ENV=production npm-run-all clean -p build:* lint:* test --aggregate-output",
+    "build:rollup": "rollup -c rollup.config.js",
+    "build:ts": "tsc --emitDeclarationOnly",
     "clean": "rimraf dist coverage",
-    "lint": "tslint  --project tsconfig.json -t codeFrame 'src/**/*.ts'",
+    "lint:es": "eslint . --ext .ts",
+    "lint:ts": "tsc --noemit",
     "sort": "npx sort-package-json",
     "test": "cross-env NODE_ENV=test jest --coverage",
     "upgrade": "npx npm-check --update"
   },
+  "babel": {
+    "plugins": [
+      "@babel/proposal-class-properties",
+      "@babel/proposal-object-rest-spread",
+      [
+        "babel-plugin-root-import",
+        {
+          "rootPathPrefix": "~",
+          "rootPathSuffix": "src"
+        }
+      ]
+    ],
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "useBuiltIns": "usage",
+          "corejs": 3
+        }
+      ],
+      "@babel/typescript"
+    ]
+  },
+  "browserslist": [
+    "defaults, maintained node versions"
+  ],
   "prettier": {
     "semi": false,
     "singleQuote": true
@@ -51,43 +77,48 @@
     },
     "moduleFileExtensions": [
       "ts",
-      "tsx",
       "js"
     ],
     "moduleNameMapper": {
       "^~/(.*)$": "<rootDir>/$1"
     },
     "testEnvironment": "node",
-    "testRegex": "(/src/.*\\.(test|spec))\\.(ts|tsx|js)$",
-    "transform": {
-      ".(ts|tsx)": "ts-jest"
-    }
+    "testRegex": "(/src/.*\\.(test|spec))\\.(ts|tsx|js)$"
   },
   "dependencies": {
-    "axios": "^0.19.0"
+    "axios": "^0.19.0",
+    "core-js": "^3.2.1"
   },
   "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/plugin-proposal-numeric-separator": "^7.2.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-typescript": "^7.3.3",
     "@types/jest": "^24.0.18",
     "@types/node": "^12.7.2",
-    "coveralls": "^3.0.2",
+    "@typescript-eslint/eslint-plugin": "^2.0.0",
+    "@typescript-eslint/parser": "^2.0.0",
+    "babel-plugin-root-import": "^6.4.1",
+    "coveralls": "^3.0.6",
     "cross-env": "^5.2.0",
+    "eslint": "^6.2.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-promise": "^4.2.1",
     "jest": "^24.9.0",
-    "jest-config": "^24.9.0",
     "npm-run-all": "^4.1.5",
-    "prettier": "^1.14.3",
+    "prettier": "^1.18.2",
     "rimraf": "^3.0.0",
     "rollup": "^1.20.0",
-    "rollup-plugin-commonjs": "^10.0.2",
-    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-sourcemaps": "^0.4.2",
-    "rollup-plugin-typescript2": "^0.22.1",
-    "ts-jest": "^24.0.2",
-    "ts-node": "^8.3.0",
-    "tslint": "^5.11.0",
-    "tslint-config-prettier": "^1.15.0",
-    "tslint-config-standard": "^8.0.1",
-    "typescript": "^3.0.3"
+    "typescript": "^3.5.3"
   },
   "engines": {
     "node": ">=6.0.0"

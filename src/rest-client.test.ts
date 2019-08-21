@@ -2,11 +2,11 @@ import { RestClient } from './rest-client'
 
 describe('RestClient', () => {
   describe('constructor', () => {
-    test.each([[null], ['string'], [{}]])(
+    test.each([null, 'string', {}])(
       'Throws when middleware is not an array (%j)',
       value => {
         // Act
-        let act = () => new RestClient(value)
+        let act = () => new RestClient(value as any)
 
         // Assert
         expect(act).toThrow(new TypeError('Middleware stack must be an array'))
@@ -57,7 +57,7 @@ describe('RestClient', () => {
           order += '2'
           return n(r)
         })
-        .use((r, n) => {
+        .use(() => {
           order += '3'
           return {} as any
         })
@@ -71,9 +71,9 @@ describe('RestClient', () => {
 
     it('Lets middleware switch request', () => {
       // Arrange
-      let middleware = jest.fn((r, n) => ({}))
+      let middleware = jest.fn(() => ({ success: true }))
       let sut = new RestClient()
-        .use((r, n) => {
+        .use((_, n) => {
           return n({ changed: true })
         })
         .use(middleware)
@@ -89,8 +89,8 @@ describe('RestClient', () => {
       // Arrange
       let middleware = jest.fn()
       let sut = new RestClient()
-        .use((r, n) => {
-          return {} as any
+        .use(() => {
+          return { success: true }
         })
         .use(middleware)
 
@@ -103,7 +103,7 @@ describe('RestClient', () => {
 
     it('Uses current request if middleware calls next without a request', () => {
       // Arrange
-      let middleware = jest.fn((r, n) => ({}))
+      let middleware = jest.fn(() => ({ success: true }))
 
       let sut = new RestClient().use((_, n) => n()).use(middleware)
 
@@ -121,7 +121,7 @@ describe('RestClient', () => {
   describe('$send', () => {
     it('Returns body of result', async () => {
       // Arrange
-      let sut = new RestClient().use(req => {
+      let sut = new RestClient().use(() => {
         return Promise.resolve({ body: 'body' } as any)
       })
 
@@ -134,7 +134,7 @@ describe('RestClient', () => {
 
     test('Requires validation', async () => {
       // Arrange
-      let sut = new RestClient().use(r =>
+      let sut = new RestClient().use(() =>
         Promise.resolve({
           success: false,
           status: 200,

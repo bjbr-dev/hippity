@@ -1,5 +1,5 @@
 import Axios, { AxiosInstance } from 'axios'
-import { Middleware, HttpResponse } from '~/src/rest-client'
+import { Middleware, HttpResponse } from '~/rest-client'
 import { isSuccess } from './is-success'
 
 export const axiosMiddleware = function(axios: AxiosInstance): Middleware {
@@ -71,7 +71,7 @@ export const axiosMiddleware = function(axios: AxiosInstance): Middleware {
     if (cancel) {
       let source = Axios.CancelToken.source()
 
-      cancel.onCancel(e => {
+      cancel.onCancel(() => {
         source.cancel()
       })
 

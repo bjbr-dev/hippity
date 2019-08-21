@@ -1,10 +1,10 @@
 import { defaultHeaderInjector as sut } from './default-header-injector'
 
-test.each([[[]], [null], [undefined], ['header']])(
+test.each([null, undefined, 'header', []])(
   'Throws when default headers is not an object (%j)',
   value => {
     // Act
-    let act = () => sut(value)
+    let act = () => sut(value as any)
 
     // Assert
     expect(act).toThrow(new TypeError('Default headers should be an object'))

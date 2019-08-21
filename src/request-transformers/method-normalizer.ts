@@ -1,4 +1,4 @@
-import { RequestTransform } from '~/src/transform-middleware'
+import { RequestTransform } from '~/transform-middleware'
 
 const methods = ['HEAD', 'GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE']
 

@@ -1,16 +1,17 @@
 import { dotNetResolve as sut } from './dot-net-resolve'
 
 describe('resolve', () => {
-  it.each([
-    ['', null, ''],
-    ['', { foo: 'bar' }, '?foo=bar'],
-    ['foo', null, 'foo'],
-    ['foo', { foo: 'bar' }, 'foo?foo=bar'],
-    ['foo/bar', null, 'foo/bar'],
-    ['foo/bar', { foo: 'bar' }, 'foo/bar?foo=bar'],
-    ['/foo/bar', null, '/foo/bar'],
-    ['/foo/bar', { foo: 'bar' }, '/foo/bar?foo=bar']
-  ])('Removes leading tilde (%j, %j, %j)', (path, params, expected) => {
+  it.each`
+    path          | params            | expected
+    ${''}         | ${null}           | ${''}
+    ${''}         | ${{ foo: 'bar' }} | ${'?foo=bar'}
+    ${'foo'}      | ${null}           | ${'foo'}
+    ${'foo'}      | ${{ foo: 'bar' }} | ${'foo?foo=bar'}
+    ${'foo/bar'}  | ${null}           | ${'foo/bar'}
+    ${'foo/bar'}  | ${{ foo: 'bar' }} | ${'foo/bar?foo=bar'}
+    ${'/foo/bar'} | ${null}           | ${'/foo/bar'}
+    ${'/foo/bar'} | ${{ foo: 'bar' }} | ${'/foo/bar?foo=bar'}
+  `('Removes leading tilde (%p, %p, %p)', ({ path, params, expected }) => {
     // Act
     const result = sut(path, params)
 
@@ -18,7 +19,7 @@ describe('resolve', () => {
     expect(result).toBe(expected)
   })
 
-  it.each([[null], [undefined]])(
+  it.each([null, undefined])(
     'Does nothing if params is undefined (%j)',
     params => {
       // Act
@@ -73,18 +74,19 @@ describe('resolve', () => {
     expect(result).toBe('/foo?a%5B0%5D.b=bar')
   })
 
-  it.each([
-    ['/{foo}', '/bar'],
-    ['/foo/{foo}', '/foo/bar'],
-    ['/{foo}/bar', '/bar/bar'],
-    ['/foo/{foo}/baz', '/foo/bar/baz'],
-    ['/{foo}/{foo}/baz', '/bar/bar/baz']
-  ])('Replaces named placeholders (%j %j)', (path, expected) => {
+  it.each`
+    path                  | expected
+    ${'/{foo}'}           | ${'/bar'}
+    ${'/foo/{foo}'}       | ${'/foo/bar'}
+    ${'/{foo}/bar'}       | ${'/bar/bar'}
+    ${'/foo/{foo}/baz'}   | ${'/foo/bar/baz'}
+    ${'/{foo}/{foo}/baz'} | ${'/bar/bar/baz'}
+  `('Replaces named placeholders (%j %j)', ({ path, expected }) => {
     // Act
-    const result = sut('/{foo}', { foo: 'bar' })
+    const result = sut(path, { foo: 'bar' })
 
     // Assert
-    expect(result).toBe('/bar')
+    expect(result).toBe(expected)
   })
 
   it('Url encodes parameters', () => {

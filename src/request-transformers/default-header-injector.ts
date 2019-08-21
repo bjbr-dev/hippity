@@ -1,4 +1,4 @@
-import { RequestTransform } from '~/src/transform-middleware'
+import { RequestTransform } from '~/transform-middleware'
 
 export const defaultHeaderInjector = (defaultHeaders: {
   [x: string]: { [x: string]: string | string[] }
