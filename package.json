@@ -24,7 +24,8 @@
     "lint:es": "eslint ./src",
     "sort": "npx sort-package-json",
     "test": "cross-env NODE_ENV=test jest --coverage",
-    "upgrade": "npx npm-check --update"
+    "upgrade": "npx npm-check --update",
+    "why": "npx npm-why"
   },
   "babel": {
     "plugins": [
@@ -80,8 +81,7 @@
     "testRegex": "(/src/.*\\.(test|spec))\\.(ts|tsx|js)$"
   },
   "dependencies": {
-    "axios": "^0.19.0",
-    "core-js": "^3.2.1"
+    "axios": "^0.19.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",
@@ -91,6 +91,7 @@
     "@types/jest": "^24.0.18",
     "@types/node": "^12.7.2",
     "babel-plugin-root-import": "^6.4.1",
+    "core-js": "^3.2.1",
     "coveralls": "^3.0.6",
     "cross-env": "^5.2.0",
     "eslint": "^6.2.0",
