@@ -1,7 +1,4 @@
-export function isSuccess(
-  method?: string,
-  status?: number
-): boolean | undefined {
+export function isSuccess(method, status) {
   if (typeof status !== 'number') {
     return false
   }

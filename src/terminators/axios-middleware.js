@@ -1,8 +1,7 @@
-import Axios, { AxiosInstance } from 'axios'
-import { Middleware, HttpResponse } from '~/rest-client'
+import Axios from 'axios'
 import { isSuccess } from './is-success'
 
-export const axiosMiddleware = function(axios: AxiosInstance): Middleware {
+export const axiosMiddleware = function(axios) {
   if (axios === null) {
     throw new Error('Axios must not be null: ')
   }
@@ -12,7 +11,7 @@ export const axiosMiddleware = function(axios: AxiosInstance): Middleware {
   }
 
   return async function(request) {
-    let {
+    const {
       // The root of the uri, if uri is not absolute
       baseUri,
 
@@ -69,7 +68,7 @@ export const axiosMiddleware = function(axios: AxiosInstance): Middleware {
 
     let cancelToken
     if (cancel) {
-      let source = Axios.CancelToken.source()
+      const source = Axios.CancelToken.source()
 
       cancel.onCancel(() => {
         source.cancel()
@@ -78,7 +77,7 @@ export const axiosMiddleware = function(axios: AxiosInstance): Middleware {
       cancelToken = source.token
     }
 
-    let axiosRequest = {
+    const axiosRequest = {
       url: uri,
       baseURL: baseUri,
       method: typeof method === 'string' ? method.toLowerCase() : method,
@@ -96,7 +95,7 @@ export const axiosMiddleware = function(axios: AxiosInstance): Middleware {
       validateStatus: null
     }
 
-    let axiosResponse = await axios(removeUndefinedProperties(axiosRequest))
+    const axiosResponse = await axios(removeUndefinedProperties(axiosRequest))
 
     return removeUndefinedProperties({
       success: isSuccess(request.method || '', axiosResponse.status),
@@ -104,20 +103,18 @@ export const axiosMiddleware = function(axios: AxiosInstance): Middleware {
       status: axiosResponse.status,
       message: axiosResponse.statusText,
       headers: axiosResponse.headers
-    } as HttpResponse)
+    })
   }
 }
 
-function removeUndefinedProperties(obj: { [key: string]: any }): any {
+function removeUndefinedProperties(obj) {
   Object.keys(obj).forEach(
     key => typeof obj[key] === 'undefined' && delete obj[key]
   )
   return obj
 }
 
-export const defaultAxiosMiddleware = function(
-  options: Object = {}
-): Middleware {
+export const defaultAxiosMiddleware = function(options) {
   const axiosOptions = {
     // Create fresh objects for all default header scopes
     // Axios creates only one which is shared across SSR requests!

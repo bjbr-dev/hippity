@@ -1,49 +1,5 @@
-import { CancellationToken } from '~/cancel-token'
-import { HeadersCollection } from '~/terminators/parse-headers'
-
-export type RouteValue =
-  | string
-  | number
-  | boolean
-  | null
-  | undefined
-  | RouteValueArray
-  | { [key: string]: RouteValue }
-
-export interface RouteValueArray extends Array<RouteValue> {}
-export type RouteValues = { [name: string]: RouteValue | RouteValue[] }
-export type Route = string | [string, RouteValues?]
-
-export type HttpRequest = {
-  method?: string
-  uri?: Route
-  message?: string
-  headers?: HeadersCollection
-  body?: any
-  cancel?: CancellationToken
-  [key: string]: any
-}
-
-export type HttpResponse = {
-  success: boolean
-  status?: number
-  message?: string
-  headers?: HeadersCollection
-  body?: any
-  [key: string]: any
-}
-
-export type NextMiddlewareDelegate = (
-  request?: HttpRequest
-) => Promise<HttpResponse> | HttpResponse
-
-export type Middleware = (
-  request: HttpRequest,
-  next: NextMiddlewareDelegate
-) => Promise<HttpResponse> | HttpResponse
-
 export class RestClient {
-  constructor(private middleware: Middleware[] = []) {
+  constructor(middleware = []) {
     if (!Array.isArray(middleware)) {
       throw new TypeError('Middleware stack must be an array')
     }
@@ -57,7 +13,7 @@ export class RestClient {
     this.middleware = middleware
   }
 
-  use(middleware: Middleware | Middleware[]) {
+  use(middleware) {
     if (Array.isArray(middleware)) {
       return new RestClient([...this.middleware, ...middleware])
     } else {
@@ -65,7 +21,7 @@ export class RestClient {
     }
   }
 
-  useIf(predicate: boolean, middleware: Middleware) {
+  useIf(predicate, middleware) {
     if (predicate === true) {
       return this.use(middleware)
     }
@@ -73,18 +29,18 @@ export class RestClient {
     return this
   }
 
-  send(request: HttpRequest): Promise<HttpResponse> | HttpResponse {
+  send(request) {
     const middlewares = this.middleware
 
     return dispatch(request, 0)
 
-    function dispatch(currentRequest: HttpRequest, index: number) {
+    function dispatch(currentRequest, index) {
       if (index === middlewares.length) {
         throw new Error(
           'Reached end of pipeline. Use a middleware which terminates the pipeline.'
         )
       } else {
-        let next: NextMiddlewareDelegate = function(request?: HttpRequest) {
+        const next = function(request) {
           if (!request) {
             request = currentRequest
           }
@@ -97,8 +53,8 @@ export class RestClient {
     }
   }
 
-  async $send(request: HttpRequest) {
-    let response = await this.send(request)
+  async $send(request) {
+    const response = await this.send(request)
 
     if (response.success !== false) {
       return response.body
@@ -111,59 +67,59 @@ export class RestClient {
     }
   }
 
-  get(uri: Route, options?: Object) {
+  get(uri, options) {
     return this.send({ method: 'GET', uri: uri, ...options })
   }
 
-  $get(uri: Route, options?: Object) {
+  $get(uri, options) {
     return this.$send({ method: 'GET', uri: uri, ...options })
   }
 
-  head(uri: Route, options?: Object) {
+  head(uri, options) {
     return this.send({ method: 'HEAD', uri: uri, ...options })
   }
 
-  $head(uri: Route, options?: Object) {
+  $head(uri, options) {
     return this.$send({ method: 'HEAD', uri: uri, ...options })
   }
 
-  options(uri: Route, options?: Object) {
+  options(uri, options) {
     return this.send({ method: 'OPTIONS', uri: uri, ...options })
   }
 
-  $options(uri: Route, options?: Object) {
+  $options(uri, options) {
     return this.$send({ method: 'OPTIONS', uri: uri, ...options })
   }
 
-  post(uri: Route, body: any, options?: Object) {
+  post(uri, body, options) {
     return this.send({ method: 'POST', uri: uri, body: body, ...options })
   }
 
-  $post(uri: Route, body: any, options?: Object) {
+  $post(uri, body, options) {
     return this.$send({ method: 'POST', uri: uri, body: body, ...options })
   }
 
-  put(uri: Route, body: any, options?: Object) {
+  put(uri, body, options) {
     return this.send({ method: 'PUT', uri: uri, body: body, ...options })
   }
 
-  $put(uri: Route, body: any, options?: Object) {
+  $put(uri, body, options) {
     return this.$send({ method: 'PUT', uri: uri, body: body, ...options })
   }
 
-  patch(uri: Route, body: any, options?: Object) {
+  patch(uri, body, options) {
     return this.send({ method: 'PATCH', uri: uri, body: body, ...options })
   }
 
-  $patch(uri: Route, body: any, options?: Object) {
+  $patch(uri, body, options) {
     return this.$send({ method: 'PATCH', uri: uri, body: body, ...options })
   }
 
-  del(uri: Route, options?: Object) {
+  del(uri, options) {
     return this.send({ method: 'DELETE', uri: uri, ...options })
   }
 
-  async $del(uri: Route, options?: Object) {
+  async $del(uri, options) {
     return this.$send({ method: 'DELETE', uri: uri, ...options })
   }
 }

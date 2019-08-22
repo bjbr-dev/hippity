@@ -2,8 +2,8 @@ import { CancellationTokenSource } from './cancel-token'
 
 test('Token is not cancelled by default', () => {
   // Arrange
-  let source = new CancellationTokenSource()
-  let token = source.token
+  const source = new CancellationTokenSource()
+  const token = source.token
 
   // Assert
   expect(source.cancelled).toBe(false)
@@ -13,8 +13,8 @@ test('Token is not cancelled by default', () => {
 
 test('Can cancel', () => {
   // Arrange
-  let source = new CancellationTokenSource()
-  let token = source.token
+  const source = new CancellationTokenSource()
+  const token = source.token
 
   // Act
   source.cancel()
@@ -27,8 +27,8 @@ test('Can cancel', () => {
 
 test('Can cancel with custom message', () => {
   // Arrange
-  let source = new CancellationTokenSource()
-  let token = source.token
+  const source = new CancellationTokenSource()
+  const token = source.token
 
   // Act
   source.cancel('foo')
@@ -43,11 +43,11 @@ test('Can cancel with custom message', () => {
 
 test('Calls all callbacks on cancel', () => {
   // Arrange
-  let source = new CancellationTokenSource()
-  let token = source.token
+  const source = new CancellationTokenSource()
+  const token = source.token
 
-  let callbacks = [jest.fn(), jest.fn()]
-  for (let callback of callbacks) {
+  const callbacks = [jest.fn(), jest.fn()]
+  for (const callback of callbacks) {
     token.onCancel(callback)
   }
 
@@ -61,11 +61,11 @@ test('Calls all callbacks on cancel', () => {
 
 test('Serializes token to JSON nicely', () => {
   // Arrange
-  let source = new CancellationTokenSource()
-  let token = source.token
+  const source = new CancellationTokenSource()
+  const token = source.token
 
   // Act
-  let json = JSON.stringify({ token: token })
+  const json = JSON.stringify({ token: token })
 
   // Assert
   expect(json).toEqual('{"token":{"cancelled":false}}')

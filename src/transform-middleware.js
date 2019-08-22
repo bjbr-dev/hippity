@@ -1,15 +1,4 @@
-import { Middleware, HttpRequest, HttpResponse } from './rest-client'
-
-export type RequestTransform = (request: HttpRequest) => HttpRequest
-export type ResponseTransform = (
-  request: HttpRequest,
-  response: HttpResponse
-) => HttpResponse
-
-export const transformMiddleware = (
-  requestTransforms: RequestTransform[],
-  responseTransforms: ResponseTransform[]
-): Middleware => {
+export const transformMiddleware = (requestTransforms, responseTransforms) => {
   if (!Array.isArray(requestTransforms)) {
     throw new TypeError('Request transforms must be an array')
   }

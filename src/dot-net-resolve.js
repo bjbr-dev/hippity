@@ -1,10 +1,4 @@
-import { RouteValue, RouteValues } from './rest-client'
-
-function buildParams(
-  key: string,
-  value: RouteValue,
-  add: (key: string, value: any) => void
-) {
+function buildParams(key, value, add) {
   if (typeof value === 'undefined') {
     return
   }
@@ -15,7 +9,7 @@ function buildParams(
         buildParams(`${key}[${i}]`, value[i], add)
       }
     } else {
-      for (let subKey in value) {
+      for (const subKey in value) {
         if (value.hasOwnProperty(subKey)) {
           buildParams(`${key}.${subKey}`, value[subKey], add)
         }
@@ -26,10 +20,7 @@ function buildParams(
   }
 }
 
-export function dotNetResolve(
-  path: string,
-  params?: RouteValues | undefined | null
-): string {
+export function dotNetResolve(path, params) {
   if (typeof path !== 'string') {
     throw new TypeError('Path must be a string')
   }
@@ -38,8 +29,8 @@ export function dotNetResolve(
     return path
   }
 
-  const queryParameters: string[] = []
-  let pushQueryParameter = function(key: string, value: RouteValue) {
+  const queryParameters = []
+  const pushQueryParameter = function(key, value) {
     queryParameters.push(
       encodeURIComponent(key) +
         '=' +
@@ -47,13 +38,13 @@ export function dotNetResolve(
     )
   }
 
-  for (let key in params) {
+  for (const key in params) {
     if (params.hasOwnProperty(key)) {
       const value = params[key]
       const placeholder = `{${key}}`
 
       if (path.indexOf(placeholder) !== -1) {
-        path = path.replace(placeholder, encodeURIComponent(value as string))
+        path = path.replace(placeholder, encodeURIComponent(value))
       } else {
         buildParams(key, value, pushQueryParameter)
       }

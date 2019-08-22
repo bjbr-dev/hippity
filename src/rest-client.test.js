@@ -6,7 +6,7 @@ describe('RestClient', () => {
       'Throws when middleware is not an array (%j)',
       value => {
         // Act
-        let act = () => new RestClient(value as any)
+        const act = () => new RestClient(value)
 
         // Assert
         expect(act).toThrow(new TypeError('Middleware stack must be an array'))
@@ -17,10 +17,10 @@ describe('RestClient', () => {
   describe('send', () => {
     it('Throws exception when send is called with no middleware registered', () => {
       // Arrange
-      let sut = new RestClient()
+      const sut = new RestClient()
 
       // Act
-      let act = () => sut.send({})
+      const act = () => sut.send({})
 
       // Assert
       expect(act).toThrow(
@@ -32,10 +32,10 @@ describe('RestClient', () => {
 
     it('Throws if no middleware terminates', () => {
       // Arrange
-      let sut = new RestClient().use((r, n) => n(r))
+      const sut = new RestClient().use((r, n) => n(r))
 
       // Act
-      let act = () => sut.send({})
+      const act = () => sut.send({})
 
       // Assert
       expect(act).toThrow(
@@ -48,7 +48,7 @@ describe('RestClient', () => {
     it('Calls middleware in order', () => {
       // Arrange
       let order = ''
-      let sut = new RestClient()
+      const sut = new RestClient()
         .use((r, n) => {
           order += '1'
           return n(r)
@@ -59,7 +59,7 @@ describe('RestClient', () => {
         })
         .use(() => {
           order += '3'
-          return {} as any
+          return {}
         })
 
       // Act
@@ -71,8 +71,8 @@ describe('RestClient', () => {
 
     it('Lets middleware switch request', () => {
       // Arrange
-      let middleware = jest.fn(() => ({ success: true }))
-      let sut = new RestClient()
+      const middleware = jest.fn(() => ({ success: true }))
+      const sut = new RestClient()
         .use((_, n) => {
           return n({ changed: true })
         })
@@ -87,8 +87,8 @@ describe('RestClient', () => {
 
     it('Does not call middleware if one terminates earlier in the pipeline', () => {
       // Arrange
-      let middleware = jest.fn()
-      let sut = new RestClient()
+      const middleware = jest.fn()
+      const sut = new RestClient()
         .use(() => {
           return { success: true }
         })
@@ -103,9 +103,9 @@ describe('RestClient', () => {
 
     it('Uses current request if middleware calls next without a request', () => {
       // Arrange
-      let middleware = jest.fn(() => ({ success: true }))
+      const middleware = jest.fn(() => ({ success: true }))
 
-      let sut = new RestClient().use((_, n) => n()).use(middleware)
+      const sut = new RestClient().use((_, n) => n()).use(middleware)
 
       // Act
       sut.send({ changed: false })
@@ -121,12 +121,12 @@ describe('RestClient', () => {
   describe('$send', () => {
     it('Returns body of result', async () => {
       // Arrange
-      let sut = new RestClient().use(() => {
-        return Promise.resolve({ body: 'body' } as any)
+      const sut = new RestClient().use(() => {
+        return Promise.resolve({ body: 'body' })
       })
 
       // Act
-      let response = await sut.$send({ GET: 'foo' })
+      const response = await sut.$send({ GET: 'foo' })
 
       // Assert
       expect(response).toBe('body')
@@ -134,7 +134,7 @@ describe('RestClient', () => {
 
     test('Requires validation', async () => {
       // Arrange
-      let sut = new RestClient().use(() =>
+      const sut = new RestClient().use(() =>
         Promise.resolve({
           success: false,
           status: 200,
@@ -144,7 +144,7 @@ describe('RestClient', () => {
       )
 
       // Act
-      let act = sut.$send({ method: 'DELETE' })
+      const act = sut.$send({ method: 'DELETE' })
 
       // Assert
       await expect(act).rejects.toThrow(

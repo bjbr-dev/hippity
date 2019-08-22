@@ -2,8 +2,6 @@
  * @file Originally copied from Axios under MIT license
  */
 
-export type HeadersCollection = { [key: string]: string | string[] }
-
 const ignoreDuplicateOf = [
   'age',
   'authorization',
@@ -24,19 +22,19 @@ const ignoreDuplicateOf = [
   'user-agent'
 ]
 
-export function parseHeaders(headers: string): HeadersCollection {
-  const parsed: HeadersCollection = {}
+export function parseHeaders(headers) {
+  const parsed = {}
 
   if (!headers) {
     return parsed
   }
 
-  for (let line of headers.split('\n')) {
-    let i = line.indexOf(':')
+  for (const line of headers.split('\n')) {
+    const i = line.indexOf(':')
 
     // Normalize headers to be consistent with browsers, and fetch()
     // https://github.com/whatwg/xhr/issues/146
-    let key = line
+    const key = line
       .substr(0, i)
       .trim()
       .toLowerCase()
@@ -52,11 +50,11 @@ export function parseHeaders(headers: string): HeadersCollection {
       // fields (i.e., as defined in [RFC2616]) might change the semantics of
       // the Set-Cookie header field because the %x2C (",") character is used
       // by Set-Cookie in a way that conflicts with such folding.
-      let val = line.substr(i + 1).trim()
+      const val = line.substr(i + 1).trim()
       if (key === 'set-cookie') {
-        parsed[key] = [...((parsed[key] as string[]) || []), val]
+        parsed[key] = [...(parsed[key] || []), val]
       } else {
-        let oldVal = parsed[key]
+        const oldVal = parsed[key]
         parsed[key] = oldVal ? oldVal + ', ' + val : val
       }
     }

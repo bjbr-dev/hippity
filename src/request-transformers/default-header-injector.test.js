@@ -4,7 +4,7 @@ test.each([null, undefined, 'header', []])(
   'Throws when default headers is not an object (%j)',
   value => {
     // Act
-    let act = () => sut(value as any)
+    const act = () => sut(value)
 
     // Assert
     expect(act).toThrow(new TypeError('Default headers should be an object'))
@@ -13,11 +13,11 @@ test.each([null, undefined, 'header', []])(
 
 it('Sets headers to empty when there are no headers or default headers', () => {
   // Arrange
-  let defaultHeaders = {}
-  let request = {}
+  const defaultHeaders = {}
+  const request = {}
 
   // Act
-  let result = sut(defaultHeaders)(request)
+  const result = sut(defaultHeaders)(request)
 
   // Assert
   expect(request).toEqual({})
@@ -26,11 +26,11 @@ it('Sets headers to empty when there are no headers or default headers', () => {
 
 it('uses common headers', () => {
   // Arrange
-  let defaultHeaders = { common: { foo: 'bar' } }
-  let request = {}
+  const defaultHeaders = { common: { foo: 'bar' } }
+  const request = {}
 
   // Act
-  let result = sut(defaultHeaders)(request)
+  const result = sut(defaultHeaders)(request)
 
   // Assert
   expect(request).toEqual({})
@@ -39,11 +39,11 @@ it('uses common headers', () => {
 
 it('uses headers for current method', () => {
   // Arrange
-  let defaultHeaders = { PUT: { foo: 'bar' } }
-  let request = { method: 'PUT' }
+  const defaultHeaders = { PUT: { foo: 'bar' } }
+  const request = { method: 'PUT' }
 
   // Act
-  let result = sut(defaultHeaders)(request)
+  const result = sut(defaultHeaders)(request)
 
   // Assert
   expect(request).toEqual({ method: 'PUT' })
@@ -52,11 +52,11 @@ it('uses headers for current method', () => {
 
 it('Does not use headers for a different method', () => {
   // Arrange
-  let defaultHeaders = { PUT: { foo: 'bar' } }
-  let request = { method: 'POST' }
+  const defaultHeaders = { PUT: { foo: 'bar' } }
+  const request = { method: 'POST' }
 
   // Act
-  let result = sut(defaultHeaders)(request)
+  const result = sut(defaultHeaders)(request)
 
   // Assert
   expect(request).toEqual({ method: 'POST' })
@@ -65,14 +65,14 @@ it('Does not use headers for a different method', () => {
 
 it('Overrides common headers with current method', () => {
   // Arrange
-  let defaultHeaders = {
+  const defaultHeaders = {
     common: { foo: 'baz' },
     PUT: { foo: 'bar' }
   }
-  let request = { method: 'PUT' }
+  const request = { method: 'PUT' }
 
   // Act
-  let result = sut(defaultHeaders)(request)
+  const result = sut(defaultHeaders)(request)
 
   // Assert
   expect(request).toEqual({ method: 'PUT' })
@@ -81,11 +81,11 @@ it('Overrides common headers with current method', () => {
 
 it('Overrides current method headers with explicit headers', () => {
   // Arrange
-  let defaultHeaders = { PUT: { foo: 'bar' } }
-  let request = { method: 'PUT', headers: { foo: 'baz' } }
+  const defaultHeaders = { PUT: { foo: 'bar' } }
+  const request = { method: 'PUT', headers: { foo: 'baz' } }
 
   // Act
-  let result = sut(defaultHeaders)(request)
+  const result = sut(defaultHeaders)(request)
 
   // Assert
   expect(request).toEqual({ method: 'PUT', headers: { foo: 'baz' } })
@@ -94,11 +94,11 @@ it('Overrides current method headers with explicit headers', () => {
 
 it('Does not change other headers', () => {
   // Arrange
-  let defaultHeaders = { common: { foo: 'bar' } }
-  let request = { headers: { baz: 'qux' } }
+  const defaultHeaders = { common: { foo: 'bar' } }
+  const request = { headers: { baz: 'qux' } }
 
   // Act
-  let result = sut(defaultHeaders)(request)
+  const result = sut(defaultHeaders)(request)
 
   // Assert
   expect(request).toEqual({ headers: { baz: 'qux' } })

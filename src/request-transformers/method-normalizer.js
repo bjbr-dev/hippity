@@ -1,15 +1,13 @@
-import { RequestTransform } from '~/transform-middleware'
-
 const methods = ['HEAD', 'GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE']
 
-export const methodNormalizer: RequestTransform = request => {
+export function methodNormalizer(request) {
   if (request.method) {
     return request
   }
 
-  for (let method of methods) {
+  for (const method of methods) {
     if (request.hasOwnProperty(method)) {
-      let newRequest = { ...request }
+      const newRequest = { ...request }
       newRequest.method = method
       newRequest.uri = request[method]
       delete newRequest[method]

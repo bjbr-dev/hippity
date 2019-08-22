@@ -1,14 +1,10 @@
 const CANCEL = Symbol()
 
-export interface CancellationToken {
-  readonly cancelled: boolean
-  onCancel(callback: (error: Error) => void): void
-  throwIfCancelled(): void
-}
-
-class CancellationTokenImpl implements CancellationToken {
-  private callbacks: { (error: Error): void }[] = []
-  private cancelReason: string | null = null
+class CancellationTokenImpl {
+  constructor() {
+    this.callbacks = []
+    this.cancelReason = null
+  }
 
   throwIfCancelled() {
     if (this.cancelReason !== null) {
@@ -16,23 +12,23 @@ class CancellationTokenImpl implements CancellationToken {
     }
   }
 
-  [CANCEL](reason?: string) {
+  [CANCEL](reason) {
     if (reason) {
       this.cancelReason = 'Promise was cancelled: ' + reason
     } else {
       this.cancelReason = 'Promise was cancelled'
     }
 
-    for (let callback of this.callbacks) {
+    for (const callback of this.callbacks) {
       callback(new Error(this.cancelReason))
     }
   }
 
-  onCancel(callback: (error: Error) => void) {
+  onCancel(callback) {
     this.callbacks.push(callback)
   }
 
-  get cancelled(): boolean {
+  get cancelled() {
     return this.cancelReason !== null
   }
 
@@ -42,17 +38,15 @@ class CancellationTokenImpl implements CancellationToken {
 }
 
 export class CancellationTokenSource {
-  public token: CancellationTokenImpl
-
   constructor() {
     this.token = new CancellationTokenImpl()
   }
 
-  cancel(reason?: string) {
+  cancel(reason) {
     this.token[CANCEL](reason)
   }
 
-  get cancelled(): boolean {
+  get cancelled() {
     return this.token.cancelled
   }
 }

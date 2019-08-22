@@ -2,11 +2,11 @@ import { baseUriApplier as sut } from './base-uri-applier'
 
 it('Adds in default base', () => {
   // Arrange
-  let base = 'www.base.com'
-  let request = {}
+  const base = 'www.base.com'
+  const request = {}
 
   // Act
-  let result = sut(base)(request)
+  const result = sut(base)(request)
 
   // Assert
   expect(request).toEqual({})
@@ -15,11 +15,11 @@ it('Adds in default base', () => {
 
 it('Does not override explicit base', () => {
   // Arrange
-  let base = 'www.base.com'
-  let request = { baseUri: 'explicit' }
+  const base = 'www.base.com'
+  const request = { baseUri: 'explicit' }
 
   // Act
-  let result = sut(base)(request)
+  const result = sut(base)(request)
 
   // Assert
   expect(request).toEqual({ baseUri: 'explicit' })
@@ -28,11 +28,11 @@ it('Does not override explicit base', () => {
 
 it('Does not override null base', () => {
   // Arrange
-  let base = 'www.base.com'
-  let request = { baseUri: null }
+  const base = 'www.base.com'
+  const request = { baseUri: null }
 
   // Act
-  let result = sut(base)(request)
+  const result = sut(base)(request)
 
   // Assert
   expect(request).toEqual({ baseUri: null })

@@ -8,7 +8,7 @@ test.each([{}, false, null, undefined, 'string'])(
   'Throws when request transform is not an array',
   value => {
     // Act
-    let act = () => sut(value as any, [])
+    const act = () => sut(value, [])
 
     // Assert
     expect(act).toThrow(new TypeError('Request transforms must be an array'))
@@ -19,7 +19,7 @@ test.each([{}, false, null, undefined, 'string'])(
   'Throws when response transform is not an array',
   value => {
     // Act
-    let act = () => sut([], value as any)
+    const act = () => sut([], value)
 
     // Assert
     expect(act).toThrow(new TypeError('Response transforms must be an array'))
@@ -28,14 +28,14 @@ test.each([{}, false, null, undefined, 'string'])(
 
 it('Does nothing if no transforms are specified', async () => {
   // Arrange
-  let request = {}
-  let response = { success: true }
-  let next = jest.fn(() => response)
-  let requestTransforms: RequestTransform[] = []
-  let responseTransforms: ResponseTransform[] = []
+  const request = {}
+  const response = { success: true }
+  const next = jest.fn(() => response)
+  const requestTransforms = []
+  const responseTransforms = []
 
   // Act
-  let result = await sut(requestTransforms, responseTransforms)(request, next)
+  const result = await sut(requestTransforms, responseTransforms)(request, next)
 
   // Assert
   expect(result).toEqual({ success: true })
@@ -46,17 +46,17 @@ it('Does nothing if no transforms are specified', async () => {
 
 it('Transforms the request in order', async () => {
   // Arrange
-  let request = { order: '' }
-  let response = { success: true }
-  let next = jest.fn(() => response)
-  let requestTransforms: RequestTransform[] = [
+  const request = { order: '' }
+  const response = { success: true }
+  const next = jest.fn(() => response)
+  const requestTransforms = [
     r => ({ ...r, order: r.order + 'a' }),
     r => ({ ...r, order: r.order + 'b' })
   ]
-  let responseTransforms: ResponseTransform[] = []
+  const responseTransforms = []
 
   // Act
-  let result = await sut(requestTransforms, responseTransforms)(request, next)
+  const result = await sut(requestTransforms, responseTransforms)(request, next)
 
   // Assert
   expect(result).toEqual({ success: true })
@@ -67,17 +67,17 @@ it('Transforms the request in order', async () => {
 
 it('Transforms the response in order', async () => {
   // Arrange
-  let request = {}
-  let response = { success: true, order: '' }
-  let next = jest.fn(() => response)
-  let requestTransforms: RequestTransform[] = []
-  let responseTransforms: ResponseTransform[] = [
+  const request = {}
+  const response = { success: true, order: '' }
+  const next = jest.fn(() => response)
+  const requestTransforms = []
+  const responseTransforms = [
     (_, res) => ({ ...res, order: res.order + 'a' }),
     (_, res) => ({ ...res, order: res.order + 'b' })
   ]
 
   // Act
-  let result = await sut(requestTransforms, responseTransforms)(request, next)
+  const result = await sut(requestTransforms, responseTransforms)(request, next)
 
   // Assert
   expect(result).toEqual({ success: true, order: 'ab' })

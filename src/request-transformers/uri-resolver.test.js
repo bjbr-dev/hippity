@@ -3,10 +3,10 @@ import { dotNetResolve as resolve } from '~/dot-net-resolve'
 
 it('does nothing if uri is a string', () => {
   // Arrange
-  let request = { uri: 'uri' }
+  const request = { uri: 'uri' }
 
   // Act
-  let result = sut(resolve)(request)
+  const result = sut(resolve)(request)
 
   // Assert
   expect(request).toEqual({ uri: 'uri' })
@@ -15,10 +15,10 @@ it('does nothing if uri is a string', () => {
 
 it('Does nothing if uri is not an array or object', () => {
   // Arrange
-  let request: any = { uri: function() {} }
+  const request = { uri: function() {} }
 
   // Act
-  let result = sut(resolve)(request)
+  const result = sut(resolve)(request)
 
   // Assert
   expect(request).toEqual({ uri: expect.any(Function) })
@@ -27,10 +27,10 @@ it('Does nothing if uri is not an array or object', () => {
 
 it('Resolves array with just a path', () => {
   // Arrange
-  let request: any = { uri: ['path'] }
+  const request = { uri: ['path'] }
 
   // Act
-  let result = sut(resolve)(request)
+  const result = sut(resolve)(request)
 
   // Assert
   expect(request).toEqual({ uri: ['path'] })
@@ -39,10 +39,10 @@ it('Resolves array with just a path', () => {
 
 it('Resolves array with just a path', () => {
   // Arrange
-  let request: any = { uri: ['path'] }
+  const request = { uri: ['path'] }
 
   // Act
-  let result = sut(resolve)(request)
+  const result = sut(resolve)(request)
 
   // Assert
   expect(request).toEqual({ uri: ['path'] })
@@ -51,10 +51,10 @@ it('Resolves array with just a path', () => {
 
 it('Resolves array with path and parameters', () => {
   // Arrange
-  let request: any = { uri: ['path', { foo: 'bar' }] }
+  const request = { uri: ['path', { foo: 'bar' }] }
 
   // Act
-  let result = sut(resolve)(request)
+  const result = sut(resolve)(request)
 
   // Assert
   expect(request).toEqual({ uri: ['path', { foo: 'bar' }] })
@@ -63,7 +63,7 @@ it('Resolves array with path and parameters', () => {
 
 it('Copies other properties on request', () => {
   // Arrange
-  let request: any = {
+  const request = {
     uri: ['path', { foo: 'bar' }],
     undefined: void 0,
     null: null,
@@ -75,7 +75,7 @@ it('Copies other properties on request', () => {
   }
 
   // Act
-  let result = sut(resolve)(request)
+  const result = sut(resolve)(request)
 
   // Assert
   expect(request).toEqual({
