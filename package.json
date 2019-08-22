@@ -74,7 +74,7 @@
       "js"
     ],
     "moduleNameMapper": {
-      "^~/(.*)$": "<rootDir>/$1"
+      "^~/(.*)$": "<rootDir>/src/$1"
     },
     "testEnvironment": "node",
     "testRegex": "(/src/.*\\.(test|spec))\\.(ts|tsx|js)$"

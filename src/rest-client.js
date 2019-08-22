@@ -4,10 +4,8 @@ export class RestClient {
       throw new TypeError('Middleware stack must be an array')
     }
 
-    for (const m of middleware) {
-      if (typeof m !== 'function') {
-        throw new Error('Middleware must be a function')
-      }
+    if (middleware.some(m => typeof m !== 'function')) {
+      throw new Error('Middleware must be a function')
     }
 
     this.middleware = middleware

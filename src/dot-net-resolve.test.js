@@ -89,6 +89,14 @@ describe('resolve', () => {
     expect(result).toBe(expected)
   })
 
+  it('Does not double-replace placeholders', () => {
+    // Act
+    const result = sut('/{foo}', { foo: '{foo}' })
+
+    // Assert
+    expect(result).toBe('/%7Bfoo%7D')
+  })
+
   it('Url encodes parameters', () => {
     // Act
     const result = sut('/{foo}', {

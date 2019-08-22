@@ -43,8 +43,10 @@ export function dotNetResolve(path, params) {
       const value = params[key]
       const placeholder = `{${key}}`
 
-      if (path.indexOf(placeholder) !== -1) {
-        path = path.replace(placeholder, encodeURIComponent(value))
+      if (path.indexOf(placeholder) >= 0) {
+        do {
+          path = path.replace(placeholder, encodeURIComponent(value))
+        } while (path.indexOf(placeholder) >= 0)
       } else {
         buildParams(key, value, pushQueryParameter)
       }
