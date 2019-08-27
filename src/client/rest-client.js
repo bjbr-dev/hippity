@@ -64,60 +64,37 @@ export class RestClient {
       )
     }
   }
+}
 
-  get(uri, options) {
-    return this.send({ method: 'GET', uri: uri, ...options })
+function addSendWithoutBody(property, method) {
+  method = (method || property).toUpperCase()
+
+  RestClient.prototype[property] = function(url, options) {
+    return this.send({ method, url: url, ...options })
   }
 
-  $get(uri, options) {
-    return this.$send({ method: 'GET', uri: uri, ...options })
-  }
-
-  head(uri, options) {
-    return this.send({ method: 'HEAD', uri: uri, ...options })
-  }
-
-  $head(uri, options) {
-    return this.$send({ method: 'HEAD', uri: uri, ...options })
-  }
-
-  options(uri, options) {
-    return this.send({ method: 'OPTIONS', uri: uri, ...options })
-  }
-
-  $options(uri, options) {
-    return this.$send({ method: 'OPTIONS', uri: uri, ...options })
-  }
-
-  post(uri, body, options) {
-    return this.send({ method: 'POST', uri: uri, body: body, ...options })
-  }
-
-  $post(uri, body, options) {
-    return this.$send({ method: 'POST', uri: uri, body: body, ...options })
-  }
-
-  put(uri, body, options) {
-    return this.send({ method: 'PUT', uri: uri, body: body, ...options })
-  }
-
-  $put(uri, body, options) {
-    return this.$send({ method: 'PUT', uri: uri, body: body, ...options })
-  }
-
-  patch(uri, body, options) {
-    return this.send({ method: 'PATCH', uri: uri, body: body, ...options })
-  }
-
-  $patch(uri, body, options) {
-    return this.$send({ method: 'PATCH', uri: uri, body: body, ...options })
-  }
-
-  del(uri, options) {
-    return this.send({ method: 'DELETE', uri: uri, ...options })
-  }
-
-  async $del(uri, options) {
-    return this.$send({ method: 'DELETE', uri: uri, ...options })
+  RestClient.prototype['$' + property] = function(url, options) {
+    return this.$send({ method, url: url, ...options })
   }
 }
+
+function addSendWithBody(property, method) {
+  method = (method || property).toUpperCase()
+
+  RestClient.prototype[property] = function(url, body, options) {
+    return this.send({ method, url, body, ...options })
+  }
+
+  RestClient.prototype['$' + property] = function(url, body, options) {
+    return this.$send({ method, url, body, ...options })
+  }
+}
+
+addSendWithoutBody('get')
+addSendWithoutBody('head')
+addSendWithoutBody('options')
+addSendWithBody('post')
+addSendWithBody('put')
+addSendWithBody('patch')
+addSendWithoutBody('del', 'DELETE')
+addSendWithoutBody('delete', 'DELETE')

@@ -16,18 +16,29 @@
       "problemMatcher": ["$eslint-stylish", "$tsc"]
     },
     {
-      "label": "Lint ts",
-      "group": "build",
-      "type": "npm",
-      "script": "lint:ts",
-      "problemMatcher": ["$tsc"]
-    },
-    {
       "label": "Lint es",
       "group": "build",
-      "type": "npm",
-      "script": "lint:es",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "lint:es"],
       "problemMatcher": ["$eslint-stylish"]
+    },
+    {
+      "label": "Run tests",
+      "group": "build",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "test"],
+      "problemMatcher": []
+    },
+    {
+      "label": "Watch tests",
+      "group": "build",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "test", "--", "--watch"],
+      "isBackground": true,
+      "problemMatcher": []
     }
   ]
 }

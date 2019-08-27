@@ -22,3 +22,28 @@ Please update the docs accordingly so that there are no discrepencies between th
 ### Releasing
 
 A new version is automatically released by Travis CI by tagging the master branch. Versions should follow [semantic versioning](http://semver.org/).
+
+### Running Examples
+
+Examples are included in part to allow manual testing.
+
+Running example
+
+```bash
+$ npm run examples
+# Open 127.0.0.1:3000
+```
+
+Running sandbox in browser
+
+```bash
+$ npm start
+# Open 127.0.0.1:3000
+```
+
+Running sandbox in terminal
+
+```bash
+$ npm start
+$ node ./sandbox/client
+```

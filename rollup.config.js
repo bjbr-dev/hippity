@@ -14,7 +14,7 @@ export default {
       name: libraryName,
       format: 'umd',
       sourcemap: true,
-      globals: { axios: 'axios' }
+      globals: {}
     },
     { file: pkg.module, format: 'es', sourcemap: true }
   ],

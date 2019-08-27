@@ -1,8 +1,4 @@
-import {
-  transformMiddleware as sut,
-  RequestTransform,
-  ResponseTransform
-} from './transform-middleware'
+import { transformMiddleware as sut } from './transform-middleware'
 
 test.each([{}, false, null, undefined, 'string'])(
   'Throws when request transform is not an array',

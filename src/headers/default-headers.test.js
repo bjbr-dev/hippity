@@ -1,4 +1,4 @@
-import { defaultHeaderInjector as sut } from './default-header-injector'
+import { defaultHeaders as sut } from './default-headers'
 
 test.each([null, undefined, 'header', []])(
   'Throws when default headers is not an object (%j)',

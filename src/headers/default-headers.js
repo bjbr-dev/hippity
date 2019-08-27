@@ -1,4 +1,4 @@
-export const defaultHeaderInjector = defaultHeaders => {
+export const defaultHeaders = defaultHeaders => {
   if (
     typeof defaultHeaders !== 'object' ||
     defaultHeaders === null ||

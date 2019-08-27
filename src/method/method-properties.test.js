@@ -1,14 +1,14 @@
-import { methodNormalizer as sut } from './method-normalizer'
+import { methodProperties as sut } from './method-properties'
 
 it('Does nothing if method already exists', () => {
   // Arrange
-  const request = { GET: 'url', method: 'POST', uri: 'other' }
+  const request = { GET: 'url', method: 'POST', url: 'other' }
 
   // Act
   const result = sut(request)
 
   // Assert
-  expect(request).toEqual({ GET: 'url', method: 'POST', uri: 'other' })
+  expect(request).toEqual({ GET: 'url', method: 'POST', url: 'other' })
   expect(result).toBe(request)
 })
 
@@ -23,7 +23,7 @@ it.each([['HEAD', 'GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE']])(
 
     // Assert
     expect(request).toEqual({ [method]: 'url' })
-    expect(result).toEqual({ method: method, uri: 'url' })
+    expect(result).toEqual({ method: method, url: 'url' })
   }
 )
 
@@ -36,5 +36,5 @@ it('Only normalizes first matching method', () => {
 
   // Assert
   expect(request).toEqual({ GET: 'url', POST: 'other' })
-  expect(result).toEqual({ method: 'GET', uri: 'url', POST: 'other' })
+  expect(result).toEqual({ method: 'GET', url: 'url', POST: 'other' })
 })

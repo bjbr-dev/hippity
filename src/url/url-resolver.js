@@ -1,3 +1,14 @@
+export function urlResolver(request) {
+  if (Array.isArray(request.url)) {
+    return {
+      ...request,
+      url: resolve(request.url)
+    }
+  } else {
+    return request
+  }
+}
+
 function buildParams(key, value, add) {
   if (typeof value === 'undefined') {
     return
@@ -20,7 +31,7 @@ function buildParams(key, value, add) {
   }
 }
 
-export function dotNetResolve(path, params) {
+export function resolve([path, params]) {
   if (typeof path !== 'string') {
     throw new TypeError('Path must be a string')
   }
