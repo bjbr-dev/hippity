@@ -15,6 +15,6 @@ const sender = (function() {
   throw new Error('Could not choose a sender')
 })()
 
-export async function sendMiddleware(request) {
-  return await sender(request)
+export function sendMiddleware(request) {
+  return sender(request)
 }

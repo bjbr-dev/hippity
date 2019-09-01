@@ -8,16 +8,16 @@ export const transformMiddleware = (requestTransforms, responseTransforms) => {
   }
 
   return async function(request, next) {
-    for (const transform of requestTransforms) {
-      request = await transform(request)
-    }
+    request = await requestTransforms.reduce(
+      (p, t) => p.then(r => t(r)),
+      Promise.resolve(request)
+    )
 
-    let response = await next(request)
+    const response = await next(request)
 
-    for (const transform of responseTransforms) {
-      response = await transform(request, response)
-    }
-
-    return response
+    return await responseTransforms.reduce(
+      (p, t) => p.then(r => t(request, r)),
+      Promise.resolve(response)
+    )
   }
 }
