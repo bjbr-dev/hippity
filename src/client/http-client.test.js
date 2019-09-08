@@ -1,4 +1,4 @@
-import { RestClient } from './rest-client'
+import { HttpClient } from './http-client'
 
 describe('RestClient', () => {
   describe('constructor', () => {
@@ -6,7 +6,7 @@ describe('RestClient', () => {
       'Throws when middleware is not an array (%j)',
       value => {
         // Act
-        const act = () => new RestClient(value)
+        const act = () => new HttpClient(value)
 
         // Assert
         expect(act).toThrow(new TypeError('Middleware stack must be an array'))
@@ -17,7 +17,7 @@ describe('RestClient', () => {
   describe('send', () => {
     it('Throws exception when send is called with no middleware registered', () => {
       // Arrange
-      const sut = new RestClient()
+      const sut = new HttpClient()
 
       // Act
       const act = () => sut.send({})
@@ -32,7 +32,7 @@ describe('RestClient', () => {
 
     it('Throws if no middleware terminates', () => {
       // Arrange
-      const sut = new RestClient().use((r, n) => n(r))
+      const sut = new HttpClient().use((r, n) => n(r))
 
       // Act
       const act = () => sut.send({})
@@ -48,7 +48,7 @@ describe('RestClient', () => {
     it('Calls middleware in order', () => {
       // Arrange
       let order = ''
-      const sut = new RestClient()
+      const sut = new HttpClient()
         .use((r, n) => {
           order += '1'
           return n(r)
@@ -72,7 +72,7 @@ describe('RestClient', () => {
     it('Lets middleware switch request', () => {
       // Arrange
       const middleware = jest.fn(() => ({ success: true }))
-      const sut = new RestClient()
+      const sut = new HttpClient()
         .use((_, n) => {
           return n({ changed: true })
         })
@@ -91,7 +91,7 @@ describe('RestClient', () => {
     it('Does not call middleware if one terminates earlier in the pipeline', () => {
       // Arrange
       const middleware = jest.fn()
-      const sut = new RestClient()
+      const sut = new HttpClient()
         .use(() => {
           return { success: true }
         })
@@ -108,7 +108,7 @@ describe('RestClient', () => {
       // Arrange
       const middleware = jest.fn(() => ({ success: true }))
 
-      const sut = new RestClient().use((_, n) => n()).use(middleware)
+      const sut = new HttpClient().use((_, n) => n()).use(middleware)
 
       // Act
       sut.send({ changed: false })
@@ -124,7 +124,7 @@ describe('RestClient', () => {
   describe('$send', () => {
     it('Returns body of result', async () => {
       // Arrange
-      const sut = new RestClient().use(() => {
+      const sut = new HttpClient().use(() => {
         return Promise.resolve({ body: 'body' })
       })
 
@@ -137,7 +137,7 @@ describe('RestClient', () => {
 
     test('Requires validation', async () => {
       // Arrange
-      const sut = new RestClient().use(() =>
+      const sut = new HttpClient().use(() =>
         Promise.resolve({
           success: false,
           status: 200,

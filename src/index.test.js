@@ -1,5 +1,5 @@
-import { RestClient } from './index'
+import { HttpClient } from './index'
 
-it('Exports rest client', () => {
-  expect(RestClient).not.toBeFalsy()
+it('Exports http client', () => {
+  expect(HttpClient).not.toBeFalsy()
 })

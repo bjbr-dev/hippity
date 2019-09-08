@@ -5,14 +5,12 @@ import pkg from './package.json'
 
 const extensions = ['.js', '.jsx']
 
-const libraryName = '@berkeleybross/restclient'
-
 export default {
   input: 'src/index.js',
   output: [
     {
       file: pkg.main,
-      name: libraryName,
+      name: pkg.name,
       format: 'umd',
       sourcemap: true,
       globals: {}

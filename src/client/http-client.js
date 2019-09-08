@@ -1,4 +1,4 @@
-export class RestClient {
+export class HttpClient {
   constructor(middleware = []) {
     if (!Array.isArray(middleware)) {
       throw new TypeError('Middleware stack must be an array')
@@ -13,9 +13,9 @@ export class RestClient {
 
   use(middleware) {
     if (Array.isArray(middleware)) {
-      return new RestClient([...this.middleware, ...middleware])
+      return new HttpClient([...this.middleware, ...middleware])
     } else {
-      return new RestClient([...this.middleware, middleware])
+      return new HttpClient([...this.middleware, middleware])
     }
   }
 
@@ -69,11 +69,11 @@ export class RestClient {
 function addSendWithoutBody(property, method) {
   method = (method || property).toUpperCase()
 
-  RestClient.prototype[property] = function(url, options) {
+  HttpClient.prototype[property] = function(url, options) {
     return this.send({ method, url: url, ...options })
   }
 
-  RestClient.prototype['$' + property] = function(url, options) {
+  HttpClient.prototype['$' + property] = function(url, options) {
     return this.$send({ method, url: url, ...options })
   }
 }
@@ -81,11 +81,11 @@ function addSendWithoutBody(property, method) {
 function addSendWithBody(property, method) {
   method = (method || property).toUpperCase()
 
-  RestClient.prototype[property] = function(url, body, options) {
+  HttpClient.prototype[property] = function(url, body, options) {
     return this.send({ method, url, body, ...options })
   }
 
-  RestClient.prototype['$' + property] = function(url, body, options) {
+  HttpClient.prototype['$' + property] = function(url, body, options) {
     return this.$send({ method, url, body, ...options })
   }
 }

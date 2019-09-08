@@ -1,2 +1,2 @@
-export * from './rest-client'
+export * from './http-client'
 export * from './transform-middleware'
