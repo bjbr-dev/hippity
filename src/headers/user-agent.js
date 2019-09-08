@@ -1,3 +1,5 @@
+/* global GLOBAL_VERSION */
+
 export function userAgent(userAgentString) {
   return request => {
     if (request.headers && request.headers['user-agent']) {
@@ -8,7 +10,7 @@ export function userAgent(userAgentString) {
       ...request,
       headers: {
         ...request.headers,
-        'user-agent': userAgentString || 'axios/' + version
+        'user-agent': userAgentString || 'axios/' + GLOBAL_VERSION
       }
     }
   }

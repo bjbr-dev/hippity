@@ -37,18 +37,6 @@ describe('urlResolver', () => {
     expect(result).toEqual({ url: 'path' })
   })
 
-  it('Resolves array with just a path', () => {
-    // Arrange
-    const request = { url: ['path'] }
-
-    // Act
-    const result = sut(request)
-
-    // Assert
-    expect(request).toEqual({ url: ['path'] })
-    expect(result).toEqual({ url: 'path' })
-  })
-
   it('Resolves array with path and parameters', () => {
     // Arrange
     const request = { url: ['path', { foo: 'bar' }] }

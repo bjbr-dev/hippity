@@ -37,7 +37,7 @@ it('Does nothing if no transforms are specified', async () => {
   expect(result).toEqual({ success: true })
   expect(request).toEqual({})
   expect(response).toEqual({ success: true })
-  expect(next).toBeCalledWith(request)
+  expect(next).toHaveBeenCalledWith(request)
 })
 
 it('Transforms the request in order', async () => {
@@ -58,7 +58,7 @@ it('Transforms the request in order', async () => {
   expect(result).toEqual({ success: true })
   expect(request).toEqual({ order: '' })
   expect(response).toEqual({ success: true })
-  expect(next).toBeCalledWith({ order: 'ab' })
+  expect(next).toHaveBeenCalledWith({ order: 'ab' })
 })
 
 it('Transforms the response in order', async () => {
@@ -79,5 +79,5 @@ it('Transforms the response in order', async () => {
   expect(result).toEqual({ success: true, order: 'ab' })
   expect(request).toEqual({})
   expect(response).toEqual({ success: true, order: '' })
-  expect(next).toBeCalledWith({})
+  expect(next).toHaveBeenCalledWith({})
 })

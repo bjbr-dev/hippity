@@ -82,7 +82,10 @@ describe('RestClient', () => {
       sut.send({})
 
       // Assert
-      expect(middleware).toBeCalledWith({ changed: true }, expect.any(Function))
+      expect(middleware).toHaveBeenCalledWith(
+        { changed: true },
+        expect.any(Function)
+      )
     })
 
     it('Does not call middleware if one terminates earlier in the pipeline', () => {
@@ -98,7 +101,7 @@ describe('RestClient', () => {
       sut.send({})
 
       // Assert
-      expect(middleware).not.toBeCalled()
+      expect(middleware).not.toHaveBeenCalled()
     })
 
     it('Uses current request if middleware calls next without a request', () => {
@@ -111,7 +114,7 @@ describe('RestClient', () => {
       sut.send({ changed: false })
 
       // Assert
-      expect(middleware).toBeCalledWith(
+      expect(middleware).toHaveBeenCalledWith(
         { changed: false },
         expect.any(Function)
       )

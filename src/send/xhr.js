@@ -2,6 +2,8 @@
 
 import { parseHeaders } from './parse-headers'
 import { isSuccess } from './is-success'
+import { createError } from './createError'
+import { isFormData } from './utils'
 
 export function sendViaXhr(request) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -75,18 +77,18 @@ export function sendViaXhr(request) {
 
     // Add headers to the request
     if ('setRequestHeader' in xhr) {
-      forEach(requestHeaders, function setRequestHeader(val, key) {
+      for (const key in requestHeaders) {
+        const val = requestHeaders[key]
         if (
-          typeof requestData === 'undefined' &&
-          key.toLowerCase() === 'content-type'
+          !(
+            typeof requestData === 'undefined' &&
+            key.toLowerCase() === 'content-type'
+          )
         ) {
-          // Remove Content-Type if data is undefined
-          delete requestHeaders[key]
-        } else {
           // Otherwise add header to the request
           xhr.setRequestHeader(key, val)
         }
-      })
+      }
     }
 
     // Add withCredentials to request if needed

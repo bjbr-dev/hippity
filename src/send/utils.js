@@ -1,8 +1,6 @@
-/*global toString:true*/
-
 // utils is a library of generic helper functions non-specific to axios
 
-const toString = Object.prototype.toString
+const objectToString = Object.prototype.toString
 
 /**
  * Determine if a value is an Array
@@ -11,7 +9,7 @@ const toString = Object.prototype.toString
  * @returns {boolean} True if value is an Array, otherwise false
  */
 export function isArray(val) {
-  return toString.call(val) === '[object Array]'
+  return objectToString.call(val) === '[object Array]'
 }
 
 /**
@@ -21,7 +19,7 @@ export function isArray(val) {
  * @returns {boolean} True if value is an ArrayBuffer, otherwise false
  */
 export function isArrayBuffer(val) {
-  return toString.call(val) === '[object ArrayBuffer]'
+  return objectToString.call(val) === '[object ArrayBuffer]'
 }
 
 /**
@@ -97,7 +95,7 @@ export function isObject(val) {
  * @returns {boolean} True if value is a Date, otherwise false
  */
 export function isDate(val) {
-  return toString.call(val) === '[object Date]'
+  return objectToString.call(val) === '[object Date]'
 }
 
 /**
@@ -107,7 +105,7 @@ export function isDate(val) {
  * @returns {boolean} True if value is a File, otherwise false
  */
 export function isFile(val) {
-  return toString.call(val) === '[object File]'
+  return objectToString.call(val) === '[object File]'
 }
 
 /**
@@ -117,7 +115,7 @@ export function isFile(val) {
  * @returns {boolean} True if value is a Blob, otherwise false
  */
 export function isBlob(val) {
-  return toString.call(val) === '[object Blob]'
+  return objectToString.call(val) === '[object Blob]'
 }
 
 /**
@@ -127,7 +125,7 @@ export function isBlob(val) {
  * @returns {boolean} True if value is a Function, otherwise false
  */
 export function isFunction(val) {
-  return toString.call(val) === '[object Function]'
+  return objectToString.call(val) === '[object Function]'
 }
 
 /**

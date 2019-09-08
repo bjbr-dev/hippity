@@ -21,7 +21,7 @@ function buildParams(key, value, add) {
       }
     } else {
       for (const subKey in value) {
-        if (value.hasOwnProperty(subKey)) {
+        if (Object.prototype.hasOwnProperty.call(value, subKey)) {
           buildParams(`${key}.${subKey}`, value[subKey], add)
         }
       }
@@ -50,7 +50,7 @@ export function resolve([path, params]) {
   }
 
   for (const key in params) {
-    if (params.hasOwnProperty(key)) {
+    if (Object.prototype.hasOwnProperty.call(params, key)) {
       const value = params[key]
       const placeholder = `{${key}}`
 

@@ -116,7 +116,7 @@ export function sendViaHttpAgent(request) {
         if (req.aborted) return
 
         req.abort()
-        reject(new OperationCancelled(reason))
+        reject()
       })
     }
 

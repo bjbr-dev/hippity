@@ -6,7 +6,7 @@ export function methodProperties(request) {
   }
 
   for (const method of methods) {
-    if (request.hasOwnProperty(method)) {
+    if (Object.prototype.hasOwnProperty.call(request, method)) {
       const newRequest = { ...request }
       newRequest.method = method
       newRequest.url = request[method]
