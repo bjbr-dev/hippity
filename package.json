@@ -1,26 +1,26 @@
 {
-  "name": "@berkeleybross/restclient",
+  "name": "hippity",
   "version": "0.4.0",
-  "description": "Simple middleware based REST client",
-  "homepage": "https://github.com/berkeleybross/restclient.js#readme",
+  "description": "Extensible HTTP client",
+  "keywords": [
+    "ajax",
+    "http",
+    "node",
+    "promise",
+    "xhr"
+  ],
+  "homepage": "https://gitlab.com/berkeleybross/hippity#readme",
   "bugs": {
-    "url": "https://github.com/berkeleybross/restclient.js/issues"
+    "url": "https://gitlab.com/berkeleybross/hippity/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/berkeleybross/restclient.js.git"
+    "url": "git+https://gitlab.com/berkeleybross/hippity.git"
   },
   "license": "MIT",
   "author": "berkeleybross",
   "files": [
     "dist"
-  ],
-  "keywords": [
-    "xhr",
-    "http",
-    "ajax",
-    "promise",
-    "node"
   ],
   "main": "dist/restclient.umd.js",
   "module": "dist/restclient.es5.js",
@@ -32,6 +32,7 @@
     "sort": "npx sort-package-json",
     "test": "cross-env NODE_ENV=test jest --coverage",
     "upgrade": "npx npm-check --update",
+    "postversion": "git push --follow-tags",
     "why": "npx npm-why"
   },
   "babel": {
