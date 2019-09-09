@@ -1,0 +1,26 @@
+image: node:10.16.3-alpine
+
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  script:
+    - npm ci
+    - npm run build
+    - npm pack
+  artifacts:
+    paths:
+      - hippity-*.tgz
+    expire_in: 1 week
+
+deploy:
+  stage: deploy
+  dependencies:
+    - build
+  script:
+    - npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
+    - npm publish hippity-*.tgz
+  only:
+    - tags

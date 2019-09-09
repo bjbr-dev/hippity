@@ -8,7 +8,7 @@ Please follow the [prettier](https://github.com/prettier/prettier) and [eslint](
 
 ### Testing
 
-Please update the tests to reflect your code changes. Pull requests will not be accepted if they are failing on [Travis CI](https://travis-ci.org/berkeleybross/restclient.js).
+Please update the tests to reflect your code changes. Pull requests will not be accepted if they are failing on [Gitlab CI](https://gitlab.com/berkeleybross/hippity/pipelines).
 
 ### Documentation
 

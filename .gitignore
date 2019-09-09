@@ -4,6 +4,7 @@ dist/
 es/
 node_modules/
 .rpt2_cache/
+/hippity-*.tgz
 
 # Invisible OS files
 *.DS_Store
