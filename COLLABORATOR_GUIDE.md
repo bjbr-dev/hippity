@@ -1,8 +1,8 @@
 # Collaborator Guide
 
-As a collaborator you will be involved with axios with some administrative responsibilities. This guide will help you understand your role and the responsibilities that come with being a collaborator.
+As a collaborator you will be involved with hippity with some administrative responsibilities. This guide will help you understand your role and the responsibilities that come with being a collaborator.
 
-1. **Adhere to and help enforce the Code of Conduct.** It is expected that you have read the [code of conduct](https://github.com/axios/axios/blob/master/CODE_OF_CONDUCT.md) and that you agree to live by it. This community should be friendly and welcoming.
+1. **Adhere to and help enforce the Code of Conduct.** It is expected that you have read the [code of conduct](https://gitlab.com/berkeleybross/hippity/blob/master/CODE_OF_CONDUCT.md) and that you agree to live by it. This community should be friendly and welcoming.
 
 1. **Triage issues.** As a collaborator you may help sort through the issues that are reported. Issues vary from bugs, regressions, feature requests, questions, etc. Apply the appropriate label(s) and respond as needed. If it is a legitimate request please address it, otherwise feel free to close the issue and include a comment with a suggestion on where to find support. If an issue has been inactive for more than a week (i.e, the owner of the issue hasn’t responded to you), close the issue with a note indicating stales issues are closed; it can always be reopened if needed. In the case of issues that require a code change encourage the owner to submit a PR. For less complex code changes, add a very simple and detailed checklist, apply the “first-timers-only” label, and encourage a newcomer to open source to get involved.
 
@@ -11,7 +11,7 @@ As a collaborator you will be involved with axios with some administrative respo
 1. **Assist with PRs.** By encouraging contributors to supply a PR for their own issue this is ideally where most of your attention will be focused. Keep a few things in mind as you review PRs.
 
    - When fixing a bug: does the PR adequately solve the problem without introducing any regressions?
-   - When implementing a feature: does the feature fit within the scope of axios?
+   - When implementing a feature: does the feature fit within the scope of hippity?
    - When removing functionality: is it properly deprecated with a warning?
    - When introducing functionality: is the API predictable?
    - Does the new code work for all supported platforms/browsers?
@@ -20,4 +20,4 @@ As a collaborator you will be involved with axios with some administrative respo
 
 1. **Fix bugs and implement features.** When things need to be fixed or implemented and a PR can’t wait, you may do things yourself. You should still submit a PR yourself and get it checked off by at least one other contributor. Keep the points from number 4 in consideration as you push your code.
 
-Thank you again for your help as a collaborator and in making axios community great! If you have any questions, or need any assistance please feel free to contact another collaborator or the owner.
+Thank you again for your help as a collaborator and in making the hippity community great! If you have any questions, or need any assistance please feel free to contact another collaborator or the owner.

@@ -1,4 +1,6 @@
-'use strict'
+/**
+ * @file Originally copied from Axios under MIT license and subsequently significantly changed
+ */
 
 import { parseHeaders } from './parse-headers'
 import { isSuccess } from './is-success'

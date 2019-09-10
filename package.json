@@ -22,8 +22,8 @@
   "files": [
     "dist"
   ],
-  "main": "dist/restclient.umd.js",
-  "module": "dist/restclient.es5.js",
+  "main": "dist/hippity.umd.js",
+  "module": "dist/hippity.es5.js",
   "scripts": {
     "build": "cross-env NODE_ENV=production npm-run-all clean -p build:* lint:* test --aggregate-output",
     "build:rollup": "rollup -c rollup.config.js",

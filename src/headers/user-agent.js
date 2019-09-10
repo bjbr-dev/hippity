@@ -10,7 +10,7 @@ export function userAgent(userAgentString) {
       ...request,
       headers: {
         ...request.headers,
-        'user-agent': userAgentString || 'axios/' + GLOBAL_VERSION
+        'user-agent': userAgentString || 'hippity/' + GLOBAL_VERSION
       }
     }
   }

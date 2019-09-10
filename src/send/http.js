@@ -1,3 +1,7 @@
+/**
+ * @file Originally copied from Axios under MIT license and subsequently significantly changed
+ */
+
 import { isStream, isArrayBuffer, isString } from '~/send/utils'
 import { createError, enhanceError } from '~/send/createError'
 import { isSuccess } from './is-success'

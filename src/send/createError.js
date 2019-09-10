@@ -14,7 +14,7 @@ export function createError(message, details) {
 }
 
 export function enhanceError(error, details) {
-  Object.assign(error, details, { isAxiosError: true })
+  Object.assign(error, details, { isHippityError: true })
 
   error.toJSON = function() {
     return {
@@ -29,7 +29,7 @@ export function enhanceError(error, details) {
       lineNumber: this.lineNumber,
       columnNumber: this.columnNumber,
       stack: this.stack,
-      // Axios
+      // Hippity
       request: details.request,
       code: details.code
     }
