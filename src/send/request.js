@@ -2,7 +2,7 @@
  * @file Originally copied from Axios under MIT license and subsequently significantly changed
  */
 
-import { isStream, isArrayBuffer } from '~/body/body-types'
+import { isStream, isArrayBuffer, isArrayBufferView } from '~/body/body-types'
 import { createError, enhanceError } from '~/send/createError'
 import { isSuccess } from './is-success'
 
@@ -21,6 +21,32 @@ const httpFactory = lazy(() => require('http'))
 const httpsFactory = lazy(() => require('https'))
 const zlibFactory = lazy(() => require('zlib'))
 
+function convertToBuffer(request) {
+  let body = request.body
+
+  if (Buffer.isBuffer(body)) {
+    return body
+  }
+
+  if (isArrayBufferView(body)) {
+    body = body.buffer
+  }
+
+  if (isArrayBuffer(body)) {
+    return Buffer.from(new Uint8Array(body))
+  }
+
+  if (typeof body === 'string') {
+    return Buffer.from(body, 'utf-8')
+  }
+
+  {
+    throw createError('Body must be a string, Buffer, ArrayBuffer or Stream', {
+      request
+    })
+  }
+}
+
 export function sendViaHttpAgent(request) {
   const http = httpFactory()
   const https = httpsFactory()
@@ -31,21 +57,7 @@ export function sendViaHttpAgent(request) {
     const headers = request.headers
 
     if (body && !isStream(body)) {
-      if (Buffer.isBuffer(body)) {
-        // Nothing to do...
-      } else if (isArrayBuffer(body)) {
-        body = Buffer.from(new Uint8Array(body))
-      } else if (typeof body === 'string') {
-        body = Buffer.from(body, 'utf-8')
-      } else {
-        return reject(
-          createError(
-            'Body must be a string, Buffer, ArrayBuffer or Stream',
-            request
-          )
-        )
-      }
-
+      body = convertToBuffer(request)
       headers['content-length'] = body.length
     }
 

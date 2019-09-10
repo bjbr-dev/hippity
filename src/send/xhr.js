@@ -65,7 +65,7 @@ export function sendViaXhr(request) {
         return
       }
 
-      reject(createError('Request aborted', request, 'ECONNABORTED', xhr))
+      reject(createError('Request aborted', { request, xhr }))
       xhr = null
     }
 
@@ -73,7 +73,7 @@ export function sendViaXhr(request) {
     xhr.onerror = function handleError() {
       // Real errors are hidden from us by the browser
       // onerror should only fire if it's a network error
-      reject(createError('Network Error', request, null, xhr))
+      reject(createError('Network Error', { request, xhr }))
       xhr = null
     }
 

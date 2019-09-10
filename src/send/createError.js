@@ -9,8 +9,7 @@
  * @returns {Error} The created error.
  */
 export function createError(message, details) {
-  const error = new Error(message)
-  return enhanceError(error, details)
+  return enhanceError(new Error(message), details)
 }
 
 export function enhanceError(error, details) {
@@ -30,8 +29,7 @@ export function enhanceError(error, details) {
       columnNumber: this.columnNumber,
       stack: this.stack,
       // Hippity
-      request: details.request,
-      code: details.code
+      request: details.request
     }
   }
 

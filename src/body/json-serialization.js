@@ -1,62 +1,35 @@
-import {
-  isFormData,
-  isStream,
-  isFile,
-  isBlob,
-  isURLSearchParams,
-  isArrayBufferView,
-  isArrayBuffer
-} from '~/body/body-types'
-import isBuffer from 'is-buffer'
-import { addHeaderIfNotPresent } from '~/headers/headers'
-
-function passThroughToRequest(body) {
-  return isBuffer(body) || isStream(body)
-}
-
-function passThroughToXhr(body) {
-  return isFormData(body) || isArrayBuffer(body) || isFile(body) || isBlob(body)
-}
+import { hasHeader, findHeader } from '~/headers/headers'
 
 export function jsonSerializer(request) {
-  const body = request.body
-  const headers = request.headers
-
-  if (passThroughToRequest(body) || passThroughToXhr(body)) {
+  if (hasHeader(request.headers, 'content-type')) {
     return request
   }
 
-  if (isArrayBufferView(body)) {
-    request.body = body.buffer
-    return request
+  return {
+    ...request,
+    headers: {
+      ...request.headers,
+      'content-type': 'application/json;charset=utf-8'
+    },
+    body: JSON.stringify(request.body)
   }
-
-  if (isURLSearchParams(body)) {
-    addHeaderIfNotPresent(
-      headers,
-      'content-type',
-      'application/x-www-form-urlencoded;charset=utf-8'
-    )
-
-    request.body = body.toString()
-    return request
-  }
-
-  addHeaderIfNotPresent(
-    headers,
-    'content-type',
-    'application/json;charset=utf-8'
-  )
-  request.body = JSON.stringify(body)
-  return request
 }
 
 export function jsonDeserializer(_, response) {
-  if (typeof response.body === 'string') {
-    try {
-      response.body = JSON.parse(response.body)
-    } catch (e) {
-      /* Ignore */
+  if (typeof response.body !== 'string') {
+    return response
+  }
+
+  const contentType = findHeader(response.headers, 'content-type')
+  if (
+    typeof contentType === 'string' &&
+    contentType.toLowerCase().indexOf('application/json') >= 0
+  ) {
+    return {
+      ...response,
+      body: JSON.parse(response.body)
     }
   }
+
+  return response
 }
