@@ -88,6 +88,9 @@
     "moduleNameMapper": {
       "^~/(.*)$": "<rootDir>/src/$1"
     },
+    "setupFilesAfterEnv": [
+      "jest-extended"
+    ],
     "testEnvironment": "node",
     "testRegex": "(/src/.*\\.(test|spec))\\.(ts|tsx|js)$"
   },
@@ -113,6 +116,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "is-buffer": "^2.0.3",
     "jest": "^24.9.0",
+    "jest-extended": "^0.11.2",
     "npm-run-all": "^4.1.5",
     "prettier": "^1.18.2",
     "rimraf": "^3.0.0",

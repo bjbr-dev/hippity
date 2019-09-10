@@ -5,14 +5,14 @@
 import { parseHeaders } from './parse-headers'
 import { isSuccess } from './is-success'
 import { createError } from './createError'
-import { isFormData } from './utils'
+import { isFormData } from '../body/body-types'
 
 export function sendViaXhr(request) {
-  return new Promise(function dispatchXhrRequest(resolve, reject) {
-    const requestData = request.data
+  return new Promise(function(resolve, reject) {
+    const requestBody = request.body
     const requestHeaders = request.headers
 
-    if (isFormData(requestData)) {
+    if (isFormData(requestBody)) {
       delete requestHeaders['content-type'] // Let the browser set it
     }
 
@@ -83,7 +83,7 @@ export function sendViaXhr(request) {
         const val = requestHeaders[key]
         if (
           !(
-            typeof requestData === 'undefined' &&
+            typeof requestBody === 'undefined' &&
             key.toLowerCase() === 'content-type'
           )
         ) {
@@ -111,7 +111,6 @@ export function sendViaXhr(request) {
       }
     }
 
-    // Handle progress if needed
     if (typeof request.onDownloadProgress === 'function') {
       xhr.addEventListener('progress', request.onDownloadProgress)
     }
@@ -133,6 +132,6 @@ export function sendViaXhr(request) {
       })
     }
 
-    xhr.send(typeof requestData === 'undefined' ? null : requestData)
+    xhr.send(typeof requestBody === 'undefined' ? null : requestBody)
   })
 }

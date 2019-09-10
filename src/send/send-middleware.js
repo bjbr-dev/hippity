@@ -1,4 +1,4 @@
-import { sendViaHttpAgent } from './http'
+import { sendViaHttpAgent } from './request'
 import { sendViaXhr } from './xhr'
 
 const sender = (function() {

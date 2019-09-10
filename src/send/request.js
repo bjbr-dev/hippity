@@ -2,7 +2,7 @@
  * @file Originally copied from Axios under MIT license and subsequently significantly changed
  */
 
-import { isStream, isArrayBuffer, isString } from '~/send/utils'
+import { isStream, isArrayBuffer } from '~/body/body-types'
 import { createError, enhanceError } from '~/send/createError'
 import { isSuccess } from './is-success'
 
@@ -35,12 +35,12 @@ export function sendViaHttpAgent(request) {
         // Nothing to do...
       } else if (isArrayBuffer(body)) {
         body = Buffer.from(new Uint8Array(body))
-      } else if (isString(body)) {
+      } else if (typeof body === 'string') {
         body = Buffer.from(body, 'utf-8')
       } else {
         return reject(
           createError(
-            'Data after transformation must be a string, an ArrayBuffer, a Buffer, or a Stream',
+            'Body must be a string, Buffer, ArrayBuffer or Stream',
             request
           )
         )
@@ -50,18 +50,19 @@ export function sendViaHttpAgent(request) {
     }
 
     const isHttpsRequest = request.url.startsWith('https://')
-    const agent = isHttpsRequest ? request.httpsAgent : request.httpAgent
 
     const options = {
       method: request.method,
       headers: headers,
-      agent: agent
+      agent: isHttpsRequest ? request.httpsAgent : request.httpAgent
     }
 
     const transport = isHttpsRequest ? https : http
 
     const req = transport.request(request.url, options, res => {
-      if (req.aborted) return
+      if (req.aborted) {
+        return
+      }
 
       // uncompress the response body transparently if required
       let stream = res
