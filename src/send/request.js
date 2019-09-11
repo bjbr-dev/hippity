@@ -40,11 +40,9 @@ function convertToBuffer(request) {
     return Buffer.from(body, 'utf-8')
   }
 
-  {
-    throw createError('Body must be a string, Buffer, ArrayBuffer or Stream', {
-      request
-    })
-  }
+  throw createError('Body must be a string, Buffer, ArrayBuffer or Stream', {
+    request
+  })
 }
 
 export function sendViaHttpAgent(request) {

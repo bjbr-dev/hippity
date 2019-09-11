@@ -1,7 +1,7 @@
 export function findHeader(headers, name) {
   const lowerName = name.toLowerCase()
 
-  for (const key of Object.keys(headers)) {
+  for (const key of Object.keys(headers || {})) {
     if (key.toLowerCase() == lowerName) {
       return headers[key]
     }
@@ -13,7 +13,7 @@ export function findHeader(headers, name) {
 function getHeaderName(headers, name) {
   const lowerName = name.toLowerCase()
 
-  for (const key of Object.keys(headers)) {
+  for (const key of Object.keys(headers || {})) {
     if (key.toLowerCase() == lowerName) {
       return key
     }
@@ -25,7 +25,7 @@ function getHeaderName(headers, name) {
 export function hasHeader(headers, name) {
   const lowerName = name.toLowerCase()
 
-  for (const key of Object.keys(headers)) {
+  for (const key of Object.keys(headers || {})) {
     if (key.toLowerCase() == lowerName) {
       return true
     }
