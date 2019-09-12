@@ -1,7 +1,5 @@
 import { userAgent } from './user-agent'
 
-global.GLOBAL_VERSION = 'version'
-
 it.each(['user-agent', 'User-Agent'])(
   'Does nothing if user-agent already set',
   name => {
@@ -10,7 +8,7 @@ it.each(['user-agent', 'User-Agent'])(
     const result = userAgent()(request)
 
     expect(request).toEqual({ headers: { [name]: 'value' } })
-    expect(result).toBe(request)
+    expect(result).toEqual({ headers: { [name]: 'value' } })
   }
 )
 
@@ -20,7 +18,7 @@ it('Adds in default user agent', () => {
   const result = userAgent()(request)
 
   expect(request).toEqual({})
-  expect(result).toEqual({ headers: { 'user-agent': 'hippity/version' } })
+  expect(result).toEqual({ headers: { 'user-agent': 'hippity/unknown' } })
 })
 
 it('Uses configured userAgent', () => {
@@ -39,6 +37,6 @@ it('Allows other headers', () => {
 
   expect(request).toEqual({ headers: { foo: 'bar' } })
   expect(result).toEqual({
-    headers: { foo: 'bar', 'user-agent': 'hippity/version' }
+    headers: { foo: 'bar', 'user-agent': 'hippity/unknown' }
   })
 })

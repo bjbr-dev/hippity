@@ -40,6 +40,12 @@ export function addHeaderIfNotPresent(headers, name, value) {
   }
 }
 
+export function addHeadersIfNotPresent(headers, newHeaders) {
+  for (const key of Object.keys(newHeaders || {})) {
+    addHeaderIfNotPresent(headers, key, newHeaders[key])
+  }
+}
+
 export function replaceHeader(headers, name, value) {
   headers[getHeaderName(headers, name)] = value
 }

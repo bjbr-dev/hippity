@@ -2,6 +2,7 @@ import {
   findHeader,
   hasHeader,
   addHeaderIfNotPresent,
+  addHeadersIfNotPresent,
   replaceHeader
 } from './headers'
 
@@ -72,6 +73,32 @@ describe('addHeaderIfNotPresent', () => {
   it('Does not change existing header capitalization', () => {
     const headers = { FOO: 'baz' }
     addHeaderIfNotPresent(headers, 'foo', 'bar')
+    expect(headers).toEqual({ FOO: 'baz' })
+  })
+})
+
+describe('addHeadersIfNotPresent', () => {
+  it('Adds header to empty object', () => {
+    const headers = {}
+    addHeadersIfNotPresent(headers, { foo: 'bar' })
+    expect(headers).toEqual({ foo: 'bar' })
+  })
+
+  it('Adds header to object with another header', () => {
+    const headers = { bar: 'baz' }
+    addHeadersIfNotPresent(headers, { foo: 'bar' })
+    expect(headers).toEqual({ foo: 'bar', bar: 'baz' })
+  })
+
+  it('Does not change existing header', () => {
+    const headers = { foo: 'baz' }
+    addHeadersIfNotPresent(headers, { foo: 'bar' })
+    expect(headers).toEqual({ foo: 'baz' })
+  })
+
+  it('Does not change existing header capitalization', () => {
+    const headers = { FOO: 'baz' }
+    addHeadersIfNotPresent(headers, { foo: 'bar' })
     expect(headers).toEqual({ FOO: 'baz' })
   })
 })

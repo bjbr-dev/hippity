@@ -27,7 +27,7 @@ export default {
     autoExternal(),
     resolve({ extensions }),
     replace({
-      GLOBAL_VERSION: JSON.stringify(pkg.version)
+      'process.env.HIPPITY_VERSION': JSON.stringify(pkg.version)
     }),
     commonjs(),
     babel({ extensions, include: ['src/**/*'] })

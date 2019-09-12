@@ -1,24 +1,16 @@
 import { isNode } from 'browser-or-node'
-import { hasHeader } from './headers'
+import { defaultHeaders } from './default-headers'
 
-/* global GLOBAL_VERSION */
+export function userAgentHeaders(userAgentString) {
+  if (!isNode) {
+    return {}
+  }
+
+  const version = process.env.HIPPITY_VERSION || 'unknown'
+  userAgentString = userAgentString || 'hippity/' + version
+  return { 'user-agent': userAgentString }
+}
 
 export function userAgent(userAgentString) {
-  if (!isNode) {
-    return r => r
-  }
-
-  return request => {
-    if (hasHeader(request.headers, 'user-agent')) {
-      return request
-    }
-
-    return {
-      ...request,
-      headers: {
-        ...request.headers,
-        'user-agent': userAgentString || 'hippity/' + GLOBAL_VERSION
-      }
-    }
-  }
+  return defaultHeaders({ common: userAgentHeaders(userAgentString) })
 }

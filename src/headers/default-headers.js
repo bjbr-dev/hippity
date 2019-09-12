@@ -1,3 +1,5 @@
+import { addHeadersIfNotPresent } from './headers'
+
 export const defaultHeaders = defaultHeaders => {
   if (
     typeof defaultHeaders !== 'object' ||
@@ -8,15 +10,15 @@ export const defaultHeaders = defaultHeaders => {
   }
 
   return request => {
-    return {
-      ...request,
-      headers: {
-        ...defaultHeaders['common'],
-        ...(typeof request.method === 'string'
-          ? defaultHeaders[request.method]
-          : null),
-        ...request.headers
-      }
+    const headers = { ...request.headers }
+
+    const method = request.method
+    if (typeof method === 'string') {
+      addHeadersIfNotPresent(headers, defaultHeaders[method])
     }
+
+    addHeadersIfNotPresent(headers, defaultHeaders.common)
+
+    return { ...request, headers }
   }
 }
