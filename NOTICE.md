@@ -1,6 +1,6 @@
 # Credits
 
-- [Axios](#axios) - This library is a wrapper around axios
+- [Axios](#axios) - This library was originally a wrapper around axios, and has now inlined a lot of their code.
 - [Nuxt Axios Module](#nuxt-axios-module) - inspired the use of the \$ prefix for easy validation
 
 ## Axios

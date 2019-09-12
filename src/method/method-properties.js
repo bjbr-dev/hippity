@@ -1,6 +1,6 @@
 const methods = ['HEAD', 'GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE']
 
-export function methodProperties(request) {
+export function urlInMethodProperties(request) {
   if (request.method) {
     return request
   }

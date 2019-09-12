@@ -1,6 +1,8 @@
+import autoExternal from 'rollup-plugin-auto-external'
 import babel from 'rollup-plugin-babel'
 import commonjs from 'rollup-plugin-commonjs'
 import resolve from 'rollup-plugin-node-resolve'
+import replace from 'rollup-plugin-replace'
 import pkg from './package.json'
 
 const extensions = ['.js', '.jsx']
@@ -22,7 +24,11 @@ export default {
   external: [],
 
   plugins: [
+    autoExternal(),
     resolve({ extensions }),
+    replace({
+      'process.env.HIPPITY_VERSION': JSON.stringify(pkg.version)
+    }),
     commonjs(),
     babel({ extensions, include: ['src/**/*'] })
   ]

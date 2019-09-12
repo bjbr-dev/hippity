@@ -30,10 +30,10 @@ export class HttpClient {
   send(request) {
     const middlewares = this.middleware
 
-    return dispatch(request, 0)
+    return dispatch(request, middlewares.length - 1)
 
     function dispatch(currentRequest, index) {
-      if (index === middlewares.length) {
+      if (index < 0) {
         throw new Error(
           'Reached end of pipeline. Use a middleware which terminates the pipeline.'
         )
@@ -43,7 +43,7 @@ export class HttpClient {
             request = currentRequest
           }
 
-          return dispatch(request, index + 1)
+          return dispatch(request, index - 1)
         }
 
         return middlewares[index](currentRequest, next)

@@ -1,17 +1,10 @@
-/* global GLOBAL_VERSION */
+import { isNode } from 'browser-or-node'
 
-export function userAgent(userAgentString) {
-  return request => {
-    if (request.headers && request.headers['user-agent']) {
-      return
-    }
-
-    return {
-      ...request,
-      headers: {
-        ...request.headers,
-        'user-agent': userAgentString || 'axios/' + GLOBAL_VERSION
-      }
-    }
+export function userAgentHeaders(userAgentString) {
+  if (!isNode) {
+    return {}
   }
+
+  const version = process.env.HIPPITY_VERSION || 'unknown'
+  return { 'user-agent': userAgentString || 'hippity/' + version }
 }

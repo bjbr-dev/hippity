@@ -1,1 +1,1 @@
-export * from './body-serialization'
+export * from './json-serialization'

@@ -1,6 +1,6 @@
 import { transformMiddleware as sut } from './transform-middleware'
 
-test.each([{}, false, null, undefined, 'string'])(
+test.each([{}, false, null, 'string'])(
   'Throws when request transform is not an array',
   value => {
     // Act
@@ -11,7 +11,7 @@ test.each([{}, false, null, undefined, 'string'])(
   }
 )
 
-test.each([{}, false, null, undefined, 'string'])(
+test.each([{}, false, null, 'string'])(
   'Throws when response transform is not an array',
   value => {
     // Act

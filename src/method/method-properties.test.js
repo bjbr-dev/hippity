@@ -1,4 +1,4 @@
-import { methodProperties as sut } from './method-properties'
+import { urlInMethodProperties as sut } from './method-properties'
 
 it('Does nothing if method already exists', () => {
   // Arrange

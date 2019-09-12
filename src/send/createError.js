@@ -9,12 +9,11 @@
  * @returns {Error} The created error.
  */
 export function createError(message, details) {
-  const error = new Error(message)
-  return enhanceError(error, details)
+  return enhanceError(new Error(message), details)
 }
 
 export function enhanceError(error, details) {
-  Object.assign(error, details, { isAxiosError: true })
+  Object.assign(error, details, { isHippityError: true })
 
   error.toJSON = function() {
     return {
@@ -29,9 +28,8 @@ export function enhanceError(error, details) {
       lineNumber: this.lineNumber,
       columnNumber: this.columnNumber,
       stack: this.stack,
-      // Axios
-      request: details.request,
-      code: details.code
+      // Hippity
+      request: details.request
     }
   }
 

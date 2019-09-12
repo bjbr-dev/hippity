@@ -1,4 +1,7 @@
-export const transformMiddleware = (requestTransforms, responseTransforms) => {
+export const transformMiddleware = (
+  requestTransforms = [],
+  responseTransforms = []
+) => {
   if (!Array.isArray(requestTransforms)) {
     throw new TypeError('Request transforms must be an array')
   }

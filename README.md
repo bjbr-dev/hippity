@@ -1,15 +1,11 @@
-# RestClient
-
-[![npm version](https://img.shields.io/npm/v/@berkeleybross/restclient.svg?style=flat-square)](https://www.npmjs.org/package/@berkeleybross/restclient)
-[![npm downloads](https://img.shields.io/npm/dm/@berkeleybross/restclient.svg?style=flat-square)](http://npm-stat.com/charts.html?package=@berkeleybross/restclient)
-[![Build Status](https://travis-ci.org/berkeleybross/restclient.js.svg?branch=master)](https://travis-ci.org/berkeleybross/restclient.js)
+# Hippity
 
 Perform HTTP requests (preferably REST style!) from NodeJS or client-side javascript.
 
 ## Features
 
 - Simple interface backed by _middleware_ for complete flexibility
-- [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) based, with cancellation support
+- [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) based, with abort support
 - Automatic JSON serialization
 - Optional, automatic validation of server responses
 
@@ -24,7 +20,7 @@ Perform HTTP requests (preferably REST style!) from NodeJS or client-side javasc
 Using npm:
 
 ```bash
-$ npm install @berkeleybross/restclient
+$ npm install hippity
 ```
 
 _Until this project reaches a `1.0` release, breaking changes will be released with a new minor version. For example `0.5.1`, and `0.5.4` will have the same API, but `0.6.0` will have breaking changes._
@@ -61,7 +57,7 @@ For more examples, please read the Wiki.
 ## Report Issues
 
 For any issues or feature requests, we would really appreciate it if you report
-them using our [issue tracker](https://github.com/berkeleybross/restclient.js/issues).
+them using our [issue tracker](hhttps://gitlab.com/berkeleybross/hippity/issues).
 
 ## Contributing
 
@@ -78,4 +74,4 @@ Released under The MIT [License](./LICENSE). Copyright (c) berkeleybross.
 
 ## Credits
 
-RestClient is made possible by other [open source software](NOTICE.md).
+Hippity is made possible by other [open source software](NOTICE.md).

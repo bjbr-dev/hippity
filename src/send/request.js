@@ -1,4 +1,8 @@
-import { isStream, isArrayBuffer, isString } from '~/send/utils'
+/**
+ * @file Originally copied from Axios under MIT license and subsequently significantly changed
+ */
+
+import { isStream, isArrayBuffer, isArrayBufferView } from '~/body/body-types'
 import { createError, enhanceError } from '~/send/createError'
 import { isSuccess } from './is-success'
 
@@ -17,7 +21,31 @@ const httpFactory = lazy(() => require('http'))
 const httpsFactory = lazy(() => require('https'))
 const zlibFactory = lazy(() => require('zlib'))
 
-export function sendViaHttpAgent(request) {
+function convertToBuffer(request) {
+  let body = request.body
+
+  if (Buffer.isBuffer(body)) {
+    return body
+  }
+
+  if (isArrayBufferView(body)) {
+    body = body.buffer
+  }
+
+  if (isArrayBuffer(body)) {
+    return Buffer.from(new Uint8Array(body))
+  }
+
+  if (typeof body === 'string') {
+    return Buffer.from(body, 'utf-8')
+  }
+
+  throw createError('Body must be a string, Buffer, ArrayBuffer or Stream', {
+    request
+  })
+}
+
+export function sendViaRequest(request) {
   const http = httpFactory()
   const https = httpsFactory()
   const { createUnzip } = zlibFactory()
@@ -27,37 +55,24 @@ export function sendViaHttpAgent(request) {
     const headers = request.headers
 
     if (body && !isStream(body)) {
-      if (Buffer.isBuffer(body)) {
-        // Nothing to do...
-      } else if (isArrayBuffer(body)) {
-        body = Buffer.from(new Uint8Array(body))
-      } else if (isString(body)) {
-        body = Buffer.from(body, 'utf-8')
-      } else {
-        return reject(
-          createError(
-            'Data after transformation must be a string, an ArrayBuffer, a Buffer, or a Stream',
-            request
-          )
-        )
-      }
-
+      body = convertToBuffer(request)
       headers['content-length'] = body.length
     }
 
     const isHttpsRequest = request.url.startsWith('https://')
-    const agent = isHttpsRequest ? request.httpsAgent : request.httpAgent
 
     const options = {
       method: request.method,
       headers: headers,
-      agent: agent
+      agent: isHttpsRequest ? request.httpsAgent : request.httpAgent
     }
 
     const transport = isHttpsRequest ? https : http
 
     const req = transport.request(request.url, options, res => {
-      if (req.aborted) return
+      if (req.aborted) {
+        return
+      }
 
       // uncompress the response body transparently if required
       let stream = res
