@@ -2,6 +2,7 @@ import babel from 'rollup-plugin-babel'
 import commonjs from 'rollup-plugin-commonjs'
 import resolve from 'rollup-plugin-node-resolve'
 import pkg from './package.json'
+import replace from 'rollup-plugin-replace'
 
 const extensions = ['.js', '.jsx']
 
@@ -23,6 +24,9 @@ export default {
 
   plugins: [
     resolve({ extensions }),
+    replace({
+      GLOBAL_VERSION: JSON.stringify(pkg.version)
+    }),
     commonjs(),
     babel({ extensions, include: ['src/**/*'] })
   ]

@@ -45,7 +45,7 @@ function convertToBuffer(request) {
   })
 }
 
-export function sendViaHttpAgent(request) {
+export function sendViaRequest(request) {
   const http = httpFactory()
   const https = httpsFactory()
   const { createUnzip } = zlibFactory()
