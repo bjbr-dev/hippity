@@ -1,4 +1,4 @@
-import { isNode } from '~/run-location'
+import { isNode } from 'browser-or-node'
 import { hasHeader } from './headers'
 
 /* global GLOBAL_VERSION */
