@@ -1,6 +1,6 @@
 {
   "name": "hippity",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Extensible HTTP client",
   "keywords": [
     "ajax",
