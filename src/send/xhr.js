@@ -5,7 +5,7 @@
 import { parseHeaders } from './parse-headers'
 import { isSuccess } from './is-success'
 import { createError } from './createError'
-import { isFormData } from '../body/body-types'
+import { isFormData } from '~/body/body-types'
 
 export function sendViaXhr(request) {
   return new Promise(function(resolve, reject) {
@@ -19,11 +19,8 @@ export function sendViaXhr(request) {
     let xhr = new XMLHttpRequest()
     xhr.open(request.method.toUpperCase(), request.url, true)
 
-    // Set the request timeout in MS
-    xhr.timeout = request.timeout
-
     // Listen for ready state
-    xhr.onreadystatechange = function handleLoad() {
+    xhr.onreadystatechange = function() {
       if (!xhr || xhr.readyState !== 4) {
         return
       }
@@ -39,7 +36,6 @@ export function sendViaXhr(request) {
         return
       }
 
-      // Prepare the response
       const responseHeaders =
         'getAllResponseHeaders' in xhr
           ? parseHeaders(xhr.getAllResponseHeaders())
@@ -60,7 +56,7 @@ export function sendViaXhr(request) {
     }
 
     // Handle browser request cancellation (as opposed to a manual cancellation)
-    xhr.onabort = function handleAbort() {
+    xhr.onabort = function() {
       if (!xhr) {
         return
       }
@@ -70,7 +66,7 @@ export function sendViaXhr(request) {
     }
 
     // Handle low level network errors
-    xhr.onerror = function handleError() {
+    xhr.onerror = function() {
       // Real errors are hidden from us by the browser
       // onerror should only fire if it's a network error
       reject(createError('Network Error', { request, xhr }))
@@ -80,15 +76,13 @@ export function sendViaXhr(request) {
     // Add headers to the request
     if ('setRequestHeader' in xhr) {
       for (const key in requestHeaders) {
-        const val = requestHeaders[key]
         if (
           !(
             typeof requestBody === 'undefined' &&
             key.toLowerCase() === 'content-type'
           )
         ) {
-          // Otherwise add header to the request
-          xhr.setRequestHeader(key, val)
+          xhr.setRequestHeader(key, requestHeaders[key])
         }
       }
     }

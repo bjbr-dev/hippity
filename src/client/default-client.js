@@ -5,6 +5,7 @@ import { jsonMiddleware } from '~/body'
 import { urlInMethodProperties } from '~/method'
 import { urlResolver } from '~/url'
 import { defaultHeaders, userAgentHeaders } from '~/headers'
+import { timeoutMiddleware } from '~/send/timeout-middleware'
 
 export function defaultHeadersMiddleware(headers) {
   return transformMiddleware([defaultHeaders(headers)])
@@ -20,6 +21,7 @@ export function resolveUrlInMethodPropertiesMiddleware() {
 
 export const httpClient = new HttpClient()
   .use(sendMiddleware)
+  .use(timeoutMiddleware())
   .use(userAgentMiddleware())
   .use(resolveUrlInMethodPropertiesMiddleware)
 
