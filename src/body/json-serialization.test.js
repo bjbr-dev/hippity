@@ -1,6 +1,15 @@
 import { jsonSerializer, jsonDeserializer } from './json-serialization'
 
 describe('jsonSerializer', () => {
+  it('does nothing if request does not have a body', () => {
+    const request = {}
+
+    const response = jsonSerializer(request)
+
+    expect(request).toEqual({})
+    expect(response).toBe(request)
+  })
+
   it('does nothing if content-type already set', () => {
     const request = { headers: { 'content-type': 'foo' }, body: { foo: 'bar' } }
 

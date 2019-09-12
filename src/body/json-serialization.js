@@ -1,6 +1,15 @@
 import { hasHeader, findHeader } from '~/headers/headers'
+import { transformMiddleware } from '~/transform-middleware'
+
+export function jsonMiddleware() {
+  return transformMiddleware([jsonSerializer], [jsonDeserializer])
+}
 
 export function jsonSerializer(request) {
+  if (!('body' in request)) {
+    return request
+  }
+
   if (hasHeader(request.headers, 'content-type')) {
     return request
   }

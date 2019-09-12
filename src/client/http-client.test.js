@@ -44,38 +44,36 @@ describe('send', () => {
     )
   })
 
-  it('Calls middleware in order', () => {
+  it('Calls middleware in reverse order', () => {
     // Arrange
     let order = ''
     const sut = new HttpClient()
-      .use((r, n) => {
+      .use(() => {
         order += '1'
-        return n(r)
+        return {}
       })
       .use((r, n) => {
         order += '2'
         return n(r)
       })
-      .use(() => {
+      .use((r, n) => {
         order += '3'
-        return {}
+        return n(r)
       })
 
     // Act
     sut.send({})
 
     // Assert
-    expect(order).toEqual('123')
+    expect(order).toEqual('321')
   })
 
   it('Lets middleware switch request', () => {
     // Arrange
     const middleware = jest.fn(() => ({ success: true }))
     const sut = new HttpClient()
-      .use((_, n) => {
-        return n({ changed: true })
-      })
       .use(middleware)
+      .use((_, n) => n({ changed: true }))
 
     // Act
     sut.send({})
@@ -90,11 +88,7 @@ describe('send', () => {
   it('Does not call middleware if one terminates earlier in the pipeline', () => {
     // Arrange
     const middleware = jest.fn()
-    const sut = new HttpClient()
-      .use(() => {
-        return { success: true }
-      })
-      .use(middleware)
+    const sut = new HttpClient().use(middleware).use(() => ({ success: true }))
 
     // Act
     sut.send({})
