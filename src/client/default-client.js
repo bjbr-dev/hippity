@@ -23,9 +23,9 @@ export const httpClient = new HttpClient()
   .use(sendMiddleware)
   .use(timeoutMiddleware())
   .use(userAgentMiddleware())
-  .use(resolveUrlInMethodPropertiesMiddleware)
+  .use(resolveUrlInMethodPropertiesMiddleware())
 
-export const jsonClient = httpClient.use(jsonMiddleware).use(
+export const jsonClient = httpClient.use(jsonMiddleware()).use(
   defaultHeadersMiddleware({
     common: { accept: 'application/json, text/plain, */*' }
   })
