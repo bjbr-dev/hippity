@@ -27,10 +27,9 @@ export class HttpClient {
     return this
   }
 
-  send(request) {
-    const middlewares = this.middleware
-
-    return dispatch(request, middlewares.length - 1)
+  _run(request) {
+    const middleware = this.middleware
+    return dispatch(request, middleware.length - 1)
 
     function dispatch(currentRequest, index) {
       if (index < 0) {
@@ -46,15 +45,21 @@ export class HttpClient {
           return dispatch(request, index - 1)
         }
 
-        return middlewares[index](currentRequest, next)
+        return middleware[index](currentRequest, next)
       }
     }
   }
 
-  async $send(request) {
-    const response = await this.send(request)
+  async send(request) {
+    const response = await this._run(request)
+    delete response.success
+    return response
+  }
 
-    if (response.success !== false) {
+  async $send(request) {
+    const { success, ...response } = await this._run(request)
+
+    if (success !== false) {
       return response.body
     } else {
       throw new Error(

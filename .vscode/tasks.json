@@ -9,6 +9,14 @@
       "problemMatcher": []
     },
     {
+      "label": "Dev",
+      "group": "build",
+      "type": "npm",
+      "script": "dev",
+      "problemMatcher": [],
+      "dependsOn": "Commit test"
+    },
+    {
       "label": "Commit test",
       "group": "build",
       "type": "npm",
@@ -29,6 +37,13 @@
       "type": "shell",
       "command": "npm",
       "args": ["run", "test"],
+      "problemMatcher": []
+    },
+    {
+      "label": "Sort",
+      "group": "build",
+      "type": "npm",
+      "script": "sort",
       "problemMatcher": []
     },
     {

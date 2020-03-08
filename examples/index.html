@@ -1,0 +1,19 @@
+<div class="container">
+  <h3>Simple GET</h3>
+
+  <div class="row">
+    <div class="col-6">
+      <script type="module" class="example">
+        import { httpClient } from '/dist/hippity.es5.js'
+
+        run(async () => await httpClient.$get('/index'))
+      </script>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="result"></div>
+    </div>
+  </div>
+</div>

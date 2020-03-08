@@ -19,15 +19,16 @@
   },
   "license": "MIT",
   "author": "berkeleybross",
+  "main": "dist/hippity.umd.js",
+  "module": "dist/hippity.es5.js",
   "files": [
     "dist"
   ],
-  "main": "dist/hippity.umd.js",
-  "module": "dist/hippity.es5.js",
   "scripts": {
-    "build": "cross-env NODE_ENV=production npm-run-all clean -p build:* lint:* test --aggregate-output",
+    "build": "cross-env NODE_ENV=production npm-run-all clean -p build:* lint:* --aggregate-output",
     "build:rollup": "rollup -c rollup.config.js",
     "clean": "rimraf dist coverage",
+    "dev": "babel-watch server.js",
     "lint:es": "eslint ./src",
     "sort": "npx sort-package-json",
     "test": "cross-env NODE_ENV=test jest --coverage",
@@ -92,19 +93,21 @@
       "jest-extended"
     ],
     "testEnvironment": "node",
-    "testRegex": "/src/.*\\.(test|spec)\\.(ts|tsx|js)$"
+    "testRegex": "/(src|tests)/.*\\.(test|spec)\\.(ts|tsx|js)$"
   },
-  "dependencies": {
-    "browser-or-node": "^1.2.1"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.8.7",
+    "@babel/node": "^7.8.7",
     "@babel/preset-env": "^7.8.7",
+    "@koa/router": "^8.0.8",
     "@types/jest": "^25.1.4",
     "@types/node": "^13.9.0",
     "babel-plugin-root-import": "^6.4.1",
     "babel-plugin-transform-async-to-promises": "^0.8.15",
+    "babel-watch": "^7.0.0",
+    "browser-or-node": "^1.2.1",
     "coveralls": "^3.0.9",
     "cross-env": "^7.0.2",
     "eslint": "^6.8.0",
@@ -117,6 +120,10 @@
     "is-buffer": "^2.0.4",
     "jest": "^25.1.0",
     "jest-extended": "^0.11.5",
+    "koa": "^2.11.0",
+    "koa-ejs": "^4.3.0",
+    "koa-mount": "^4.0.0",
+    "koa-static": "^5.0.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^1.19.1",
     "rimraf": "^3.0.2",

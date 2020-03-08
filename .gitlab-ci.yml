@@ -9,6 +9,7 @@ build:
   script:
     - npm ci
     - npm run build
+    - pwsh test.ps1
     - npm pack
   artifacts:
     paths:
