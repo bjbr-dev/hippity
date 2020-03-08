@@ -114,8 +114,8 @@ export function sendViaXhr(request) {
       xhr.upload.addEventListener('progress', request.onUploadProgress)
     }
 
-    if (request.abort) {
-      request.abort.addEventListener('abort', () => {
+    if (request.onAbort) {
+      request.onAbort(() => {
         if (!xhr) {
           return
         }
