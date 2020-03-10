@@ -1,4 +1,4 @@
-image: node:12.16.1
+image: node:12.16.1-alpine
 
 stages:
   - build
@@ -7,10 +7,10 @@ stages:
 build:
   stage: build
   script:
-    - apt-get update && apt-get install -y powershell
     - npm ci
     - npm run build
-    - pwsh test.ps1
+    - npm run dev &
+    - npm run test
     - npm pack
   artifacts:
     paths:
