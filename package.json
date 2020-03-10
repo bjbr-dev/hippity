@@ -33,7 +33,7 @@
     "sort": "npx sort-package-json",
     "test": "npm-run-all -s test:wait test:jest",
     "test:jest": "cross-env NODE_ENV=test jest --coverage",
-    "test:wait": "wait-on http://localhost:3000/heartbeat",
+    "test:wait": "wait-on http://localhost:3000/heartbeat -t 5000",
     "upgrade": "npx npm-check --update",
     "why": "npx npm-why"
   },

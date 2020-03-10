@@ -17,6 +17,4 @@ it('Gets JSON', async () => {
     },
     body: { message: 'hello world' }
   })
-
-  expect(true).toBe(false)
 })
