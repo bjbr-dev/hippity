@@ -12,13 +12,13 @@ test.each([[199, 300, 301, 400, 404, 410, 500]])(
 )
 
 test.each([[200, 201, 298, 299]])(
-  'Returns undefined if status is valid (%j)',
+  'Returns true if status is valid (%j)',
   async status => {
     // Act
     const result = isSuccess('GET', status)
 
     // Assert
-    expect(result).toBeUndefined()
+    expect(result).toBe(true)
   }
 )
 
@@ -29,7 +29,7 @@ test.each([[404, 410]])(
     const result = isSuccess('DELETE', status)
 
     // Assert
-    expect(result).toBeUndefined()
+    expect(result).toBe(true)
   }
 )
 

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+
+    <link
+      rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/default.min.css"
+    />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
+    <style>
+      pre {
+        white-space: pre-wrap;
+      }
+    </style>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"
+    ></script>
+
+    <title>Hippity Examples</title>
+  </head>
+  <body>
+    <%- body %>
+
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"
+      integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      $('.example').each((i, e) => {
+        const $pre = $('<pre>')
+          .addClass('javascript')
+          .append($('<code>').text(normalizeIndentation($(e).html())))
+
+        $(e).after($pre)
+        hljs.highlightBlock($pre[0])
+      })
+
+      function run(resultContainer, asyncCode) {
+        if (typeof asyncCode == 'undefined') {
+          asyncCode = resultContainer
+          resultContainer = '.result'
+        }
+
+        ;(async () => {
+          const result = await asyncCode()
+          if (typeof result !== 'undefined') {
+            setResult(result, resultContainer)
+          }
+        })().catch(alert)
+      }
+
+      function setResult(result, resultContainer = '.result', language = '') {
+        if (typeof result !== 'string') {
+          result = JSON.stringify(result, null, 2)
+          language = 'json'
+        }
+
+        const $pre = $('<pre>')
+          .addClass(language)
+          .append($('<code>').text(result))
+        $(resultContainer).append($pre)
+        hljs.highlightBlock($pre[0])
+      }
+
+      function normalizeIndentation(script) {
+        script = script.replace(/^(\r|\n)+/, '')
+        const lines = script.split('\n')
+
+        const match = script.match(/^[ \t]*(?=\S)/gm)
+        const minIndex = match ? Math.min(...match.map(x => x.length)) : 0
+
+        return lines.map(l => l.substr(minIndex)).join('\n')
+      }
+    </script>
+  </body>
+</html>

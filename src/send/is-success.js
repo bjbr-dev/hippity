@@ -4,11 +4,11 @@ export function isSuccess(method, status) {
   }
 
   if (status >= 200 && status < 300) {
-    return
+    return true
   }
 
   if (method === 'DELETE' && (status === 404 || status === 410)) {
-    return
+    return true
   }
 
   return false

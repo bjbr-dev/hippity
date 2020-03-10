@@ -16,34 +16,30 @@ Please update the docs accordingly so that there are no discrepencies between th
 
 ### Developing
 
-- `npm run test` run all unit tests
-- `npm run test -- --watch` watch for changes and run all unit tests
+#### VSCode
+
+- `Install NPM packages` Installs NPM packages, should be run whenever the branch changes (due to switch or pull)
+- `Start` watch for changes and restart the server (on http://localhost:3000/)
+- `Build` Runs the build & lint scripts
+- `Lint es` Runs the javascript linter
+- `Run tests` Runs all tests - requires `Dev` to be running
+- `Watch tests` watch for changes and run all tests - requires `Dev` to be running
+
+#### Command line
+
+- `npm start` Start the examples server, also used in integration tests
+- `npm run test` run all unit tests (requires the server to be started)
+- `npm run test:watch` watch for changes and run all unit tests
 
 ### Releasing
 
-A new version is automatically released by Travis CI by tagging the master branch. Versions should follow [semantic versioning](http://semver.org/).
+A new version is automatically released by GitLab when the master branch is tagged. Versions should follow [semantic versioning](http://semver.org/).
 
 ### Running Examples
 
 Examples are included in part to allow manual testing.
 
-Running example
-
-```bash
-$ npm run examples
-# Open 127.0.0.1:3000
-```
-
-Running sandbox in browser
-
 ```bash
 $ npm start
 # Open 127.0.0.1:3000
-```
-
-Running sandbox in terminal
-
-```bash
-$ npm start
-$ node ./sandbox/client
 ```

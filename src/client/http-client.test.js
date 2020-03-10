@@ -14,30 +14,30 @@ describe('constructor', () => {
 })
 
 describe('send', () => {
-  it('Throws exception when send is called with no middleware registered', () => {
+  it('Throws exception when send is called with no middleware registered', async () => {
     // Arrange
     const sut = new HttpClient()
 
     // Act
-    const act = () => sut.send({})
+    const act = sut.send({})
 
     // Assert
-    expect(act).toThrow(
+    await expect(act).rejects.toThrow(
       new Error(
         'Reached end of pipeline. Use a middleware which terminates the pipeline.'
       )
     )
   })
 
-  it('Throws if no middleware terminates', () => {
+  it('Throws if no middleware terminates', async () => {
     // Arrange
     const sut = new HttpClient().use((r, n) => n(r))
 
     // Act
-    const act = () => sut.send({})
+    const act = sut.send({})
 
     // Assert
-    expect(act).toThrow(
+    await expect(act).rejects.toThrow(
       new Error(
         'Reached end of pipeline. Use a middleware which terminates the pipeline.'
       )
@@ -70,7 +70,7 @@ describe('send', () => {
 
   it('Lets middleware switch request', () => {
     // Arrange
-    const middleware = jest.fn(() => ({ success: true }))
+    const middleware = jest.fn(() => ({}))
     const sut = new HttpClient()
       .use(middleware)
       .use((_, n) => n({ changed: true }))
@@ -88,7 +88,7 @@ describe('send', () => {
   it('Does not call middleware if one terminates earlier in the pipeline', () => {
     // Arrange
     const middleware = jest.fn()
-    const sut = new HttpClient().use(middleware).use(() => ({ success: true }))
+    const sut = new HttpClient().use(middleware).use(() => ({}))
 
     // Act
     sut.send({})
@@ -99,7 +99,7 @@ describe('send', () => {
 
   it('Uses current request if middleware calls next without a request', () => {
     // Arrange
-    const middleware = jest.fn(() => ({ success: true }))
+    const middleware = jest.fn(() => ({}))
 
     const sut = new HttpClient().use((_, n) => n()).use(middleware)
 
@@ -147,7 +147,7 @@ describe('$send', () => {
       new Error(
         'Response does not indicate success\n\n' +
           'Request: {\n  "method": "DELETE"\n}\n\n' +
-          'Response: {\n  "success": false,\n  "status": 200,\n  "message": "OK",\n  "body": true\n}'
+          'Response: {\n  "status": 200,\n  "message": "OK",\n  "body": true\n}'
       )
     )
   })

@@ -126,8 +126,8 @@ export function sendViaRequest(request) {
       reject(enhanceError(err, { request }))
     })
 
-    if (request.abort) {
-      request.abort.addEventListener('abort', () => {
+    if (request.onAbort) {
+      request.onAbort(() => {
         if (req.aborted) return
 
         req.abort()

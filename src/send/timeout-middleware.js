@@ -1,34 +1,32 @@
-import AbortController from 'abort-controller'
-
-// Unfortunately, the async-to-promises transform doesn't support returns inside finally block, so use promises everywhere
 export function timeoutMiddleware(ms = 0) {
-  return (request, next) => {
-    const timeout = 'timeout' in request ? request.timeout : ms
-    if (timeout <= 0) {
+  return async (request, next) => {
+    const requestTimeout = 'timeout' in request ? request.timeout : ms
+    if (requestTimeout <= 0) {
       return next()
     }
 
-    const controller = new AbortController()
-    const nextRequest = { ...request, abort: controller.signal }
+    const callbacks = []
+    const nextRequest = {
+      ...request,
+      onAbort: callback => callbacks.push(callback)
+    }
+
     delete nextRequest.timeout
 
-    const timer = setTimeout(controller.abort, timeout)
-    const onFinally = () => clearTimeout(timer)
+    const timer = setTimeout(() => {
+      for (const callback of callbacks) {
+        callback()
+      }
+    }, requestTimeout)
 
+    // Unfortunately, the async-to-promises transform doesn't support returns inside finally blocks
+    let result
     try {
-      return Promise.resolve(next(nextRequest)).then(
-        v => {
-          onFinally()
-          return v
-        },
-        e => {
-          onFinally()
-          throw e
-        }
-      )
-    } catch (e) {
-      onFinally()
-      throw e
+      result = await next(nextRequest)
+    } finally {
+      clearTimeout(timer)
     }
+
+    return result
   }
 }
