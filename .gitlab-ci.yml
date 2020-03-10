@@ -7,7 +7,7 @@ stages:
 build:
   stage: build
   script:
-    - sudo apt-get install -y powershell
+    - apt-get install -y powershell
     - npm ci
     - npm run build
     - pwsh test.ps1
