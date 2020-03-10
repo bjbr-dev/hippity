@@ -9,19 +9,19 @@
       "problemMatcher": []
     },
     {
-      "label": "Dev",
+      "label": "Start",
       "group": "build",
       "type": "npm",
-      "script": "dev",
+      "script": "start",
       "problemMatcher": [],
       "dependsOn": "Commit test"
     },
     {
-      "label": "Commit test",
+      "label": "Build",
       "group": "build",
       "type": "npm",
       "script": "build",
-      "problemMatcher": ["$eslint-stylish", "$tsc"]
+      "problemMatcher": ["$eslint-stylish"]
     },
     {
       "label": "Lint es",
@@ -51,7 +51,7 @@
       "group": "build",
       "type": "shell",
       "command": "npm",
-      "args": ["run", "test", "--", "--watch"],
+      "args": ["run", "test:watch"],
       "isBackground": true,
       "problemMatcher": []
     }
