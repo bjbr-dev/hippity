@@ -9,7 +9,7 @@ build:
   script:
     - npm ci
     - npm run build
-    - npm run dev &
+    - npm start &
     - npm run test
     - npm pack
   artifacts:
