@@ -51,7 +51,7 @@
       "group": "build",
       "type": "shell",
       "command": "npm",
-      "args": ["run", "test:watch"],
+      "args": ["run", "test-watch"],
       "isBackground": true,
       "problemMatcher": []
     }

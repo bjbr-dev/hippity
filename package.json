@@ -31,10 +31,11 @@
     "lint:es": "eslint ./src ./tests",
     "sort": "npx sort-package-json",
     "start": "babel-watch server.js",
-    "test": "npm-run-all -s test:wait test:jest",
-    "test:jest": "cross-env NODE_ENV=test jest --coverage",
+    "test": "run-p start \"test:run -- --coverage\" --race",
+    "test-watch": "run-s \"test:run -- --watch\"",
+    "test:jest": "cross-env NODE_ENV=test jest",
+    "test:run": "run-s test:wait \"test:jest -- {@}\" --",
     "test:wait": "wait-on http://localhost:3000/heartbeat -t 5000",
-    "test:watch": "npm-run-all -s test:wait \"test:jest -- --watch\"",
     "upgrade": "npx npm-check --update",
     "why": "npx npm-why"
   },
@@ -71,18 +72,18 @@
   },
   "jest": {
     "collectCoverageFrom": [
-      "src/*.{js,ts}"
+      "src/**/*.{js,ts}"
     ],
     "coveragePathIgnorePatterns": [
       "/node_modules/",
-      "/.test.js$/"
+      "/\\.test\\.js$/"
     ],
     "coverageThreshold": {
       "global": {
-        "branches": 10,
-        "functions": 10,
-        "lines": 10,
-        "statements": 10
+        "branches": 55,
+        "functions": 68,
+        "lines": 66,
+        "statements": 66
       }
     },
     "moduleFileExtensions": [
