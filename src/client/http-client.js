@@ -11,28 +11,52 @@ export class HttpClient {
     this.middleware = middleware
   }
 
-  use(middleware) {
-    if (Array.isArray(middleware)) {
-      return new HttpClient([...this.middleware, ...middleware])
+  if(predicate, thenCallback, elseCallback) {
+    if (predicate) {
+      return typeof thenCallback === 'function' ? thenCallback(this) : this
     } else {
-      return new HttpClient([...this.middleware, middleware])
+      return typeof elseCallback === 'function' ? elseCallback(this) : this
     }
   }
 
-  useIf(predicate, middleware) {
-    if (predicate === true) {
-      return this.use(middleware)
+  useTerminator(terminator) {
+    const newMiddleware = [...this.middleware]
+    newMiddleware.splice(-1, 1, terminator)
+    return new HttpClient(newMiddleware)
+  }
+
+  use(middleware) {
+    return this.useFirst(middleware)
+  }
+
+  useFirst(middleware) {
+    const newMiddleware = Array.isArray(middleware)
+      ? [...middleware, ...this.middleware]
+      : [middleware, ...this.middleware]
+    return new HttpClient(newMiddleware)
+  }
+
+  useLast(middleware) {
+    const newMiddleware = [...this.middleware]
+    if (Array.isArray(middleware)) {
+      newMiddleware.splice(-1, 0, ...middleware)
+    } else {
+      newMiddleware.splice(-1, 0, middleware)
     }
 
-    return this
+    return new HttpClient(newMiddleware)
+  }
+
+  useIf(predicate, middleware) {
+    return this.if(predicate, c => c.use(middleware))
   }
 
   _run(request) {
     const middleware = this.middleware
-    return dispatch(request, middleware.length - 1)
+    return dispatch(request, 0)
 
     function dispatch(currentRequest, index) {
-      if (index < 0) {
+      if (index >= middleware.length) {
         throw new Error(
           'Reached end of pipeline. Use a middleware which terminates the pipeline.'
         )
@@ -42,7 +66,7 @@ export class HttpClient {
             request = currentRequest
           }
 
-          return dispatch(request, index - 1)
+          return dispatch(request, index + 1)
         }
 
         return middleware[index](currentRequest, next)

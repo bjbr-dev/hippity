@@ -1,8 +1,4 @@
-import { jsonClient, baseUrl, transformMiddleware } from '~/'
-
-const client = jsonClient.use(
-  transformMiddleware([baseUrl('http://localhost:3000/')])
-)
+import { client } from './clients'
 
 it('Gets JSON', async () => {
   const result = await client.get('/api/hello')

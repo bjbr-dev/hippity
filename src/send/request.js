@@ -45,7 +45,7 @@ function convertToBuffer(request) {
   })
 }
 
-export function sendViaRequest(request) {
+export function requestTerminator(request) {
   const http = httpFactory()
   const https = httpsFactory()
   const { createUnzip } = zlibFactory()
@@ -131,7 +131,7 @@ export function sendViaRequest(request) {
         if (req.aborted) return
 
         req.abort()
-        reject()
+        reject(new Error('Aborted'))
       })
     }
 
