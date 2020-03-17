@@ -44,7 +44,7 @@ describe('send', () => {
     )
   })
 
-  it('Calls middleware in reverse order', () => {
+  it('Calls middleware in reverse order', async () => {
     // Arrange
     let order = ''
     const sut = new HttpClient()
@@ -62,13 +62,33 @@ describe('send', () => {
       })
 
     // Act
-    sut.send({})
+    await sut.send({})
 
     // Assert
     expect(order).toEqual('321')
   })
 
-  it('Lets middleware switch request', () => {
+  it('Calls terminator last', async () => {
+    // Arrange
+    let order = ''
+    const sut = new HttpClient()
+      .useTerminator(() => {
+        order += '0'
+        return {}
+      })
+      .use((r, n) => {
+        order += '1'
+        return n(r)
+      })
+
+    // Act
+    await sut.send({})
+
+    // Assert
+    expect(order).toEqual('10')
+  })
+
+  it('Lets middleware switch request', async () => {
     // Arrange
     const middleware = jest.fn(() => ({}))
     const sut = new HttpClient()
@@ -76,7 +96,7 @@ describe('send', () => {
       .use((_, n) => n({ changed: true }))
 
     // Act
-    sut.send({})
+    await sut.send({})
 
     // Assert
     expect(middleware).toHaveBeenCalledWith(
@@ -85,26 +105,26 @@ describe('send', () => {
     )
   })
 
-  it('Does not call middleware if one terminates earlier in the pipeline', () => {
+  it('Does not call middleware if one terminates earlier in the pipeline', async () => {
     // Arrange
     const middleware = jest.fn()
     const sut = new HttpClient().use(middleware).use(() => ({}))
 
     // Act
-    sut.send({})
+    await sut.send({})
 
     // Assert
     expect(middleware).not.toHaveBeenCalled()
   })
 
-  it('Uses current request if middleware calls next without a request', () => {
+  it('Uses current request if middleware calls next without a request', async () => {
     // Arrange
     const middleware = jest.fn(() => ({}))
 
     const sut = new HttpClient().use((_, n) => n()).use(middleware)
 
     // Act
-    sut.send({ changed: false })
+    await sut.send({ changed: false })
 
     // Assert
     expect(middleware).toHaveBeenCalledWith(
@@ -150,5 +170,185 @@ describe('$send', () => {
           'Response: {\n  "status": 200,\n  "message": "OK",\n  "body": true\n}'
       )
     )
+  })
+})
+
+describe('use', () => {
+  it('Adds middleware to be called in reverse order', async () => {
+    // Arrange
+    let order = ''
+    const sut = new HttpClient()
+      .use(function a() {
+        order += '1'
+        return {}
+      })
+      .use(function b(r, n) {
+        order += '2'
+        return n(r)
+      })
+      .use(function c(r, n) {
+        order += '3'
+        return n(r)
+      })
+
+    // Act
+    await sut.send({})
+
+    // Assert
+    expect(order).toEqual('321')
+  })
+})
+
+describe('useFirst', () => {
+  it('Adds middleware to run before all others', async () => {
+    // Arrange
+    let order = ''
+    const sut = new HttpClient()
+      .use(() => {
+        order += '1'
+        return {}
+      })
+      .use((r, n) => {
+        order += '2'
+        return n(r)
+      })
+      .useFirst((r, n) => {
+        order += '3'
+        return n(r)
+      })
+
+    // Act
+    await sut.send({})
+
+    // Assert
+    expect(order).toEqual('321')
+  })
+})
+
+describe('useLast', () => {
+  it('Adds middleware to run after all others but before terminating middleware', async () => {
+    // Arrange
+    let order = ''
+    const sut = new HttpClient()
+      .use(() => {
+        order += '1'
+        return {}
+      })
+      .use((r, n) => {
+        order += '2'
+        return n(r)
+      })
+      .useLast((r, n) => {
+        order += '3'
+        return n(r)
+      })
+
+    // Act
+    await sut.send({})
+
+    // Assert
+    expect(order).toEqual('231')
+  })
+
+  it('Adds only middleware', async () => {
+    // Arrange
+    let order = ''
+    const sut = new HttpClient().useLast(() => {
+      order += '1'
+      return {}
+    })
+
+    // Act
+    await sut.send({})
+
+    // Assert
+    expect(order).toEqual('1')
+  })
+})
+
+describe('useTerminator', () => {
+  it('Adds terminator if no middleware registered', async () => {
+    // Arrange
+    let order = ''
+    const sut = new HttpClient().useTerminator(() => {
+      order += '1'
+      return {}
+    })
+
+    // Act
+    await sut.send({})
+
+    // Assert
+    expect(order).toEqual('1')
+  })
+
+  it('Replaces terminator', async () => {
+    // Arrange
+    let order = ''
+    const sut = new HttpClient()
+      .useTerminator(() => {
+        order += '1'
+        return {}
+      })
+      .use((r, n) => {
+        order += '2'
+        return n(r)
+      })
+      .useTerminator(() => {
+        order += '3'
+        return {}
+      })
+
+    // Act
+    await sut.send({})
+
+    // Assert
+    expect(order).toEqual('23')
+  })
+})
+
+describe('if', () => {
+  it('Registers middleware when true', async () => {
+    // Arrange
+    let order = ''
+    const sut = new HttpClient()
+      .use(() => {
+        order += '1'
+        return {}
+      })
+      .if(true, c =>
+        c.use((r, n) => {
+          order += '2'
+          return n(r)
+        })
+      )
+
+    // Act
+    await sut.send({})
+
+    // Assert
+    expect(order).toEqual('21')
+  })
+
+  it('Does not register middleware when false', async () => {
+    // Arrange
+    let order = ''
+    const sut = new HttpClient()
+      .use(() => {
+        order += '1'
+        return {}
+      })
+      .if(false, c =>
+        c.use((r, n) => {
+          order += '2'
+          return n(r)
+        })
+      )
+
+    // Act
+    await sut.send({})
+
+    // Assert
+    expect(order).toEqual('1')
   })
 })

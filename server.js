@@ -4,10 +4,24 @@ import mount from 'koa-mount'
 import render from 'koa-ejs'
 import { join } from 'path'
 import Router from '@koa/router'
+import koaBody from 'koa-body'
 
 const router = new Router()
-  .get('/api/hello', ctx => (ctx.body = { message: 'hello world' }))
   .get('/heartbeat', ctx => (ctx.body = { message: 'OK' }))
+  .get('/api/hello', ctx => (ctx.body = { message: 'hello world' }))
+  .get('/api/sleep', async ctx => {
+    const ms = parseInt(ctx.request.query.ms || '1000')
+    await new Promise(resolve => setTimeout(resolve, Math.min(ms, 10000)))
+    ctx.body = { message: 'OK' }
+  })
+  .all('/api/reflect', koaBody(), ctx => {
+    ctx.body = {
+      url: ctx.request.url,
+      method: ctx.request.method,
+      headers: ctx.request.headers,
+      body: ctx.request.body
+    }
+  })
 
 const app = new Koa()
 render(app, {

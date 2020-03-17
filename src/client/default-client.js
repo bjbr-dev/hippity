@@ -1,11 +1,12 @@
 import { HttpClient } from './http-client'
 import { transformMiddleware } from '../transform-middleware'
-import { sendMiddleware } from '~/send'
+import { sendTerminator } from '~/send'
 import { jsonMiddleware } from '~/body'
 import { urlInMethodProperties } from '~/method'
 import { urlResolver } from '~/url'
 import { defaultHeaders, userAgentHeaders } from '~/headers'
 import { timeoutMiddleware } from '~/send/timeout-middleware'
+import { isNode } from 'browser-or-node'
 
 export function defaultHeadersMiddleware(headers) {
   return transformMiddleware([defaultHeaders(headers)])
@@ -20,9 +21,9 @@ export function resolveUrlInMethodPropertiesMiddleware() {
 }
 
 export const httpClient = new HttpClient()
-  .use(sendMiddleware)
+  .useTerminator(sendTerminator())
   .use(timeoutMiddleware())
-  .use(userAgentMiddleware())
+  .if(!isNode, c => c.use(userAgentMiddleware()))
   .use(resolveUrlInMethodPropertiesMiddleware())
 
 export const jsonClient = httpClient.use(jsonMiddleware()).use(

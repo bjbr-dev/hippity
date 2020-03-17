@@ -7,7 +7,7 @@ import { isSuccess } from './is-success'
 import { createError } from './createError'
 import { isFormData } from '~/body/body-types'
 
-export function sendViaXhr(request) {
+export function xhrTerminator(request) {
   return new Promise(function(resolve, reject) {
     const requestBody = request.body
     const requestHeaders = request.headers

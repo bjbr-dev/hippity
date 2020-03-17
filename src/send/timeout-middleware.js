@@ -1,4 +1,4 @@
-export function timeoutMiddleware(ms = 0) {
+export function timeoutMiddleware(ms = 20000) {
   return async (request, next) => {
     const requestTimeout = 'timeout' in request ? request.timeout : ms
     if (requestTimeout <= 0) {
