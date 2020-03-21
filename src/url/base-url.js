@@ -1,28 +1,28 @@
 export function baseUrl(defaultBaseUrl) {
   return request => {
-    if (isAbsoluteURL(request.url)) {
+    if (isAbsoluteUrl(request.url)) {
       return request
     }
 
     const { baseUrl, ...rest } = request
-    rest.url = combineURLs(baseUrl || defaultBaseUrl, request.url)
+    rest.url = combineUrls(baseUrl || defaultBaseUrl, request.url)
     return rest
   }
 }
 
-function isAbsoluteURL(url) {
+function isAbsoluteUrl(url) {
   // A URL is considered absolute if it begins with "<scheme>://" or "//" (protocol-relative URL).
   // RFC 3986 defines scheme name as a sequence of characters beginning with a letter and followed
   // by any combination of letters, digits, plus, period, or hyphen.
   return /^([a-z][a-z\d+\-.]*:)?\/\//i.test(url)
 }
 
-function combineURLs(baseURL, relativeURL) {
-  if (!baseURL) {
-    return relativeURL
+function combineUrls(baseUrl, relativeUrl) {
+  if (!baseUrl) {
+    return relativeUrl
   }
 
-  return relativeURL
-    ? baseURL.replace(/\/+$/, '') + '/' + relativeURL.replace(/^\/+/, '')
-    : baseURL
+  return relativeUrl
+    ? baseUrl.replace(/\/+$/, '') + '/' + relativeUrl.replace(/^\/+/, '')
+    : baseUrl
 }
