@@ -6,6 +6,7 @@ it('Waits for request', async () => {
   })
 
   expect(result).toEqual({
+    success: true,
     status: 200,
     message: 'OK',
     headers: {

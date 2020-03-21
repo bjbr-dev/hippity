@@ -51,9 +51,9 @@ export class HttpClient {
     return this.if(predicate, c => c.use(middleware))
   }
 
-  _run(request) {
+  async send(request) {
     const middleware = this.middleware
-    return dispatch(request, 0)
+    return await dispatch(request, 0)
 
     function dispatch(currentRequest, index) {
       if (index >= middleware.length) {
@@ -74,14 +74,8 @@ export class HttpClient {
     }
   }
 
-  async send(request) {
-    const response = await this._run(request)
-    delete response.success
-    return response
-  }
-
   async $send(request) {
-    const { success, ...response } = await this._run(request)
+    const { success, ...response } = await this.send(request)
 
     if (success !== false) {
       return response.body
