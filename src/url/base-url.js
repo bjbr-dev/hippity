@@ -1,10 +1,12 @@
-export function baseUrl(baseUrl) {
+export function baseUrl(defaultBaseUrl) {
   return request => {
     if (isAbsoluteURL(request.url)) {
       return request
     }
 
-    return { ...request, url: combineURLs(baseUrl, request.url) }
+    const { baseUrl, ...rest } = request
+    rest.url = combineURLs(baseUrl || defaultBaseUrl, request.url)
+    return rest
   }
 }
 
@@ -16,6 +18,10 @@ function isAbsoluteURL(url) {
 }
 
 function combineURLs(baseURL, relativeURL) {
+  if (!baseURL) {
+    return relativeURL
+  }
+
   return relativeURL
     ? baseURL.replace(/\/+$/, '') + '/' + relativeURL.replace(/^\/+/, '')
     : baseURL
