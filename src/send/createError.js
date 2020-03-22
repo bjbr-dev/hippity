@@ -20,16 +20,19 @@ export function enhanceError(error, details) {
       // Standard
       message: this.message,
       name: this.name,
+
       // Microsoft
       description: this.description,
       number: this.number,
+
       // Mozilla
       fileName: this.fileName,
       lineNumber: this.lineNumber,
       columnNumber: this.columnNumber,
       stack: this.stack,
+
       // Hippity
-      request: details.request
+      ...details
     }
   }
 

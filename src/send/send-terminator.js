@@ -1,5 +1,5 @@
-import { requestTerminator } from './request'
-import { xhrTerminator } from './xhr'
+import { requestTerminator } from './request-terminator'
+import { xhrTerminator } from './xhr-terminator'
 import { isNode } from 'browser-or-node'
 
 export function sendTerminator() {

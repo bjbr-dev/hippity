@@ -61,6 +61,28 @@ it('Transforms the request in order', async () => {
   expect(next).toHaveBeenCalledWith({ order: 'ab' })
 })
 
+it('Reuses original request if transform does not return anything', async () => {
+  // Arrange
+  const request = { order: '' }
+  const response = { success: true }
+  const next = jest.fn(() => response)
+  const requestTransforms = [
+    r => {
+      r.order += 'a'
+    }
+  ]
+  const responseTransforms = []
+
+  // Act
+  const result = await sut(requestTransforms, responseTransforms)(request, next)
+
+  // Assert
+  expect(result).toEqual({ success: true })
+  expect(request).toEqual({ order: 'a' })
+  expect(response).toEqual({ success: true })
+  expect(next).toHaveBeenCalledWith({ order: 'a' })
+})
+
 it('Transforms the response in order', async () => {
   // Arrange
   const request = {}
@@ -79,5 +101,27 @@ it('Transforms the response in order', async () => {
   expect(result).toEqual({ success: true, order: 'ab' })
   expect(request).toEqual({})
   expect(response).toEqual({ success: true, order: '' })
+  expect(next).toHaveBeenCalledWith({})
+})
+
+it('Reuses original response if transform does not return anything', async () => {
+  // Arrange
+  const request = {}
+  const response = { success: true, order: '' }
+  const next = jest.fn(() => response)
+  const requestTransforms = []
+  const responseTransforms = [
+    (_, res) => {
+      res.order += 'a'
+    }
+  ]
+
+  // Act
+  const result = await sut(requestTransforms, responseTransforms)(request, next)
+
+  // Assert
+  expect(result).toEqual({ success: true, order: 'a' })
+  expect(request).toEqual({})
+  expect(response).toEqual({ success: true, order: 'a' })
   expect(next).toHaveBeenCalledWith({})
 })

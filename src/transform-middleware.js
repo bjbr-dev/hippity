@@ -12,14 +12,14 @@ export const transformMiddleware = (
 
   return async function(request, next) {
     const transformedRequest = await requestTransforms.reduce(
-      (p, t) => p.then(r => t(r)),
+      (p, t) => p.then(r => t(r) || r),
       Promise.resolve(request)
     )
 
     const response = await next(transformedRequest)
 
     return await responseTransforms.reduce(
-      (p, t) => p.then(r => t(transformedRequest, r)),
+      (p, t) => p.then(r => t(transformedRequest, r) || r),
       Promise.resolve(response)
     )
   }

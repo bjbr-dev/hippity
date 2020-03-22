@@ -4,6 +4,7 @@ it('Gets JSON', async () => {
   const result = await client.get('/api/hello')
 
   expect(result).toEqual({
+    success: true,
     status: 200,
     message: 'OK',
     headers: {
@@ -20,6 +21,7 @@ it('Posts JSON', async () => {
   const result = await client.post('/api/reflect', { message: 'hello world' })
 
   expect(result).toEqual({
+    success: true,
     status: 200,
     message: 'OK',
     headers: {
@@ -47,6 +49,7 @@ it('PUTs JSON', async () => {
   const result = await client.put('/api/reflect', { message: 'hello world' })
 
   expect(result).toEqual({
+    success: true,
     status: 200,
     message: 'OK',
     headers: {
@@ -74,6 +77,7 @@ it('Patches JSON', async () => {
   const result = await client.patch('/api/reflect', { message: 'hello world' })
 
   expect(result).toEqual({
+    success: true,
     status: 200,
     message: 'OK',
     headers: {
@@ -101,6 +105,7 @@ it('Deletes JSON', async () => {
   const result = await client.delete('/api/reflect')
 
   expect(result).toEqual({
+    success: true,
     status: 200,
     message: 'OK',
     headers: {
