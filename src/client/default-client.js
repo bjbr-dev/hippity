@@ -3,7 +3,7 @@ import { transformMiddleware } from '../transform-middleware'
 import { sendTerminator } from '~/send'
 import { jsonMiddleware } from '~/body'
 import { urlInMethodProperties } from '~/method'
-import { urlResolver } from '~/url'
+import { urlResolver, baseUrl } from '~/url'
 import { defaultHeaders, userAgentHeaders } from '~/headers'
 import { timeoutMiddleware } from '~/send/timeout-middleware'
 import { isNode } from 'browser-or-node'
@@ -16,8 +16,12 @@ export function userAgentMiddleware(userAgentString) {
   return defaultHeadersMiddleware({ common: userAgentHeaders(userAgentString) })
 }
 
-export function resolveUrlInMethodPropertiesMiddleware() {
-  return transformMiddleware([urlInMethodProperties, urlResolver])
+export function resolveUrlInMethodPropertiesMiddleware(defaultBaseUrl) {
+  return transformMiddleware([
+    urlInMethodProperties,
+    urlResolver,
+    baseUrl(defaultBaseUrl)
+  ])
 }
 
 export const httpClient = new HttpClient()
