@@ -15,7 +15,8 @@ it('Waits for request', async () => {
       'content-type': 'application/json; charset=utf-8',
       date: expect.any(String)
     },
-    body: { message: 'OK' }
+    body: { message: 'OK' },
+    request: expect.anything()
   })
 })
 
