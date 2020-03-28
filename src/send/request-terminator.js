@@ -91,7 +91,8 @@ export function requestTerminator(request) {
         success: isSuccess(request.method || '', res.statusCode),
         status: res.statusCode,
         message: res.statusMessage,
-        headers: res.headers
+        headers: res.headers,
+        request: request
       }
 
       if (request.responseType === 'stream') {

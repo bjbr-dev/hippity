@@ -13,7 +13,8 @@ it('Gets JSON', async () => {
       'content-type': 'application/json; charset=utf-8',
       date: expect.any(String)
     },
-    body: { message: 'hello world' }
+    body: { message: 'hello world' },
+    request: expect.anything()
   })
 })
 
@@ -41,7 +42,8 @@ it('Posts JSON', async () => {
         host: 'localhost:3000'
       },
       body: { message: 'hello world' }
-    }
+    },
+    request: expect.anything()
   })
 })
 
@@ -69,7 +71,8 @@ it('PUTs JSON', async () => {
         host: 'localhost:3000'
       },
       body: { message: 'hello world' }
-    }
+    },
+    request: expect.anything()
   })
 })
 
@@ -97,7 +100,8 @@ it('Patches JSON', async () => {
         host: 'localhost:3000'
       },
       body: { message: 'hello world' }
-    }
+    },
+    request: expect.anything()
   })
 })
 
@@ -123,6 +127,7 @@ it('Deletes JSON', async () => {
         host: 'localhost:3000'
       },
       body: {}
-    }
+    },
+    request: expect.anything()
   })
 })

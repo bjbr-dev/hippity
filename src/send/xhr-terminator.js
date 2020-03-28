@@ -50,7 +50,8 @@ export function xhrTerminator(request) {
         body: responseData,
         status: xhr.status,
         message: xhr.statusText,
-        headers: responseHeaders
+        headers: responseHeaders,
+        request: request
       })
       xhr = null
     }
