@@ -15,7 +15,7 @@ export function createError(message, details) {
 export function enhanceError(error, details) {
   Object.assign(error, details, { isHippityError: true })
 
-  error.toJSON = function() {
+  error.toJSON = function () {
     return {
       // Standard
       message: this.message,
@@ -32,7 +32,7 @@ export function enhanceError(error, details) {
       stack: this.stack,
 
       // Hippity
-      ...details
+      ...details,
     }
   }
 

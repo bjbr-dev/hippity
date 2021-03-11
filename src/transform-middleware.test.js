@@ -2,7 +2,7 @@ import { transformMiddleware as sut } from './transform-middleware'
 
 test.each([{}, false, null, 'string'])(
   'Throws when request transform is not an array',
-  value => {
+  (value) => {
     // Act
     const act = () => sut(value, [])
 
@@ -13,7 +13,7 @@ test.each([{}, false, null, 'string'])(
 
 test.each([{}, false, null, 'string'])(
   'Throws when response transform is not an array',
-  value => {
+  (value) => {
     // Act
     const act = () => sut([], value)
 
@@ -46,8 +46,8 @@ it('Transforms the request in order', async () => {
   const response = { success: true }
   const next = jest.fn(() => response)
   const requestTransforms = [
-    r => ({ ...r, order: r.order + 'a' }),
-    r => ({ ...r, order: r.order + 'b' })
+    (r) => ({ ...r, order: r.order + 'a' }),
+    (r) => ({ ...r, order: r.order + 'b' }),
   ]
   const responseTransforms = []
 
@@ -67,9 +67,9 @@ it('Reuses original request if transform does not return anything', async () => 
   const response = { success: true }
   const next = jest.fn(() => response)
   const requestTransforms = [
-    r => {
+    (r) => {
       r.order += 'a'
-    }
+    },
   ]
   const responseTransforms = []
 
@@ -91,7 +91,7 @@ it('Transforms the response in order', async () => {
   const requestTransforms = []
   const responseTransforms = [
     (_, res) => ({ ...res, order: res.order + 'a' }),
-    (_, res) => ({ ...res, order: res.order + 'b' })
+    (_, res) => ({ ...res, order: res.order + 'b' }),
   ]
 
   // Act
@@ -113,7 +113,7 @@ it('Reuses original response if transform does not return anything', async () =>
   const responseTransforms = [
     (_, res) => {
       res.order += 'a'
-    }
+    },
   ]
 
   // Act

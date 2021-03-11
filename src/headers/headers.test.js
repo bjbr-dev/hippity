@@ -3,7 +3,7 @@ import {
   hasHeader,
   addHeaderIfNotPresent,
   addHeadersIfNotPresent,
-  replaceHeader
+  replaceHeader,
 } from './headers'
 
 describe('findHeader', () => {

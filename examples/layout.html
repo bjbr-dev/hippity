@@ -83,9 +83,9 @@
         const lines = script.split('\n')
 
         const match = script.match(/^[ \t]*(?=\S)/gm)
-        const minIndex = match ? Math.min(...match.map(x => x.length)) : 0
+        const minIndex = match ? Math.min(...match.map((x) => x.length)) : 0
 
-        return lines.map(l => l.substr(minIndex)).join('\n')
+        return lines.map((l) => l.substr(minIndex)).join('\n')
       }
     </script>
   </body>

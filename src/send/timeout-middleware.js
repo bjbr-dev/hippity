@@ -8,7 +8,7 @@ export function timeoutMiddleware(ms = 20000) {
     const callbacks = []
     const nextRequest = {
       ...request,
-      onAbort: callback => callbacks.push(callback)
+      onAbort: (callback) => callbacks.push(callback),
     }
 
     delete nextRequest.timeout

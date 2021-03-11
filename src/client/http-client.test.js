@@ -3,7 +3,7 @@ import { HttpClient } from './http-client'
 describe('constructor', () => {
   test.each([null, 'string', {}])(
     'Throws when middleware is not an array (%j)',
-    value => {
+    (value) => {
       // Act
       const act = () => new HttpClient(value)
 
@@ -155,7 +155,7 @@ describe('$send', () => {
         success: false,
         status: 200,
         message: 'OK',
-        body: true
+        body: true,
       })
     )
 
@@ -316,7 +316,7 @@ describe('if', () => {
         order += '1'
         return {}
       })
-      .if(true, c =>
+      .if(true, (c) =>
         c.use((r, n) => {
           order += '2'
           return n(r)
@@ -338,7 +338,7 @@ describe('if', () => {
         order += '1'
         return {}
       })
-      .if(false, c =>
+      .if(false, (c) =>
         c.use((r, n) => {
           order += '2'
           return n(r)

@@ -20,18 +20,18 @@ export function resolveUrlInMethodPropertiesMiddleware(defaultBaseUrl) {
   return transformMiddleware([
     urlInMethodProperties,
     urlResolver,
-    baseUrl(defaultBaseUrl)
+    baseUrl(defaultBaseUrl),
   ])
 }
 
 export const httpClient = new HttpClient()
   .useTerminator(sendTerminator())
   .use(timeoutMiddleware())
-  .if(!isNode, c => c.use(userAgentMiddleware()))
+  .if(!isNode, (c) => c.use(userAgentMiddleware()))
   .use(resolveUrlInMethodPropertiesMiddleware())
 
 export const jsonClient = httpClient.use(jsonMiddleware()).use(
   defaultHeadersMiddleware({
-    common: { accept: 'application/json, text/plain, */*' }
+    common: { accept: 'application/json, text/plain, */*' },
   })
 )

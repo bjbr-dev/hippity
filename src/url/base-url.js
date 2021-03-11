@@ -1,5 +1,5 @@
 export function baseUrl(defaultBaseUrl) {
-  return request => {
+  return (request) => {
     if (isAbsoluteUrl(request.url)) {
       return request
     }

@@ -14,7 +14,7 @@ it('Does nothing if method already exists', () => {
 
 it.each([['HEAD', 'GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE']])(
   'Normalizes methods',
-  method => {
+  (method) => {
     // Arrange
     const request = { [method]: 'url' }
 

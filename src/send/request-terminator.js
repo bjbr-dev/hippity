@@ -41,7 +41,7 @@ function convertToBuffer(request) {
   }
 
   throw createError('Body must be a string, Buffer, ArrayBuffer or Stream', {
-    request
+    request,
   })
 }
 
@@ -64,12 +64,12 @@ export function requestTerminator(request) {
     const options = {
       method: request.method,
       headers: headers,
-      agent: isHttpsRequest ? request.httpsAgent : request.httpAgent
+      agent: isHttpsRequest ? request.httpsAgent : request.httpAgent,
     }
 
     const transport = isHttpsRequest ? https : http
 
-    const req = transport.request(request.url, options, res => {
+    const req = transport.request(request.url, options, (res) => {
       if (req.aborted) {
         return
       }
@@ -92,7 +92,7 @@ export function requestTerminator(request) {
         status: res.statusCode,
         message: res.statusMessage,
         headers: res.headers,
-        request: request
+        request: request,
       }
 
       if (request.responseType === 'stream') {
@@ -100,9 +100,9 @@ export function requestTerminator(request) {
         resolve(response)
       } else {
         const responseBuffer = []
-        stream.on('data', chunk => responseBuffer.push(chunk))
+        stream.on('data', (chunk) => responseBuffer.push(chunk))
 
-        stream.on('error', err => {
+        stream.on('error', (err) => {
           if (req.aborted) {
             return
           }
@@ -122,7 +122,7 @@ export function requestTerminator(request) {
       }
     })
 
-    req.on('error', err => {
+    req.on('error', (err) => {
       if (req.aborted) return
       reject(enhanceError(err, { request }))
     })
@@ -138,7 +138,7 @@ export function requestTerminator(request) {
 
     if (isStream(body)) {
       body
-        .on('error', err => {
+        .on('error', (err) => {
           reject(enhanceError(err, { request }))
         })
         .pipe(req)

@@ -3,22 +3,22 @@ module.exports = {
   env: {
     browser: true,
     node: true,
-    es6: true
+    es6: true,
   },
   parserOptions: {
     ecmaVersion: 2018,
-    sourceType: 'module'
+    sourceType: 'module',
   },
   rules: {
     'prettier/prettier': 'error',
     'no-var': 'error',
-    'prefer-const': 'error'
+    'prefer-const': 'error',
   },
   overrides: [
     {
       files: '*.test.js',
       plugins: ['jest'],
-      extends: ['plugin:jest/recommended']
-    }
-  ]
+      extends: ['plugin:jest/recommended'],
+    },
+  ],
 }

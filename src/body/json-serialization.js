@@ -7,9 +7,9 @@ export function jsonMiddleware() {
 
 export const jsonSerializer = bodySerializer(
   'application/json;charset=utf-8',
-  body => JSON.stringify(body)
+  (body) => JSON.stringify(body)
 )
 
-export const jsonDeserializer = bodyDeserializer('application/json', b =>
+export const jsonDeserializer = bodyDeserializer('application/json', (b) =>
   JSON.parse(b)
 )

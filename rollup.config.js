@@ -15,9 +15,9 @@ export default {
       name: pkg.name,
       format: 'umd',
       sourcemap: true,
-      globals: {}
+      globals: {},
     },
-    { file: pkg.module, format: 'es', sourcemap: true }
+    { file: pkg.module, format: 'es', sourcemap: true },
   ],
 
   // Specify here external modules which you don't want to include in your bundle (for instance: 'lodash', 'moment' etc.)
@@ -27,9 +27,9 @@ export default {
     autoExternal(),
     resolve({ extensions }),
     replace({
-      'process.env.HIPPITY_VERSION': JSON.stringify(pkg.version)
+      'process.env.HIPPITY_VERSION': JSON.stringify(pkg.version),
     }),
     commonjs(),
-    babel({ extensions, include: ['src/**/*'] })
-  ]
+    babel({ extensions, include: ['src/**/*'] }),
+  ],
 }

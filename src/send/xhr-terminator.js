@@ -8,7 +8,7 @@ import { createError } from './createError'
 import { isFormData } from '~/body/body-types'
 
 export function xhrTerminator(request) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     const requestBody = request.body
     const requestHeaders = request.headers
 
@@ -20,7 +20,7 @@ export function xhrTerminator(request) {
     xhr.open(request.method.toUpperCase(), request.url, true)
 
     // Listen for ready state
-    xhr.onreadystatechange = function() {
+    xhr.onreadystatechange = function () {
       if (!xhr || xhr.readyState !== 4) {
         return
       }
@@ -51,13 +51,13 @@ export function xhrTerminator(request) {
         status: xhr.status,
         message: xhr.statusText,
         headers: responseHeaders,
-        request: request
+        request: request,
       })
       xhr = null
     }
 
     // Handle browser request cancellation (as opposed to a manual cancellation)
-    xhr.onabort = function() {
+    xhr.onabort = function () {
       if (!xhr) {
         return
       }
@@ -67,7 +67,7 @@ export function xhrTerminator(request) {
     }
 
     // Handle low level network errors
-    xhr.onerror = function() {
+    xhr.onerror = function () {
       // Real errors are hidden from us by the browser
       // onerror should only fire if it's a network error
       reject(createError('Network Error', { request, xhr }))

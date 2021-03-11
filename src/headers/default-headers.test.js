@@ -2,7 +2,7 @@ import { defaultHeaders as sut } from './default-headers'
 
 test.each([null, undefined, 'header', []])(
   'Throws when default headers is not an object (%j)',
-  value => {
+  (value) => {
     // Act
     const act = () => sut(value)
 
@@ -67,7 +67,7 @@ it('Overrides common headers with current method', () => {
   // Arrange
   const defaultHeaders = {
     common: { foo: 'baz' },
-    PUT: { foo: 'bar' }
+    PUT: { foo: 'bar' },
   }
   const request = { method: 'PUT' }
 

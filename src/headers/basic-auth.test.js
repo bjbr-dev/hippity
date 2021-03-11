@@ -3,14 +3,14 @@ import { basicAuth } from './basic-auth'
 it('Does nothing if authorization already set', () => {
   const request = {
     headers: { authorization: 'foo' },
-    auth: { username: 'foo', password: 'bar' }
+    auth: { username: 'foo', password: 'bar' },
   }
 
   const result = basicAuth()(request)
 
   expect(request).toEqual({
     headers: { authorization: 'foo' },
-    auth: { username: 'foo', password: 'bar' }
+    auth: { username: 'foo', password: 'bar' },
   })
   expect(result).toBe(request)
 })

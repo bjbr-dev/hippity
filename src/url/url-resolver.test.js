@@ -15,7 +15,7 @@ describe('urlResolver', () => {
 
   it('Does nothing if url is not an array or object', () => {
     // Arrange
-    const request = { url: function() {} }
+    const request = { url: function () {} }
 
     // Act
     const result = sut(request)
@@ -59,7 +59,7 @@ describe('urlResolver', () => {
       boolean: true,
       string: 'foo',
       array: [1, 2],
-      object: {}
+      object: {},
     }
 
     // Act
@@ -74,7 +74,7 @@ describe('urlResolver', () => {
       boolean: true,
       string: 'foo',
       array: [1, 2],
-      object: {}
+      object: {},
     })
 
     expect(result).toEqual({
@@ -85,7 +85,7 @@ describe('urlResolver', () => {
       boolean: true,
       string: 'foo',
       array: [1, 2],
-      object: {}
+      object: {},
     })
   })
 })
@@ -111,7 +111,7 @@ describe('resolve', () => {
 
   it.each([null, undefined])(
     'Does nothing if params is undefined (%j)',
-    params => {
+    (params) => {
       // Act
       const result = resolve(['/foo', params])
 
@@ -124,7 +124,7 @@ describe('resolve', () => {
     // Act
     const result = resolve([
       '/foo',
-      { 'this should': "be url encoded ;,/?:@&=+$ -_.!~*'() #" }
+      { 'this should': "be url encoded ;,/?:@&=+$ -_.!~*'() #" },
     ])
 
     // Assert
@@ -192,7 +192,7 @@ describe('resolve', () => {
     // Act
     const result = resolve([
       '/{foo}',
-      { foo: "should be url encoded ;,/?:@&=+$ -_.!~*'() #" }
+      { foo: "should be url encoded ;,/?:@&=+$ -_.!~*'() #" },
     ])
 
     // Assert

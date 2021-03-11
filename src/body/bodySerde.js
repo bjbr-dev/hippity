@@ -1,7 +1,7 @@
 import { hasHeader, findHeader } from '~/headers/headers'
 
 export function bodySerializer(contentType, serialize) {
-  return request => {
+  return (request) => {
     if (!('body' in request)) {
       return request
     }
@@ -13,7 +13,7 @@ export function bodySerializer(contentType, serialize) {
     return {
       ...request,
       headers: { ...request.headers, 'content-type': contentType },
-      body: serialize(request.body)
+      body: serialize(request.body),
     }
   }
 }
@@ -21,7 +21,7 @@ export function bodySerializer(contentType, serialize) {
 export function bodyDeserializer(contentTypeTest, deserialize) {
   if (typeof contentTypeTest === 'string') {
     const expectedContentType = contentTypeTest
-    contentTypeTest = c => c.toLowerCase().indexOf(expectedContentType) >= 0
+    contentTypeTest = (c) => c.toLowerCase().indexOf(expectedContentType) >= 0
   }
 
   return (_, response) => {
@@ -33,7 +33,7 @@ export function bodyDeserializer(contentTypeTest, deserialize) {
     if (typeof contentType === 'string' && contentTypeTest(contentType)) {
       return {
         ...response,
-        body: deserialize(response.body)
+        body: deserialize(response.body),
       }
     }
 

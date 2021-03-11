@@ -3,10 +3,10 @@ import { hasHeader } from './headers'
 const toBase64 =
   typeof btoa !== 'undefined'
     ? btoa
-    : value => Buffer.from(value).toString('base64')
+    : (value) => Buffer.from(value).toString('base64')
 
 export function basicAuth(defaultAuth) {
-  return request => {
+  return (request) => {
     if (hasHeader(request.headers, 'authorization')) {
       return request
     }
@@ -23,8 +23,8 @@ export function basicAuth(defaultAuth) {
       ...request,
       headers: {
         ...request.headers,
-        authorization: 'Basic ' + toBase64(username + ':' + password)
-      }
+        authorization: 'Basic ' + toBase64(username + ':' + password),
+      },
     }
     delete result.auth
     return result

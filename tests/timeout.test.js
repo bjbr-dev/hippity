@@ -2,7 +2,7 @@ import { client } from './clients'
 
 it('Waits for request', async () => {
   const result = await client.get(['/api/sleep', { ms: 150 }], {
-    timeout: 2000
+    timeout: 2000,
   })
 
   expect(result).toEqual({
@@ -13,16 +13,16 @@ it('Waits for request', async () => {
       connection: 'close',
       'content-length': '16',
       'content-type': 'application/json; charset=utf-8',
-      date: expect.any(String)
+      date: expect.any(String),
     },
     body: { message: 'OK' },
-    request: expect.anything()
+    request: expect.anything(),
   })
 })
 
 it('Can timeout', async () => {
   const result = client.get(['/api/sleep', { ms: 500 }], {
-    timeout: 50
+    timeout: 50,
   })
   await expect(result).rejects.toThrow('Aborted')
 })

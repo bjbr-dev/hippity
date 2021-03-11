@@ -2,7 +2,7 @@ import { isSuccess } from './is-success'
 
 test.each([[199, 300, 301, 400, 404, 410, 500]])(
   'Returns false if status indicates failure (%j)',
-  async status => {
+  async (status) => {
     // Act
     const result = isSuccess('GET', status)
 
@@ -13,7 +13,7 @@ test.each([[199, 300, 301, 400, 404, 410, 500]])(
 
 test.each([[200, 201, 298, 299]])(
   'Returns true if status is valid (%j)',
-  async status => {
+  async (status) => {
     // Act
     const result = isSuccess('GET', status)
 
@@ -24,7 +24,7 @@ test.each([[200, 201, 298, 299]])(
 
 test.each([[404, 410]])(
   'Allows delete methods to have 404 and 410 (%j)',
-  async status => {
+  async (status) => {
     // Act
     const result = isSuccess('DELETE', status)
 

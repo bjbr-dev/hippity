@@ -17,7 +17,7 @@ describe('jsonSerializer', () => {
 
     expect(request).toEqual({
       headers: { 'content-type': 'foo' },
-      body: { foo: 'bar' }
+      body: { foo: 'bar' },
     })
     expect(response).toBe(request)
   })
@@ -31,9 +31,9 @@ describe('jsonSerializer', () => {
     expect(response).toEqual({
       headers: {
         foo: 'bar',
-        'content-type': 'application/json;charset=utf-8'
+        'content-type': 'application/json;charset=utf-8',
       },
-      body: '{"foo":"bar"}'
+      body: '{"foo":"bar"}',
     })
   })
 })
@@ -42,14 +42,14 @@ describe('jsonDeserializer', () => {
   it('does nothing if body is not a string', () => {
     const request = {}
     const response = {
-      body: { foo: 'bar' }
+      body: { foo: 'bar' },
     }
 
     const result = jsonDeserializer(request, response)
 
     expect(request).toEqual({})
     expect(response).toEqual({
-      body: { foo: 'bar' }
+      body: { foo: 'bar' },
     })
     expect(result).toBe(response)
   })
@@ -58,7 +58,7 @@ describe('jsonDeserializer', () => {
     const request = {}
     const response = {
       headers: {},
-      body: '{"foo":"bar"}'
+      body: '{"foo":"bar"}',
     }
 
     const result = jsonDeserializer(request, response)
@@ -66,7 +66,7 @@ describe('jsonDeserializer', () => {
     expect(request).toEqual({})
     expect(response).toEqual({
       headers: {},
-      body: '{"foo":"bar"}'
+      body: '{"foo":"bar"}',
     })
     expect(result).toBe(response)
   })
@@ -75,7 +75,7 @@ describe('jsonDeserializer', () => {
     const request = {}
     const response = {
       headers: { 'Content-Type': 'application/xml' },
-      body: '{"foo":"bar"}'
+      body: '{"foo":"bar"}',
     }
 
     const result = jsonDeserializer(request, response)
@@ -83,7 +83,7 @@ describe('jsonDeserializer', () => {
     expect(request).toEqual({})
     expect(response).toEqual({
       headers: { 'Content-Type': 'application/xml' },
-      body: '{"foo":"bar"}'
+      body: '{"foo":"bar"}',
     })
     expect(result).toBe(response)
   })
@@ -92,7 +92,7 @@ describe('jsonDeserializer', () => {
     const request = {}
     const response = {
       headers: { 'Content-Type': 'application/json' },
-      body: '{"foo":"bar"}'
+      body: '{"foo":"bar"}',
     }
 
     const result = jsonDeserializer(request, response)
@@ -100,11 +100,11 @@ describe('jsonDeserializer', () => {
     expect(request).toEqual({})
     expect(response).toEqual({
       headers: { 'Content-Type': 'application/json' },
-      body: '{"foo":"bar"}'
+      body: '{"foo":"bar"}',
     })
     expect(result).toEqual({
       headers: { 'Content-Type': 'application/json' },
-      body: { foo: 'bar' }
+      body: { foo: 'bar' },
     })
   })
 })

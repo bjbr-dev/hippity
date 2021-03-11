@@ -19,7 +19,7 @@ const ignoreDuplicateOf = [
   'proxy-authorization',
   'referer',
   'retry-after',
-  'user-agent'
+  'user-agent',
 ]
 
 export function parseHeaders(headers) {
@@ -34,10 +34,7 @@ export function parseHeaders(headers) {
 
     // Normalize headers to be consistent with browsers, and fetch()
     // https://github.com/whatwg/xhr/issues/146
-    const key = line
-      .substr(0, i)
-      .trim()
-      .toLowerCase()
+    const key = line.substr(0, i).trim().toLowerCase()
 
     if (key) {
       if (parsed[key] && ignoreDuplicateOf.indexOf(key) >= 0) {

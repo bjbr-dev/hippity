@@ -4,7 +4,7 @@ export class HttpClient {
       throw new TypeError('Middleware stack must be an array')
     }
 
-    if (middleware.some(m => typeof m !== 'function')) {
+    if (middleware.some((m) => typeof m !== 'function')) {
       throw new Error('Middleware must be a function')
     }
 
@@ -48,7 +48,7 @@ export class HttpClient {
   }
 
   useIf(predicate, middleware) {
-    return this.if(predicate, c => c.use(middleware))
+    return this.if(predicate, (c) => c.use(middleware))
   }
 
   async send(request) {
@@ -61,7 +61,7 @@ export class HttpClient {
           'Reached end of pipeline. Use a middleware which terminates the pipeline.'
         )
       } else {
-        const next = function(request) {
+        const next = function (request) {
           if (!request) {
             request = currentRequest
           }
@@ -92,11 +92,11 @@ export class HttpClient {
 function addSendWithoutBody(property, method) {
   method = (method || property).toUpperCase()
 
-  HttpClient.prototype[property] = function(url, options) {
+  HttpClient.prototype[property] = function (url, options) {
     return this.send({ method, url: url, ...options })
   }
 
-  HttpClient.prototype['$' + property] = function(url, options) {
+  HttpClient.prototype['$' + property] = function (url, options) {
     return this.$send({ method, url: url, ...options })
   }
 }
@@ -104,11 +104,11 @@ function addSendWithoutBody(property, method) {
 function addSendWithBody(property, method) {
   method = (method || property).toUpperCase()
 
-  HttpClient.prototype[property] = function(url, body, options) {
+  HttpClient.prototype[property] = function (url, body, options) {
     return this.send({ method, url, body, ...options })
   }
 
-  HttpClient.prototype['$' + property] = function(url, body, options) {
+  HttpClient.prototype['$' + property] = function (url, body, options) {
     return this.$send({ method, url, body, ...options })
   }
 }

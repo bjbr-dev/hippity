@@ -11,10 +11,10 @@ it('Gets JSON', async () => {
       connection: 'close',
       'content-length': '25',
       'content-type': 'application/json; charset=utf-8',
-      date: expect.any(String)
+      date: expect.any(String),
     },
     body: { message: 'hello world' },
-    request: expect.anything()
+    request: expect.anything(),
   })
 })
 
@@ -29,7 +29,7 @@ it('Posts JSON', async () => {
       connection: 'close',
       'content-length': '243',
       'content-type': 'application/json; charset=utf-8',
-      date: expect.any(String)
+      date: expect.any(String),
     },
     body: {
       url: '/api/reflect',
@@ -39,11 +39,11 @@ it('Posts JSON', async () => {
         connection: 'close',
         'content-length': '25',
         'content-type': 'application/json;charset=utf-8',
-        host: 'localhost:3000'
+        host: 'localhost:3000',
       },
-      body: { message: 'hello world' }
+      body: { message: 'hello world' },
     },
-    request: expect.anything()
+    request: expect.anything(),
   })
 })
 
@@ -58,7 +58,7 @@ it('PUTs JSON', async () => {
       connection: 'close',
       'content-length': '242',
       'content-type': 'application/json; charset=utf-8',
-      date: expect.any(String)
+      date: expect.any(String),
     },
     body: {
       url: '/api/reflect',
@@ -68,11 +68,11 @@ it('PUTs JSON', async () => {
         connection: 'close',
         'content-length': '25',
         'content-type': 'application/json;charset=utf-8',
-        host: 'localhost:3000'
+        host: 'localhost:3000',
       },
-      body: { message: 'hello world' }
+      body: { message: 'hello world' },
     },
-    request: expect.anything()
+    request: expect.anything(),
   })
 })
 
@@ -87,7 +87,7 @@ it('Patches JSON', async () => {
       connection: 'close',
       'content-length': '244',
       'content-type': 'application/json; charset=utf-8',
-      date: expect.any(String)
+      date: expect.any(String),
     },
     body: {
       url: '/api/reflect',
@@ -97,11 +97,11 @@ it('Patches JSON', async () => {
         connection: 'close',
         'content-length': '25',
         'content-type': 'application/json;charset=utf-8',
-        host: 'localhost:3000'
+        host: 'localhost:3000',
       },
-      body: { message: 'hello world' }
+      body: { message: 'hello world' },
     },
-    request: expect.anything()
+    request: expect.anything(),
   })
 })
 
@@ -116,7 +116,7 @@ it('Deletes JSON', async () => {
       connection: 'close',
       'content-length': '152',
       'content-type': 'application/json; charset=utf-8',
-      date: expect.any(String)
+      date: expect.any(String),
     },
     body: {
       url: '/api/reflect',
@@ -124,10 +124,10 @@ it('Deletes JSON', async () => {
       headers: {
         accept: 'application/json, text/plain, */*',
         connection: 'close',
-        host: 'localhost:3000'
+        host: 'localhost:3000',
       },
-      body: {}
+      body: {},
     },
-    request: expect.anything()
+    request: expect.anything(),
   })
 })

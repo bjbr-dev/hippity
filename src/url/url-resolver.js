@@ -2,7 +2,7 @@ export function urlResolver(request) {
   if (Array.isArray(request.url)) {
     return {
       ...request,
-      url: resolve(request.url)
+      url: resolve(request.url),
     }
   } else {
     return request
@@ -41,7 +41,7 @@ export function resolve([path, params]) {
   }
 
   const queryParameters = []
-  const pushQueryParameter = function(key, value) {
+  const pushQueryParameter = function (key, value) {
     queryParameters.push(
       encodeURIComponent(key) +
         '=' +

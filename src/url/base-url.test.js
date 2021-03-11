@@ -13,7 +13,7 @@ it('Adds in default base', () => {
   expect(result).toEqual({ url: 'https://www.base.com/foo' })
 })
 
-it.each([undefined, null, ''])('Does nothing if base is not set', base => {
+it.each([undefined, null, ''])('Does nothing if base is not set', (base) => {
   // Arrange
   const request = { url: 'foo' }
 
