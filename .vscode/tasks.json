@@ -54,6 +54,15 @@
       "args": ["run", "test-watch"],
       "isBackground": true,
       "problemMatcher": []
+    },
+    {
+      "label": "Upgrade",
+      "group": "build",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "upgrade"],
+      "isBackground": true,
+      "problemMatcher": []
     }
   ]
 }
