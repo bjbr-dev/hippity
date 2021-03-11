@@ -40,7 +40,7 @@ It will throw an error only if their was an HTTP transport error (e.g. network d
 ```js
 async function example() {
   const response = await this.client.put(['/api/users/{id}', { id: 5 }], {
-    name: 'John Smith'
+    name: 'John Smith',
   })
 
   // Could also check response.success !== false
@@ -57,7 +57,7 @@ For more examples, please read the Wiki.
 ## Report Issues
 
 For any issues or feature requests, we would really appreciate it if you report
-them using our [issue tracker](hhttps://gitlab.com/berkeleybross/hippity/issues).
+them using our [issue tracker](hhttps://github.com/berkeleybross/hippity/issues).
 
 ## Contributing
 

@@ -8,7 +8,7 @@ Please follow the [prettier](https://github.com/prettier/prettier) and [eslint](
 
 ### Testing
 
-Please update the tests to reflect your code changes. Pull requests will not be accepted if they are failing on [Gitlab CI](https://gitlab.com/berkeleybross/hippity/pipelines).
+Please update the tests to reflect your code changes. Pull requests will not be accepted if they are failing on [GitHub CI](https://github.com/berkeleybross/hippity/pipelines).
 
 ### Documentation
 
@@ -33,7 +33,7 @@ Please update the docs accordingly so that there are no discrepencies between th
 
 ### Releasing
 
-A new version is automatically released by GitLab when the master branch is tagged. Versions should follow [semantic versioning](http://semver.org/).
+A new version is automatically released by GitHub when the master branch is tagged. Versions should follow [semantic versioning](http://semver.org/).
 
 ### Running Examples
 

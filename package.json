@@ -9,13 +9,13 @@
     "promise",
     "xhr"
   ],
-  "homepage": "https://gitlab.com/berkeleybross/hippity#readme",
+  "homepage": "https://github.com/berkeleybross/hippity#readme",
   "bugs": {
-    "url": "https://gitlab.com/berkeleybross/hippity/issues"
+    "url": "https://github.com/berkeleybross/hippity/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/berkeleybross/hippity.git"
+    "url": "git+https://github.com/berkeleybross/hippity.git"
   },
   "license": "MIT",
   "author": "berkeleybross",
