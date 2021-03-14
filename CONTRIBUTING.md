@@ -33,7 +33,7 @@ Please update the docs accordingly so that there are no discrepencies between th
 
 ### Releasing
 
-A new version is automatically released by GitHub when the master branch is tagged. Versions should follow [semantic versioning](http://semver.org/).
+Releases are automatically deployed to NPM when a github release is made. Go to [Github releases](https://github.com/berkeleybross/hippity/releases) and either create a new release or publish the draft release created by the `release-drafter` Github bot. Versions should follow [semantic versioning](http://semver.org/).
 
 ### Running Examples
 
