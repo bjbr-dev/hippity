@@ -21,7 +21,7 @@ Please update the docs accordingly so that there are no discrepencies between th
 - `Install NPM packages` Installs NPM packages, should be run whenever the branch changes (due to switch or pull)
 - `Start` watch for changes and restart the server (on http://localhost:3000/)
 - `Build` Runs the build & lint scripts
-- `Lint es` Runs the javascript linter
+- `Lint es` Runs eslint
 - `Run tests` Runs all tests - requires `Dev` to be running
 - `Watch tests` watch for changes and run all tests - requires `Dev` to be running
 
