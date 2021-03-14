@@ -8,7 +8,7 @@ import pkg from './package.json'
 const extensions = ['.js', '.jsx']
 
 export default {
-  input: 'src/index.js',
+  input: 'src/index.ts',
   output: [
     {
       file: pkg.main,
