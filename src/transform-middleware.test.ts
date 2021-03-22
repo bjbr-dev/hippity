@@ -4,7 +4,7 @@ test.each([{}, false, null, 'string'])(
   'Throws when request transform is not an array',
   (value) => {
     // Act
-    const act = () => sut(value, [])
+    const act = () => sut(value as [], [])
 
     // Assert
     expect(act).toThrow(new TypeError('Request transforms must be an array'))
@@ -15,7 +15,7 @@ test.each([{}, false, null, 'string'])(
   'Throws when response transform is not an array',
   (value) => {
     // Act
-    const act = () => sut([], value)
+    const act = () => sut([], value as [])
 
     // Assert
     expect(act).toThrow(new TypeError('Response transforms must be an array'))
@@ -25,8 +25,8 @@ test.each([{}, false, null, 'string'])(
 it('Does nothing if no transforms are specified', async () => {
   // Arrange
   const request = {}
-  const response = { success: true }
-  const next = jest.fn(() => response)
+  const response = { status: 200, success: true }
+  const next = jest.fn(() => Promise.resolve(response))
   const requestTransforms = []
   const responseTransforms = []
 
@@ -43,8 +43,8 @@ it('Does nothing if no transforms are specified', async () => {
 it('Transforms the request in order', async () => {
   // Arrange
   const request = { order: '' }
-  const response = { success: true }
-  const next = jest.fn(() => response)
+  const response = { status: 200, success: true }
+  const next = jest.fn(() => Promise.resolve(response))
   const requestTransforms = [
     (r) => ({ ...r, order: r.order + 'a' }),
     (r) => ({ ...r, order: r.order + 'b' }),
@@ -64,8 +64,8 @@ it('Transforms the request in order', async () => {
 it('Reuses original request if transform does not return anything', async () => {
   // Arrange
   const request = { order: '' }
-  const response = { success: true }
-  const next = jest.fn(() => response)
+  const response = { status: 200, success: true }
+  const next = jest.fn(() => Promise.resolve(response))
   const requestTransforms = [
     (r) => {
       r.order += 'a'
@@ -86,8 +86,8 @@ it('Reuses original request if transform does not return anything', async () => 
 it('Transforms the response in order', async () => {
   // Arrange
   const request = {}
-  const response = { success: true, order: '' }
-  const next = jest.fn(() => response)
+  const response = { status: 200, success: true, order: '' }
+  const next = jest.fn(() => Promise.resolve(response))
   const requestTransforms = []
   const responseTransforms = [
     (_, res) => ({ ...res, order: res.order + 'a' }),
@@ -107,8 +107,8 @@ it('Transforms the response in order', async () => {
 it('Reuses original response if transform does not return anything', async () => {
   // Arrange
   const request = {}
-  const response = { success: true, order: '' }
-  const next = jest.fn(() => response)
+  const response = { status: 200, success: true, order: '' }
+  const next = jest.fn(() => Promise.resolve(response))
   const requestTransforms = []
   const responseTransforms = [
     (_, res) => {

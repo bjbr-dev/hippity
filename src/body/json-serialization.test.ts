@@ -42,6 +42,8 @@ describe('jsonDeserializer', () => {
   it('does nothing if body is not a string', () => {
     const request = {}
     const response = {
+      status: 200,
+      success: true,
       body: { foo: 'bar' },
     }
 
@@ -57,6 +59,8 @@ describe('jsonDeserializer', () => {
   it('Does nothing if content type is not set', () => {
     const request = {}
     const response = {
+      status: 200,
+      success: true,
       headers: {},
       body: '{"foo":"bar"}',
     }
@@ -74,6 +78,8 @@ describe('jsonDeserializer', () => {
   it('Does nothing if content type is not JSON', () => {
     const request = {}
     const response = {
+      status: 200,
+      success: true,
       headers: { 'Content-Type': 'application/xml' },
       body: '{"foo":"bar"}',
     }
@@ -91,6 +97,8 @@ describe('jsonDeserializer', () => {
   it('Deserializes JSON', () => {
     const request = {}
     const response = {
+      status: 200,
+      success: true,
       headers: { 'Content-Type': 'application/json' },
       body: '{"foo":"bar"}',
     }

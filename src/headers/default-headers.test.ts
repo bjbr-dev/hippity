@@ -1,10 +1,11 @@
-import { defaultHeaders as sut } from './default-headers'
+import { HippityRequest } from '~/client'
+import { DefaultHeaderLookup, defaultHeaders as sut } from './default-headers'
 
 test.each([null, undefined, 'header', []])(
   'Throws when default headers is not an object (%j)',
-  (value) => {
+  (value: unknown) => {
     // Act
-    const act = () => sut(value)
+    const act = () => sut(value as DefaultHeaderLookup)
 
     // Assert
     expect(act).toThrow(new TypeError('Default headers should be an object'))
@@ -40,7 +41,7 @@ it('uses common headers', () => {
 it('uses headers for current method', () => {
   // Arrange
   const defaultHeaders = { PUT: { foo: 'bar' } }
-  const request = { method: 'PUT' }
+  const request: HippityRequest = { method: 'PUT' }
 
   // Act
   const result = sut(defaultHeaders)(request)
@@ -53,7 +54,7 @@ it('uses headers for current method', () => {
 it('Does not use headers for a different method', () => {
   // Arrange
   const defaultHeaders = { PUT: { foo: 'bar' } }
-  const request = { method: 'POST' }
+  const request: HippityRequest = { method: 'POST' }
 
   // Act
   const result = sut(defaultHeaders)(request)
@@ -69,7 +70,7 @@ it('Overrides common headers with current method', () => {
     common: { foo: 'baz' },
     PUT: { foo: 'bar' },
   }
-  const request = { method: 'PUT' }
+  const request: HippityRequest = { method: 'PUT' }
 
   // Act
   const result = sut(defaultHeaders)(request)
@@ -82,7 +83,7 @@ it('Overrides common headers with current method', () => {
 it('Overrides current method headers with explicit headers', () => {
   // Arrange
   const defaultHeaders = { PUT: { foo: 'bar' } }
-  const request = { method: 'PUT', headers: { foo: 'baz' } }
+  const request: HippityRequest = { method: 'PUT', headers: { foo: 'baz' } }
 
   // Act
   const result = sut(defaultHeaders)(request)

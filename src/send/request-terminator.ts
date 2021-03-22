@@ -3,6 +3,7 @@
  */
 
 import { isStream, isArrayBuffer, isArrayBufferView } from '~/body/body-types'
+import { HippityRequest, HippityResponse } from '~/client'
 import { createError, enhanceError } from '~/send/createError'
 import { isSuccess } from './is-success'
 
@@ -21,7 +22,7 @@ const httpFactory = lazy(() => require('http'))
 const httpsFactory = lazy(() => require('https'))
 const zlibFactory = lazy(() => require('zlib'))
 
-function convertToBuffer(request) {
+function convertToBuffer(request: HippityRequest): Buffer {
   let body = request.body
 
   if (Buffer.isBuffer(body)) {
@@ -45,7 +46,9 @@ function convertToBuffer(request) {
   })
 }
 
-export function requestTerminator(request) {
+export function requestTerminator(
+  request: HippityRequest
+): Promise<HippityResponse> {
   const http = httpFactory()
   const https = httpsFactory()
   const { createUnzip } = zlibFactory()
@@ -55,8 +58,9 @@ export function requestTerminator(request) {
     const headers = request.headers
 
     if (body && !isStream(body)) {
-      body = convertToBuffer(request)
-      headers['content-length'] = body.length
+      const bodyBuffer = convertToBuffer(request)
+      body = bodyBuffer
+      headers['content-length'] = bodyBuffer.length.toString()
     }
 
     const isHttpsRequest = request.url.startsWith('https://')
@@ -87,7 +91,7 @@ export function requestTerminator(request) {
           break
       }
 
-      const response = {
+      const response: HippityResponse = {
         success: isSuccess(request.method || '', res.statusCode),
         status: res.statusCode,
         message: res.statusMessage,
@@ -111,7 +115,7 @@ export function requestTerminator(request) {
         })
 
         stream.on('end', () => {
-          let responseData = Buffer.concat(responseBuffer)
+          let responseData: Buffer | string = Buffer.concat(responseBuffer)
           if (request.responseType !== 'arraybuffer') {
             responseData = responseData.toString(request.responseEncoding)
           }
@@ -127,7 +131,7 @@ export function requestTerminator(request) {
       reject(enhanceError(err, { request }))
     })
 
-    if (request.onAbort) {
+    if (typeof request.onAbort === 'function') {
       request.onAbort(() => {
         if (req.aborted) return
 

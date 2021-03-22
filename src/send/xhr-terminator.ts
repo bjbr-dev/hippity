@@ -6,8 +6,11 @@ import { parseHeaders } from './parse-headers'
 import { isSuccess } from './is-success'
 import { createError } from './createError'
 import { isFormData } from '~/body/body-types'
+import { HippityRequest, HippityResponse } from '~/client'
 
-export function xhrTerminator(request) {
+export function xhrTerminator(
+  request: HippityRequest
+): Promise<HippityResponse> {
   return new Promise(function (resolve, reject) {
     const requestBody = request.body
     const requestHeaders = request.headers
@@ -95,6 +98,12 @@ export function xhrTerminator(request) {
 
     // Add responseType to request if needed
     if (request.responseType) {
+      if (request.responseType === 'stream') {
+        throw new Error(
+          "Cannot use 'stream' response type with the XHR Terminator"
+        )
+      }
+
       try {
         xhr.responseType = request.responseType
       } catch (e) {
@@ -127,6 +136,8 @@ export function xhrTerminator(request) {
       })
     }
 
-    xhr.send(typeof requestBody === 'undefined' ? null : requestBody)
+    xhr.send(
+      typeof requestBody === 'undefined' ? null : (requestBody as string)
+    )
   })
 }

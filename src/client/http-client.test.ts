@@ -1,11 +1,11 @@
-import { HttpClient } from './http-client'
+import { HippityTerminator, HttpClient } from './http-client'
 
 describe('constructor', () => {
   test.each([null, 'string', {}])(
     'Throws when middleware is not an array (%j)',
     (value) => {
       // Act
-      const act = () => new HttpClient(value)
+      const act = () => new HttpClient(value as [HippityTerminator])
 
       // Assert
       expect(act).toThrow(new TypeError('Middleware stack must be an array'))
@@ -50,7 +50,7 @@ describe('send', () => {
     const sut = new HttpClient()
       .use(() => {
         order += '1'
-        return {}
+        return Promise.resolve({ status: 200, success: true })
       })
       .use((r, n) => {
         order += '2'
@@ -74,7 +74,7 @@ describe('send', () => {
     const sut = new HttpClient()
       .useTerminator(() => {
         order += '0'
-        return {}
+        return Promise.resolve({ status: 200, success: true })
       })
       .use((r, n) => {
         order += '1'
@@ -90,7 +90,9 @@ describe('send', () => {
 
   it('Lets middleware switch request', async () => {
     // Arrange
-    const middleware = jest.fn(() => ({}))
+    const middleware = jest.fn(() =>
+      Promise.resolve({ status: 200, success: true })
+    )
     const sut = new HttpClient()
       .use(middleware)
       .use((_, n) => n({ changed: true }))
@@ -108,7 +110,9 @@ describe('send', () => {
   it('Does not call middleware if one terminates earlier in the pipeline', async () => {
     // Arrange
     const middleware = jest.fn()
-    const sut = new HttpClient().use(middleware).use(() => ({}))
+    const sut = new HttpClient()
+      .use(middleware)
+      .use(() => Promise.resolve({ status: 200, success: true }))
 
     // Act
     await sut.send({})
@@ -119,7 +123,9 @@ describe('send', () => {
 
   it('Uses current request if middleware calls next without a request', async () => {
     // Arrange
-    const middleware = jest.fn(() => ({}))
+    const middleware = jest.fn(() =>
+      Promise.resolve({ status: 200, success: true })
+    )
 
     const sut = new HttpClient().use((_, n) => n()).use(middleware)
 
@@ -138,7 +144,7 @@ describe('$send', () => {
   it('Returns body of result', async () => {
     // Arrange
     const sut = new HttpClient().use(() => {
-      return Promise.resolve({ body: 'body' })
+      return Promise.resolve({ status: 200, success: true, body: 'body' })
     })
 
     // Act
@@ -180,7 +186,7 @@ describe('use', () => {
     const sut = new HttpClient()
       .use(function a() {
         order += '1'
-        return {}
+        return Promise.resolve({ status: 200, success: true })
       })
       .use(function b(r, n) {
         order += '2'
@@ -206,7 +212,7 @@ describe('useFirst', () => {
     const sut = new HttpClient()
       .use(() => {
         order += '1'
-        return {}
+        return Promise.resolve({ status: 200, success: true })
       })
       .use((r, n) => {
         order += '2'
@@ -232,7 +238,7 @@ describe('useLast', () => {
     const sut = new HttpClient()
       .use(() => {
         order += '1'
-        return {}
+        return Promise.resolve({ status: 200, success: true })
       })
       .use((r, n) => {
         order += '2'
@@ -255,7 +261,7 @@ describe('useLast', () => {
     let order = ''
     const sut = new HttpClient().useLast(() => {
       order += '1'
-      return {}
+      return Promise.resolve({ status: 200, success: true })
     })
 
     // Act
@@ -272,7 +278,7 @@ describe('useTerminator', () => {
     let order = ''
     const sut = new HttpClient().useTerminator(() => {
       order += '1'
-      return {}
+      return Promise.resolve({ status: 200, success: true })
     })
 
     // Act
@@ -288,7 +294,7 @@ describe('useTerminator', () => {
     const sut = new HttpClient()
       .useTerminator(() => {
         order += '1'
-        return {}
+        return Promise.resolve({ status: 200, success: true })
       })
       .use((r, n) => {
         order += '2'
@@ -296,7 +302,7 @@ describe('useTerminator', () => {
       })
       .useTerminator(() => {
         order += '3'
-        return {}
+        return Promise.resolve({ status: 200, success: true })
       })
 
     // Act
@@ -311,17 +317,17 @@ describe('if', () => {
   it('Registers middleware when true', async () => {
     // Arrange
     let order = ''
-    const sut = new HttpClient()
-      .use(() => {
+    const sut = new HttpClient([
+      () => {
         order += '1'
-        return {}
+        return Promise.resolve({ status: 200, success: true })
+      },
+    ]).if(true, (c) =>
+      c.use((r, n) => {
+        order += '2'
+        return n(r)
       })
-      .if(true, (c) =>
-        c.use((r, n) => {
-          order += '2'
-          return n(r)
-        })
-      )
+    )
 
     // Act
     await sut.send({})
@@ -333,17 +339,17 @@ describe('if', () => {
   it('Does not register middleware when false', async () => {
     // Arrange
     let order = ''
-    const sut = new HttpClient()
-      .use(() => {
+    const sut = new HttpClient([
+      () => {
         order += '1'
-        return {}
+        return Promise.resolve({ status: 200, success: true })
+      },
+    ]).if(false, (c) =>
+      c.use((r, n) => {
+        order += '2'
+        return n(r)
       })
-      .if(false, (c) =>
-        c.use((r, n) => {
-          order += '2'
-          return n(r)
-        })
-      )
+    )
 
     // Act
     await sut.send({})

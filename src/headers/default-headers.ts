@@ -1,6 +1,14 @@
+import { HippityRequestHeaders } from '~/client'
+import { HippityRequestTransform } from '~/transform-middleware'
 import { addHeadersIfNotPresent } from './headers'
 
-export const defaultHeaders = (defaultHeaders) => {
+export type DefaultHeaderLookup = {
+  [method: string]: HippityRequestHeaders
+}
+
+export const defaultHeaders = (
+  defaultHeaders: DefaultHeaderLookup
+): HippityRequestTransform => {
   if (
     typeof defaultHeaders !== 'object' ||
     defaultHeaders === null ||

@@ -1,4 +1,4 @@
-export function baseUrl(defaultBaseUrl) {
+export function baseUrl(defaultBaseUrl?) {
   return (request) => {
     if (isAbsoluteUrl(request.url)) {
       return request
