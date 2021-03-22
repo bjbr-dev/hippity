@@ -21,6 +21,7 @@
   "author": "berkeleybross",
   "main": "dist/hippity.umd.js",
   "module": "dist/hippity.es5.js",
+  "types": "dist/src/index.d.ts",
   "files": [
     "dist"
   ],
@@ -34,7 +35,7 @@
     "lint": "run-p lint:*",
     "lint:es": "eslint ./src ./tests",
     "lint:prettier": "prettier --check .",
-    "lint:types": "tsc --noEmit",
+    "lint:types": "tsc --emitDeclarationOnly",
     "start": "babel-watch -e .ts server.ts",
     "sort": "npx sort-package-json",
     "test": "run-p start \"test:run -- --coverage\" --race",
