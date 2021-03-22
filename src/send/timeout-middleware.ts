@@ -1,4 +1,6 @@
-export function timeoutMiddleware(ms = 20000) {
+import { HippityMiddleware } from '~/client'
+
+export function timeoutMiddleware(ms = 20000): HippityMiddleware {
   return async (request, next) => {
     const requestTimeout = 'timeout' in request ? request.timeout : ms
     if (requestTimeout <= 0) {

@@ -1,12 +1,15 @@
+import { HippityMethod } from '~/method'
+
 export type HippityRequestHeaders = {
   [name: string]: string
 }
 
-export interface HippityRequest {
-  method?: 'GET' | 'HEAD' | 'OPTIONS' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
-  url?: string
+export interface HippityRequest<TUrl = string> {
+  method?: HippityMethod
+  url?: TUrl
   body?: unknown
   headers?: HippityRequestHeaders
+  timeout?: number
   onAbort?: (triggerAbort: () => void) => void
   responseEncoding?: BufferEncoding
   responseType?: XMLHttpRequestResponseType | 'stream'
@@ -29,21 +32,24 @@ export interface HippityResponse {
 }
 
 export type HippityTerminator = (
-  request: HippityRequest
+  request: HippityRequest<string>
 ) => Promise<HippityResponse>
 
 export type HippityMiddlewareNextCallback = (
   request?: HippityRequest
 ) => Promise<HippityResponse>
 
-export type HippityMiddleware = (
-  request: HippityRequest,
+export type HippityMiddleware<TUrl = string> = (
+  request: HippityRequest<TUrl>,
   next: HippityMiddlewareNextCallback
 ) => Promise<HippityResponse>
 
-export class HttpClient {
+export class HttpClient<
+  TRequest extends { url?: TRequest['url'] } = HippityRequest,
+  TResponse = HippityResponse
+> {
   constructor(
-    private middleware: HippityMiddleware[] = [],
+    private middleware: HippityMiddleware<TRequest['url']>[] = [],
     private terminator?: HippityTerminator
   ) {
     if (!Array.isArray(middleware)) {
@@ -61,9 +67,13 @@ export class HttpClient {
 
   if(
     predicate: boolean,
-    thenCallback?: (client: HttpClient) => HttpClient,
-    elseCallback?: (client: HttpClient) => HttpClient
-  ): HttpClient {
+    thenCallback?: (
+      client: HttpClient<TRequest, TResponse>
+    ) => HttpClient<TRequest, TResponse>,
+    elseCallback?: (
+      client: HttpClient<TRequest, TResponse>
+    ) => HttpClient<TRequest, TResponse>
+  ): HttpClient<TRequest, TResponse> {
     if (predicate) {
       return typeof thenCallback === 'function' ? thenCallback(this) : this
     } else {
@@ -71,22 +81,36 @@ export class HttpClient {
     }
   }
 
-  useTerminator(terminator: HippityTerminator): HttpClient {
+  useTerminator(
+    terminator: HippityTerminator
+  ): HttpClient<TRequest, TResponse> {
     return new HttpClient(this.middleware, terminator)
   }
 
-  use(middleware: HippityMiddleware | HippityMiddleware[]): HttpClient {
+  use(
+    middleware:
+      | HippityMiddleware<TRequest['url']>
+      | HippityMiddleware<TRequest['url']>[]
+  ): HttpClient<TRequest, TResponse> {
     return this.useFirst(middleware)
   }
 
-  useFirst(middleware: HippityMiddleware | HippityMiddleware[]): HttpClient {
+  useFirst(
+    middleware:
+      | HippityMiddleware<TRequest['url']>
+      | HippityMiddleware<TRequest['url']>[]
+  ): HttpClient<TRequest, TResponse> {
     const newMiddleware = Array.isArray(middleware)
       ? [...middleware, ...this.middleware]
       : [middleware, ...this.middleware]
     return new HttpClient(newMiddleware, this.terminator)
   }
 
-  useLast(middleware: HippityMiddleware | HippityMiddleware[]): HttpClient {
+  useLast(
+    middleware:
+      | HippityMiddleware<TRequest['url']>
+      | HippityMiddleware<TRequest['url']>[]
+  ): HttpClient<TRequest, TResponse> {
     const newMiddleware = Array.isArray(middleware)
       ? [...this.middleware, ...middleware]
       : [...this.middleware, middleware]
@@ -94,11 +118,16 @@ export class HttpClient {
     return new HttpClient(newMiddleware, this.terminator)
   }
 
-  useIf(predicate: boolean, middleware: HippityMiddleware): HttpClient {
+  useIf(
+    predicate: boolean,
+    middleware: HippityMiddleware<TRequest['url']>
+  ): HttpClient<TRequest, TResponse> {
     return this.if(predicate, (c) => c.use(middleware))
   }
 
-  async send(request: HippityRequest): Promise<HippityResponse> {
+  async send(
+    request: HippityRequest<TRequest['url']>
+  ): Promise<HippityResponse> {
     const middleware = this.terminator
       ? [...this.middleware, this.terminator]
       : this.middleware
@@ -106,7 +135,7 @@ export class HttpClient {
     return await dispatch(request, 0)
 
     function dispatch(
-      currentRequest: HippityRequest,
+      currentRequest: HippityRequest<TRequest['url']>,
       index: number
     ): Promise<HippityResponse> {
       if (index >= middleware.length) {
@@ -122,12 +151,12 @@ export class HttpClient {
           return dispatch(request, index + 1)
         }
 
-        return middleware[index](currentRequest, next)
+        return middleware[index](currentRequest as HippityRequest<string>, next)
       }
     }
   }
 
-  async $send(request: HippityRequest): Promise<unknown> {
+  async $send(request: HippityRequest<TRequest['url']>): Promise<unknown> {
     const { success, ...response } = await this.send(request)
 
     if (success !== false) {
@@ -141,32 +170,50 @@ export class HttpClient {
     }
   }
 
-  get(url: string, options?: HippityRequest): Promise<HippityResponse> {
+  get(
+    url: TRequest['url'],
+    options?: HippityRequest<TRequest['url']>
+  ): Promise<HippityResponse> {
     return this.send({ method: 'GET', url, ...options })
   }
 
-  $get(url: string, options?: HippityRequest): Promise<unknown> {
+  $get(
+    url: TRequest['url'],
+    options?: HippityRequest<TRequest['url']>
+  ): Promise<unknown> {
     return this.$send({ method: 'GET', url, ...options })
   }
 
-  head(url: string, options?: HippityRequest): Promise<HippityResponse> {
+  head(
+    url: TRequest['url'],
+    options?: HippityRequest<TRequest['url']>
+  ): Promise<HippityResponse> {
     return this.send({ method: 'HEAD', url, ...options })
   }
 
-  $head(url: string, options?: HippityRequest): Promise<unknown> {
+  $head(
+    url: TRequest['url'],
+    options?: HippityRequest<TRequest['url']>
+  ): Promise<unknown> {
     return this.$send({ method: 'HEAD', url, ...options })
   }
 
-  options(url: string, options?: HippityRequest): Promise<HippityResponse> {
+  options(
+    url: TRequest['url'],
+    options?: HippityRequest<TRequest['url']>
+  ): Promise<HippityResponse> {
     return this.send({ method: 'OPTIONS', url, ...options })
   }
 
-  $options(url: string, options?: HippityRequest): Promise<unknown> {
+  $options(
+    url: TRequest['url'],
+    options?: HippityRequest<TRequest['url']>
+  ): Promise<unknown> {
     return this.$send({ method: 'OPTIONS', url, ...options })
   }
 
   post(
-    url: string,
+    url: TRequest['url'],
     body: unknown,
     options?: HippityRequest
   ): Promise<HippityResponse> {
@@ -174,7 +221,7 @@ export class HttpClient {
   }
 
   $post(
-    url: string,
+    url: TRequest['url'],
     body: unknown,
     options?: HippityRequest
   ): Promise<unknown> {
@@ -182,19 +229,23 @@ export class HttpClient {
   }
 
   put(
-    url: string,
+    url: TRequest['url'],
     body: unknown,
     options?: HippityRequest
   ): Promise<HippityResponse> {
     return this.send({ method: 'PUT', body, url, ...options })
   }
 
-  $put(url: string, body: unknown, options?: HippityRequest): Promise<unknown> {
+  $put(
+    url: TRequest['url'],
+    body: unknown,
+    options?: HippityRequest
+  ): Promise<unknown> {
     return this.$send({ method: 'PUT', body, url, ...options })
   }
 
   patch(
-    url: string,
+    url: TRequest['url'],
     body: unknown,
     options?: HippityRequest
   ): Promise<HippityResponse> {
@@ -202,7 +253,7 @@ export class HttpClient {
   }
 
   $patch(
-    url: string,
+    url: TRequest['url'],
     body: unknown,
     options?: HippityRequest
   ): Promise<unknown> {
@@ -210,28 +261,32 @@ export class HttpClient {
   }
 
   del(
-    url: string,
-    body: unknown,
+    url: TRequest['url'],
+    body?: unknown,
     options?: HippityRequest
   ): Promise<HippityResponse> {
     return this.send({ method: 'DELETE', body, url, ...options })
   }
 
-  $del(url: string, body: unknown, options?: HippityRequest): Promise<unknown> {
+  $del(
+    url: TRequest['url'],
+    body: unknown,
+    options?: HippityRequest
+  ): Promise<unknown> {
     return this.$send({ method: 'DELETE', body, url, ...options })
   }
 
   delete(
-    url: string,
-    body: unknown,
+    url: TRequest['url'],
+    body?: unknown,
     options?: HippityRequest
   ): Promise<HippityResponse> {
     return this.send({ method: 'DELETE', body, url, ...options })
   }
 
   $delete(
-    url: string,
-    body: unknown,
+    url: TRequest['url'],
+    body?: unknown,
     options?: HippityRequest
   ): Promise<unknown> {
     return this.$send({ method: 'DELETE', body, url, ...options })

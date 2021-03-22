@@ -2,12 +2,13 @@ import {
   HippityRequestHeaders,
   HippityMiddleware,
   HttpClient,
+  HippityRequest,
 } from './http-client'
 import { transformMiddleware } from '../transform-middleware'
 import { sendTerminator } from '~/send'
 import { jsonMiddleware } from '~/body'
 import { urlInMethodProperties } from '~/method'
-import { urlResolver, baseUrl } from '~/url'
+import { urlResolver, baseUrl, RouteTemplate } from '~/url'
 import { defaultHeaders, userAgentHeaders } from '~/headers'
 import { timeoutMiddleware } from '~/send/timeout-middleware'
 import { isNode } from 'browser-or-node'
@@ -34,7 +35,9 @@ export function resolveUrlInMethodPropertiesMiddleware(
   ])
 }
 
-export const httpClient = new HttpClient([], sendTerminator())
+export const httpClient = new HttpClient<
+  HippityRequest<string | RouteTemplate>
+>([], sendTerminator())
   .use(timeoutMiddleware())
   .if(!isNode, (c) => c.use(userAgentMiddleware()))
   .use(resolveUrlInMethodPropertiesMiddleware())

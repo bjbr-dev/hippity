@@ -1,21 +1,22 @@
 /**
  * Create an Error with the specified message, config, error code, request and response.
- *
- * @param {string} message The error message.
- * @param {Object} config The config.
- * @param {string} [code] The error code (for example, 'ECONNABORTED').
- * @param {Object} [request] The request.
- * @param {Object} [response] The response.
- * @returns {Error} The created error.
  */
-export function createError(message, details) {
+export function createError(
+  message: string,
+  details: Record<string, unknown>
+): Error {
   return enhanceError(new Error(message), details)
 }
 
-export function enhanceError(error, details) {
+export function enhanceError(
+  error: Error,
+  details: Record<string, unknown>
+): Error {
   Object.assign(error, details, { isHippityError: true })
-
-  error.toJSON = function () {
+  ;((error as unknown) as Record<string, unknown>).toJSON = function (): Record<
+    string,
+    unknown
+  > {
     return {
       // Standard
       message: this.message,

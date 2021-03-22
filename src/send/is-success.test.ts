@@ -35,7 +35,7 @@ test.each([[404, 410]])(
 
 test('Returns false if status is not a number', async () => {
   // Act
-  const result = isSuccess('GET', '200')
+  const result = isSuccess('GET', ('200' as unknown) as number)
 
   // Assert
   expect(result).toBe(false)

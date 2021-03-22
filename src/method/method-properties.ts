@@ -1,15 +1,16 @@
-const methods = ['HEAD', 'GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE']
+import { HippityRequest } from '~/client'
+import { possibleMethods } from '.'
 
-export function urlInMethodProperties(request) {
+export function urlInMethodProperties(request: HippityRequest): HippityRequest {
   if (request.method) {
     return request
   }
 
-  for (const method of methods) {
+  for (const method of possibleMethods) {
     if (Object.prototype.hasOwnProperty.call(request, method)) {
       const newRequest = { ...request }
       newRequest.method = method
-      newRequest.url = request[method]
+      newRequest.url = request[method] as string
       delete newRequest[method]
       return newRequest
     }

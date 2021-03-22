@@ -1,9 +1,12 @@
-import { urlResolver as sut, resolve } from './url-resolver'
+import { HippityRequest } from '~/client'
+import { urlResolver as sut, resolve, RouteTemplate } from './url-resolver'
+
+type Request = HippityRequest<string | RouteTemplate>
 
 describe('urlResolver', () => {
   it('does nothing if url is a string', () => {
     // Arrange
-    const request = { url: 'url' }
+    const request: Request = { url: 'url' }
 
     // Act
     const result = sut(request)
@@ -15,7 +18,10 @@ describe('urlResolver', () => {
 
   it('Does nothing if url is not an array or object', () => {
     // Arrange
-    const request = { url: function () {} }
+    const request: Request = {
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      url: (function () {} as unknown) as RouteTemplate,
+    }
 
     // Act
     const result = sut(request)
@@ -27,7 +33,7 @@ describe('urlResolver', () => {
 
   it('Resolves array with just a path', () => {
     // Arrange
-    const request = { url: ['path'] }
+    const request: Request = { url: ['path'] }
 
     // Act
     const result = sut(request)
@@ -39,7 +45,7 @@ describe('urlResolver', () => {
 
   it('Resolves array with path and parameters', () => {
     // Arrange
-    const request = { url: ['path', { foo: 'bar' }] }
+    const request: Request = { url: ['path', { foo: 'bar' }] }
 
     // Act
     const result = sut(request)
@@ -51,7 +57,7 @@ describe('urlResolver', () => {
 
   it('Copies other properties on request', () => {
     // Arrange
-    const request = {
+    const request: Request = {
       url: ['path', { foo: 'bar' }],
       undefined: void 0,
       null: null,

@@ -2,6 +2,8 @@
  * @file Originally copied from Axios under MIT license
  */
 
+import { HippityResponseHeaders } from '~/client'
+
 const ignoreDuplicateOf = [
   'age',
   'authorization',
@@ -22,7 +24,7 @@ const ignoreDuplicateOf = [
   'user-agent',
 ]
 
-export function parseHeaders(headers) {
+export function parseHeaders(headers: string): HippityResponseHeaders {
   const parsed = {}
 
   if (!headers) {

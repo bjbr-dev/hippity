@@ -1,15 +1,36 @@
-export function urlResolver(request) {
-  if (Array.isArray(request.url)) {
+import { HippityRequest } from '~/client'
+
+type RouteValuePrimitive = string | number | boolean
+
+type RouteValue =
+  | RouteValues
+  | RouteValues[]
+  | RouteValuePrimitive
+  | RouteValuePrimitive[]
+
+export type RouteValues = { [key: string]: RouteValue }
+
+export type RouteTemplate = [string, (RouteValues | null)?]
+
+export function urlResolver(
+  request: HippityRequest<string | RouteTemplate>
+): HippityRequest<string> {
+  const template = request.url
+  if (Array.isArray(template)) {
     return {
       ...request,
-      url: resolve(request.url),
+      url: resolve(template),
     }
   } else {
-    return request
+    return request as HippityRequest<string>
   }
 }
 
-function buildParams(key, value, add) {
+function buildParams(
+  key: string,
+  value: RouteValue,
+  add: (key: string, value: RouteValuePrimitive) => void
+) {
   if (typeof value === 'undefined') {
     return
   }
@@ -27,11 +48,11 @@ function buildParams(key, value, add) {
       }
     }
   } else {
-    add(key, value)
+    add(key, value as RouteValuePrimitive)
   }
 }
 
-export function resolve([path, params]) {
+export function resolve([path, params]: RouteTemplate): string {
   if (typeof path !== 'string') {
     throw new TypeError('Path must be a string')
   }
@@ -41,7 +62,10 @@ export function resolve([path, params]) {
   }
 
   const queryParameters = []
-  const pushQueryParameter = function (key, value) {
+  const pushQueryParameter = function (
+    key: string,
+    value: RouteValuePrimitive
+  ) {
     queryParameters.push(
       encodeURIComponent(key) +
         '=' +
@@ -56,7 +80,10 @@ export function resolve([path, params]) {
 
       if (path.indexOf(placeholder) >= 0) {
         do {
-          path = path.replace(placeholder, encodeURIComponent(value))
+          path = path.replace(
+            placeholder,
+            encodeURIComponent(value as RouteValuePrimitive)
+          )
         } while (path.indexOf(placeholder) >= 0)
       } else {
         buildParams(key, value, pushQueryParameter)

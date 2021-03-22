@@ -1,8 +1,9 @@
+import { HippityRequest } from '~/client'
 import { urlInMethodProperties as sut } from './method-properties'
 
 it('Does nothing if method already exists', () => {
   // Arrange
-  const request = { GET: 'url', method: 'POST', url: 'other' }
+  const request: HippityRequest = { GET: 'url', method: 'POST', url: 'other' }
 
   // Act
   const result = sut(request)

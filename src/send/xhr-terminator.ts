@@ -20,7 +20,7 @@ export function xhrTerminator(
     }
 
     let xhr = new XMLHttpRequest()
-    xhr.open(request.method.toUpperCase(), request.url, true)
+    xhr.open(request.method.toUpperCase(), request.url as string, true)
 
     // Listen for ready state
     xhr.onreadystatechange = function () {
