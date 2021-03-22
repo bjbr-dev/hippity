@@ -40,6 +40,14 @@
       "problemMatcher": ["$tsc"]
     },
     {
+      "label": "Lint prettier",
+      "group": "build",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "lint:prettier"],
+      "problemMatcher": []
+    },
+    {
       "label": "Run tests",
       "group": "build",
       "type": "shell",

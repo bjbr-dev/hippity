@@ -5,7 +5,7 @@ import resolve from 'rollup-plugin-node-resolve'
 import replace from 'rollup-plugin-replace'
 import pkg from './package.json'
 
-const extensions = ['.js', '.jsx']
+const extensions = ['.ts', '.tsx']
 
 export default {
   input: 'src/index.ts',
