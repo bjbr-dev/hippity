@@ -27,7 +27,7 @@ it('Posts JSON', async () => {
     message: 'OK',
     headers: {
       connection: 'close',
-      'content-length': '243',
+      'content-length': '274',
       'content-type': 'application/json; charset=utf-8',
       date: expect.any(String),
     },
@@ -40,6 +40,7 @@ it('Posts JSON', async () => {
         'content-length': '25',
         'content-type': 'application/json;charset=utf-8',
         host: 'localhost:3000',
+        'user-agent': 'hippity/unknown',
       },
       body: { message: 'hello world' },
     },
@@ -56,7 +57,7 @@ it('PUTs JSON', async () => {
     message: 'OK',
     headers: {
       connection: 'close',
-      'content-length': '242',
+      'content-length': '273',
       'content-type': 'application/json; charset=utf-8',
       date: expect.any(String),
     },
@@ -69,6 +70,7 @@ it('PUTs JSON', async () => {
         'content-length': '25',
         'content-type': 'application/json;charset=utf-8',
         host: 'localhost:3000',
+        'user-agent': 'hippity/unknown',
       },
       body: { message: 'hello world' },
     },
@@ -85,7 +87,7 @@ it('Patches JSON', async () => {
     message: 'OK',
     headers: {
       connection: 'close',
-      'content-length': '244',
+      'content-length': '275',
       'content-type': 'application/json; charset=utf-8',
       date: expect.any(String),
     },
@@ -97,6 +99,7 @@ it('Patches JSON', async () => {
         connection: 'close',
         'content-length': '25',
         'content-type': 'application/json;charset=utf-8',
+        'user-agent': 'hippity/unknown',
         host: 'localhost:3000',
       },
       body: { message: 'hello world' },
@@ -114,7 +117,7 @@ it('Deletes JSON', async () => {
     message: 'OK',
     headers: {
       connection: 'close',
-      'content-length': '152',
+      'content-length': '183',
       'content-type': 'application/json; charset=utf-8',
       date: expect.any(String),
     },
@@ -123,6 +126,7 @@ it('Deletes JSON', async () => {
       method: 'DELETE',
       headers: {
         accept: 'application/json, text/plain, */*',
+        'user-agent': 'hippity/unknown',
         connection: 'close',
         host: 'localhost:3000',
       },

@@ -40,7 +40,7 @@ export const httpClient = new HttpClient<
 >()
   .use(sendTerminator())
   .use(timeoutMiddleware())
-  .if(!isNode, (c) => c.use(userAgentMiddleware()))
+  .if(isNode, (c) => c.use(userAgentMiddleware()))
   .use(resolveUrlInMethodPropertiesMiddleware())
 
 export const jsonClient = httpClient.use(jsonMiddleware()).use(
