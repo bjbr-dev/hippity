@@ -34,9 +34,9 @@ it('Does nothing if no transforms are specified', async () => {
   const result = await sut(requestTransforms, responseTransforms)(request, next)
 
   // Assert
-  expect(result).toEqual({ success: true })
+  expect(result).toEqual({ status: 200, success: true })
   expect(request).toEqual({})
-  expect(response).toEqual({ success: true })
+  expect(response).toEqual({ status: 200, success: true })
   expect(next).toHaveBeenCalledWith(request)
 })
 
@@ -55,9 +55,9 @@ it('Transforms the request in order', async () => {
   const result = await sut(requestTransforms, responseTransforms)(request, next)
 
   // Assert
-  expect(result).toEqual({ success: true })
+  expect(result).toEqual({ status: 200, success: true })
   expect(request).toEqual({ order: '' })
-  expect(response).toEqual({ success: true })
+  expect(response).toEqual({ status: 200, success: true })
   expect(next).toHaveBeenCalledWith({ order: 'ab' })
 })
 
@@ -77,9 +77,9 @@ it('Reuses original request if transform does not return anything', async () => 
   const result = await sut(requestTransforms, responseTransforms)(request, next)
 
   // Assert
-  expect(result).toEqual({ success: true })
+  expect(result).toEqual({ status: 200, success: true })
   expect(request).toEqual({ order: 'a' })
-  expect(response).toEqual({ success: true })
+  expect(response).toEqual({ status: 200, success: true })
   expect(next).toHaveBeenCalledWith({ order: 'a' })
 })
 
@@ -98,9 +98,9 @@ it('Transforms the response in order', async () => {
   const result = await sut(requestTransforms, responseTransforms)(request, next)
 
   // Assert
-  expect(result).toEqual({ success: true, order: 'ab' })
+  expect(result).toEqual({ status: 200, success: true, order: 'ab' })
   expect(request).toEqual({})
-  expect(response).toEqual({ success: true, order: '' })
+  expect(response).toEqual({ status: 200, success: true, order: '' })
   expect(next).toHaveBeenCalledWith({})
 })
 
@@ -120,8 +120,8 @@ it('Reuses original response if transform does not return anything', async () =>
   const result = await sut(requestTransforms, responseTransforms)(request, next)
 
   // Assert
-  expect(result).toEqual({ success: true, order: 'a' })
+  expect(result).toEqual({ status: 200, success: true, order: 'a' })
   expect(request).toEqual({})
-  expect(response).toEqual({ success: true, order: 'a' })
+  expect(response).toEqual({ status: 200, success: true, order: 'a' })
   expect(next).toHaveBeenCalledWith({})
 })

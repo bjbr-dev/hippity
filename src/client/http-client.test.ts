@@ -1,11 +1,11 @@
-import { HippityTerminator, HttpClient } from './http-client'
+import { HippityMiddleware, HttpClient } from './http-client'
 
 describe('constructor', () => {
   test.each([null, 'string', {}])(
     'Throws when middleware is not an array (%j)',
     (value) => {
       // Act
-      const act = () => new HttpClient(value as [HippityTerminator])
+      const act = () => new HttpClient(value as [HippityMiddleware])
 
       // Assert
       expect(act).toThrow(new TypeError('Middleware stack must be an array'))
@@ -72,7 +72,7 @@ describe('send', () => {
     // Arrange
     let order = ''
     const sut = new HttpClient()
-      .useTerminator(() => {
+      .use(() => {
         order += '0'
         return Promise.resolve({ status: 200, success: true })
       })
@@ -205,7 +205,7 @@ describe('use', () => {
   })
 })
 
-describe('useFirst', () => {
+describe('useAt', () => {
   it('Adds middleware to run before all others', async () => {
     // Arrange
     let order = ''
@@ -218,7 +218,7 @@ describe('useFirst', () => {
         order += '2'
         return n(r)
       })
-      .useFirst((r, n) => {
+      .use((r, n) => {
         order += '3'
         return n(r)
       })
@@ -229,9 +229,7 @@ describe('useFirst', () => {
     // Assert
     expect(order).toEqual('321')
   })
-})
 
-describe('useLast', () => {
   it('Adds middleware to run after all others but before terminating middleware', async () => {
     // Arrange
     let order = ''
@@ -244,7 +242,7 @@ describe('useLast', () => {
         order += '2'
         return n(r)
       })
-      .useLast((r, n) => {
+      .useAt(-1, (r, n) => {
         order += '3'
         return n(r)
       })
@@ -259,7 +257,7 @@ describe('useLast', () => {
   it('Adds only middleware', async () => {
     // Arrange
     let order = ''
-    const sut = new HttpClient().useLast(() => {
+    const sut = new HttpClient().useAt(-1, () => {
       order += '1'
       return Promise.resolve({ status: 200, success: true })
     })
@@ -269,47 +267,6 @@ describe('useLast', () => {
 
     // Assert
     expect(order).toEqual('1')
-  })
-})
-
-describe('useTerminator', () => {
-  it('Adds terminator if no middleware registered', async () => {
-    // Arrange
-    let order = ''
-    const sut = new HttpClient().useTerminator(() => {
-      order += '1'
-      return Promise.resolve({ status: 200, success: true })
-    })
-
-    // Act
-    await sut.send({})
-
-    // Assert
-    expect(order).toEqual('1')
-  })
-
-  it('Replaces terminator', async () => {
-    // Arrange
-    let order = ''
-    const sut = new HttpClient()
-      .useTerminator(() => {
-        order += '1'
-        return Promise.resolve({ status: 200, success: true })
-      })
-      .use((r, n) => {
-        order += '2'
-        return n(r)
-      })
-      .useTerminator(() => {
-        order += '3'
-        return Promise.resolve({ status: 200, success: true })
-      })
-
-    // Act
-    await sut.send({})
-
-    // Assert
-    expect(order).toEqual('23')
   })
 })
 
@@ -317,17 +274,17 @@ describe('if', () => {
   it('Registers middleware when true', async () => {
     // Arrange
     let order = ''
-    const sut = new HttpClient([
-      () => {
+    const sut = new HttpClient()
+      .use(() => {
         order += '1'
         return Promise.resolve({ status: 200, success: true })
-      },
-    ]).if(true, (c) =>
-      c.use((r, n) => {
-        order += '2'
-        return n(r)
       })
-    )
+      .if(true, (c) =>
+        c.use((r, n) => {
+          order += '2'
+          return n(r)
+        })
+      )
 
     // Act
     await sut.send({})
@@ -339,17 +296,17 @@ describe('if', () => {
   it('Does not register middleware when false', async () => {
     // Arrange
     let order = ''
-    const sut = new HttpClient([
-      () => {
+    const sut = new HttpClient()
+      .use(() => {
         order += '1'
         return Promise.resolve({ status: 200, success: true })
-      },
-    ]).if(false, (c) =>
-      c.use((r, n) => {
-        order += '2'
-        return n(r)
       })
-    )
+      .if(false, (c) =>
+        c.use((r, n) => {
+          order += '2'
+          return n(r)
+        })
+      )
 
     // Act
     await sut.send({})

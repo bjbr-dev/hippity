@@ -31,10 +31,6 @@ export interface HippityResponse {
   request?: HippityRequest
 }
 
-export type HippityTerminator = (
-  request: HippityRequest<string>
-) => Promise<HippityResponse>
-
 export type HippityMiddlewareNextCallback = (
   request?: HippityRequest
 ) => Promise<HippityResponse>
@@ -48,20 +44,13 @@ export class HttpClient<
   TRequest extends { url?: TRequest['url'] } = HippityRequest,
   TResponse = HippityResponse
 > {
-  constructor(
-    private middleware: HippityMiddleware<TRequest['url']>[] = [],
-    private terminator?: HippityTerminator
-  ) {
+  constructor(private middleware: HippityMiddleware<TRequest['url']>[] = []) {
     if (!Array.isArray(middleware)) {
       throw new TypeError('Middleware stack must be an array')
     }
 
     if (middleware.some((m) => typeof m !== 'function')) {
       throw new Error('Middleware must be a function')
-    }
-
-    if (terminator && typeof terminator !== 'function') {
-      throw new Error('Terminator must be a function')
     }
   }
 
@@ -81,56 +70,40 @@ export class HttpClient<
     }
   }
 
-  useTerminator(
-    terminator: HippityTerminator
+  /**
+   * Inserts the middleware to be used at the given index.
+   * 0 means the middleware will run before any other middleware.
+   * A negative number means it will count from the end.
+   *
+   * Given [a, b, c]
+   *
+   * useAt(0) => [d, a, b, c]
+   * useAt(1) => [a, d, b, c]
+   * useAt(-1) => [a, b, d, c]
+   *
+   * Note that you can't run anything after middleware "c", since this is the _terminating_ middleware - i.e. it won't call anything after it.
+   * You can insert a new middleware before c, which doesn't have to call "next" and thus it becomes a terminator itself.
+   * Alternatively, create a new HttpClient and call "use" with your terminator.
+   */
+  useAt(
+    index: number,
+    middleware: HippityMiddleware<TRequest['url']>
   ): HttpClient<TRequest, TResponse> {
-    return new HttpClient(this.middleware, terminator)
+    const newMiddleware = [...this.middleware]
+    newMiddleware.splice(index, 0, middleware)
+    return new HttpClient<TRequest, TResponse>(newMiddleware)
   }
 
   use(
-    middleware:
-      | HippityMiddleware<TRequest['url']>
-      | HippityMiddleware<TRequest['url']>[]
-  ): HttpClient<TRequest, TResponse> {
-    return this.useFirst(middleware)
-  }
-
-  useFirst(
-    middleware:
-      | HippityMiddleware<TRequest['url']>
-      | HippityMiddleware<TRequest['url']>[]
-  ): HttpClient<TRequest, TResponse> {
-    const newMiddleware = Array.isArray(middleware)
-      ? [...middleware, ...this.middleware]
-      : [middleware, ...this.middleware]
-    return new HttpClient(newMiddleware, this.terminator)
-  }
-
-  useLast(
-    middleware:
-      | HippityMiddleware<TRequest['url']>
-      | HippityMiddleware<TRequest['url']>[]
-  ): HttpClient<TRequest, TResponse> {
-    const newMiddleware = Array.isArray(middleware)
-      ? [...this.middleware, ...middleware]
-      : [...this.middleware, middleware]
-
-    return new HttpClient(newMiddleware, this.terminator)
-  }
-
-  useIf(
-    predicate: boolean,
     middleware: HippityMiddleware<TRequest['url']>
   ): HttpClient<TRequest, TResponse> {
-    return this.if(predicate, (c) => c.use(middleware))
+    return this.useAt(0, middleware)
   }
 
   async send(
     request: HippityRequest<TRequest['url']>
   ): Promise<HippityResponse> {
-    const middleware = this.terminator
-      ? [...this.middleware, this.terminator]
-      : this.middleware
+    const middleware = this.middleware
 
     return await dispatch(request, 0)
 
@@ -262,33 +235,23 @@ export class HttpClient<
 
   del(
     url: TRequest['url'],
-    body?: unknown,
     options?: HippityRequest
   ): Promise<HippityResponse> {
-    return this.send({ method: 'DELETE', body, url, ...options })
+    return this.send({ method: 'DELETE', url, ...options })
   }
 
-  $del(
-    url: TRequest['url'],
-    body: unknown,
-    options?: HippityRequest
-  ): Promise<unknown> {
-    return this.$send({ method: 'DELETE', body, url, ...options })
+  $del(url: TRequest['url'], options?: HippityRequest): Promise<unknown> {
+    return this.$send({ method: 'DELETE', url, ...options })
   }
 
   delete(
     url: TRequest['url'],
-    body?: unknown,
     options?: HippityRequest
   ): Promise<HippityResponse> {
-    return this.send({ method: 'DELETE', body, url, ...options })
+    return this.send({ method: 'DELETE', url, ...options })
   }
 
-  $delete(
-    url: TRequest['url'],
-    body?: unknown,
-    options?: HippityRequest
-  ): Promise<unknown> {
-    return this.$send({ method: 'DELETE', body, url, ...options })
+  $delete(url: TRequest['url'], options?: HippityRequest): Promise<unknown> {
+    return this.$send({ method: 'DELETE', url, ...options })
   }
 }

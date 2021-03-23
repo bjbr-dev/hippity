@@ -51,6 +51,8 @@ describe('jsonDeserializer', () => {
 
     expect(request).toEqual({})
     expect(response).toEqual({
+      status: 200,
+      success: true,
       body: { foo: 'bar' },
     })
     expect(result).toBe(response)
@@ -69,6 +71,8 @@ describe('jsonDeserializer', () => {
 
     expect(request).toEqual({})
     expect(response).toEqual({
+      status: 200,
+      success: true,
       headers: {},
       body: '{"foo":"bar"}',
     })
@@ -88,6 +92,8 @@ describe('jsonDeserializer', () => {
 
     expect(request).toEqual({})
     expect(response).toEqual({
+      status: 200,
+      success: true,
       headers: { 'Content-Type': 'application/xml' },
       body: '{"foo":"bar"}',
     })
@@ -107,10 +113,14 @@ describe('jsonDeserializer', () => {
 
     expect(request).toEqual({})
     expect(response).toEqual({
+      status: 200,
+      success: true,
       headers: { 'Content-Type': 'application/json' },
       body: '{"foo":"bar"}',
     })
     expect(result).toEqual({
+      status: 200,
+      success: true,
       headers: { 'Content-Type': 'application/json' },
       body: { foo: 'bar' },
     })

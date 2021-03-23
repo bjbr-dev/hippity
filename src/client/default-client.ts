@@ -37,7 +37,8 @@ export function resolveUrlInMethodPropertiesMiddleware(
 
 export const httpClient = new HttpClient<
   HippityRequest<string | RouteTemplate>
->([], sendTerminator())
+>()
+  .use(sendTerminator())
   .use(timeoutMiddleware())
   .if(!isNode, (c) => c.use(userAgentMiddleware()))
   .use(resolveUrlInMethodPropertiesMiddleware())
