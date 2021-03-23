@@ -1,6 +1,18 @@
 module.exports = {
-  extends: ['eslint:recommended', 'plugin:prettier/recommended'],
+  root: true,
+  parser: '@typescript-eslint/parser',
+  plugins: ['@typescript-eslint'],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:@typescript-eslint/recommended',
+
+    // These plugins **disable** eslint rules that conflict with prettier, we need to run prettier as well as eslint.
+    // Since these plugins disable other rules, they should be placed last
+    'prettier',
+  ],
   env: {
+    'jest/globals': true,
     browser: true,
     node: true,
     es6: true,
@@ -10,7 +22,6 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
-    'prettier/prettier': 'error',
     'no-var': 'error',
     'prefer-const': 'error',
   },

@@ -21,6 +21,7 @@
   "author": "berkeleybross",
   "main": "dist/hippity.umd.js",
   "module": "dist/hippity.es5.js",
+  "types": "dist/src/index.d.ts",
   "files": [
     "dist"
   ],
@@ -28,12 +29,15 @@
     "build": "cross-env NODE_ENV=production npm-run-all clean -p build:* lint:* --aggregate-output",
     "build:rollup": "rollup -c rollup.config.js",
     "clean": "rimraf dist coverage",
+    "format": "run-s format:*",
+    "format:es": "eslint --fix",
+    "format:prettier": "prettier --write .",
     "lint": "run-p lint:*",
     "lint:es": "eslint ./src ./tests",
     "lint:prettier": "prettier --check .",
-    "format": "prettier --write .",
+    "lint:types": "tsc --emitDeclarationOnly",
+    "start": "babel-watch -e .ts server.ts",
     "sort": "npx sort-package-json",
-    "start": "babel-watch server.js",
     "test": "run-p start \"test:run -- --coverage\" --race",
     "test-watch": "run-s \"test:run -- --watch\"",
     "test:jest": "cross-env NODE_ENV=test jest",
@@ -66,7 +70,8 @@
             "browsers": "defaults, maintained node versions"
           }
         }
-      ]
+      ],
+      "@babel/preset-typescript"
     ]
   },
   "prettier": {
@@ -107,9 +112,13 @@
     "@babel/core": "^7.13.10",
     "@babel/node": "^7.13.10",
     "@babel/preset-env": "^7.13.10",
+    "@babel/preset-typescript": "^7.13.0",
     "@koa/router": "^10.0.0",
     "@types/jest": "^26.0.20",
+    "@types/koa": "^2.13.1",
     "@types/node": "^14.14.33",
+    "@typescript-eslint/eslint-plugin": "^4.17.0",
+    "@typescript-eslint/parser": "^4.17.0",
     "babel-plugin-root-import": "^6.6.0",
     "babel-plugin-transform-async-to-promises": "^0.8.15",
     "babel-watch": "^7.4.1",
@@ -121,7 +130,6 @@
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jest": "^24.2.1",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-promise": "^4.3.1",
     "is-buffer": "^2.0.5",
     "jest": "^26.6.3",
@@ -141,10 +149,11 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-replace": "^2.2.0",
     "rollup-plugin-sourcemaps": "^0.6.3",
+    "typescript": "^4.2.3",
     "wait-on": "^5.2.1"
   },
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=10.0.0"
   },
   "publishConfig": {
     "access": "public"
