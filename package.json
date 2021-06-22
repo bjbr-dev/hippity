@@ -23,7 +23,8 @@
   "module": "dist/hippity.es5.js",
   "types": "dist/src/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "tsconfig.json"
   ],
   "scripts": {
     "build": "cross-env NODE_ENV=production npm-run-all clean -p build:* lint:* --aggregate-output",
