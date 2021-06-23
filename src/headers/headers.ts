@@ -1,4 +1,4 @@
-import { HippityResponseHeaders } from '~/client'
+import { HippityResponseHeaders } from '../client'
 
 export function findHeader(
   headers: HippityResponseHeaders,

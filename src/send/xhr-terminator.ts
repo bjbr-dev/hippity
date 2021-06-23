@@ -5,8 +5,8 @@
 import { parseHeaders } from './parse-headers'
 import { isSuccess } from './is-success'
 import { createError } from './createError'
-import { isFormData } from '~/body/body-types'
-import { HippityRequest, HippityResponse } from '~/client'
+import { isFormData } from '../body/body-types'
+import { HippityRequest, HippityResponse } from '../client'
 
 export function xhrTerminator(
   request: HippityRequest

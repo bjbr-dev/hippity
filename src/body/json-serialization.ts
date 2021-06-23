@@ -1,5 +1,5 @@
-import { HippityMiddleware } from '~/client'
-import { transformMiddleware } from '~/transform-middleware'
+import { HippityMiddleware } from '../client'
+import { transformMiddleware } from '../transform-middleware'
 import { bodySerializer, bodyDeserializer } from './bodySerde'
 
 export function jsonMiddleware(): HippityMiddleware {

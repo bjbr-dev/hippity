@@ -1,4 +1,4 @@
-import { HippityRequestTransform } from '~/transform-middleware'
+import { HippityRequestTransform } from '../transform-middleware'
 
 export function baseUrl(defaultBaseUrl?: string): HippityRequestTransform {
   return (request) => {

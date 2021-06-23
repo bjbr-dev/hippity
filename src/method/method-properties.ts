@@ -1,4 +1,4 @@
-import { HippityRequest } from '~/client'
+import { HippityRequest } from '../client'
 import { possibleMethods } from './possible-methods'
 
 export function urlInMethodProperties(request: HippityRequest): HippityRequest {

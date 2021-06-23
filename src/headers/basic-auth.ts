@@ -1,5 +1,5 @@
-import { HippityRequest } from '~/client'
-import { HippityRequestTransform } from '~/transform-middleware'
+import { HippityRequest } from '../client'
+import { HippityRequestTransform } from '../transform-middleware'
 import { hasHeader } from './headers'
 
 const toBase64 =

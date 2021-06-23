@@ -2,9 +2,9 @@
  * @file Originally copied from Axios under MIT license and subsequently significantly changed
  */
 
-import { isStream, isArrayBuffer, isArrayBufferView } from '~/body/body-types'
-import { HippityRequest, HippityResponse } from '~/client'
-import { createError, enhanceError } from '~/send/createError'
+import { isStream, isArrayBuffer, isArrayBufferView } from '../body/body-types'
+import { HippityRequest, HippityResponse } from '../client'
+import { createError, enhanceError } from '../send/createError'
 import { isSuccess } from './is-success'
 
 function lazy(factory) {

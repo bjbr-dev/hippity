@@ -1,4 +1,4 @@
-import { HippityRequestHeaders } from '~/client'
+import { HippityRequestHeaders } from '../client'
 
 export function userAgentHeaders(
   userAgentString?: string

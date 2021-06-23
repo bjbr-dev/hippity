@@ -1,4 +1,4 @@
-import { HippityRequest } from '~/client'
+import { HippityRequest } from '../client'
 import { DefaultHeaderLookup, defaultHeaders as sut } from './default-headers'
 
 test.each([null, undefined, 'header', []])(

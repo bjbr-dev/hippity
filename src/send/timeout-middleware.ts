@@ -1,4 +1,4 @@
-import { HippityMiddleware } from '~/client'
+import { HippityMiddleware } from '../client'
 
 export function timeoutMiddleware(ms = 20000): HippityMiddleware {
   return async (request, next) => {

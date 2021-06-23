@@ -1,5 +1,5 @@
-import { HippityRequestHeaders } from '~/client'
-import { HippityRequestTransform } from '~/transform-middleware'
+import { HippityRequestHeaders } from '../client'
+import { HippityRequestTransform } from '../transform-middleware'
 import { addHeadersIfNotPresent } from './headers'
 
 export type DefaultHeaderLookup = {

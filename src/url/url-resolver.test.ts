@@ -1,4 +1,4 @@
-import { HippityRequest } from '~/client'
+import { HippityRequest } from '../client'
 import { urlResolver as sut, resolve, RouteTemplate } from './url-resolver'
 
 type Request = HippityRequest<string | RouteTemplate>

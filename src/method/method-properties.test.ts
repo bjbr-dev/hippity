@@ -1,4 +1,4 @@
-import { HippityRequest } from '~/client'
+import { HippityRequest } from '../client'
 import { urlInMethodProperties as sut } from './method-properties'
 
 it('Does nothing if method already exists', () => {

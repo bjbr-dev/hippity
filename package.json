@@ -23,8 +23,7 @@
   "module": "dist/hippity.es5.js",
   "types": "dist/src/index.d.ts",
   "files": [
-    "dist",
-    "tsconfig.json"
+    "dist"
   ],
   "scripts": {
     "build": "cross-env NODE_ENV=production npm-run-all clean -p build:* lint:* --aggregate-output",
@@ -53,13 +52,6 @@
         "babel-plugin-transform-async-to-promises",
         {
           "inlineHelpers": true
-        }
-      ],
-      [
-        "babel-plugin-root-import",
-        {
-          "rootPathPrefix": "~",
-          "rootPathSuffix": "src"
         }
       ]
     ],
@@ -99,9 +91,6 @@
       "ts",
       "js"
     ],
-    "moduleNameMapper": {
-      "^~/(.*)$": "<rootDir>/src/$1"
-    },
     "setupFilesAfterEnv": [
       "jest-extended"
     ],
@@ -120,7 +109,6 @@
     "@types/node": "^14.14.33",
     "@typescript-eslint/eslint-plugin": "^4.17.0",
     "@typescript-eslint/parser": "^4.17.0",
-    "babel-plugin-root-import": "^6.6.0",
     "babel-plugin-transform-async-to-promises": "^0.8.15",
     "babel-watch": "^7.4.1",
     "browser-or-node": "^1.3.0",

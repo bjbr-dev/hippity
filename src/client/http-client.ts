@@ -1,4 +1,4 @@
-import { HippityMethod } from '~/method'
+import { HippityMethod } from '../method'
 
 export type HippityRequestHeaders = {
   [name: string]: string

@@ -1,4 +1,4 @@
-import { jsonClient, baseUrl, transformMiddleware } from '~/'
+import { jsonClient, baseUrl, transformMiddleware } from '../src/'
 
 export const client = jsonClient.useAt(
   -1,

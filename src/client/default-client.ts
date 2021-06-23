@@ -5,12 +5,12 @@ import {
   HippityRequest,
 } from './http-client'
 import { transformMiddleware } from '../transform-middleware'
-import { sendTerminator } from '~/send'
-import { jsonMiddleware } from '~/body'
-import { urlInMethodProperties } from '~/method'
-import { urlResolver, baseUrl, RouteTemplate } from '~/url'
-import { defaultHeaders, userAgentHeaders } from '~/headers'
-import { timeoutMiddleware } from '~/send/timeout-middleware'
+import { sendTerminator } from '../send'
+import { jsonMiddleware } from '../body'
+import { urlInMethodProperties } from '../method'
+import { urlResolver, baseUrl, RouteTemplate } from '../url'
+import { defaultHeaders, userAgentHeaders } from '../headers'
+import { timeoutMiddleware } from '../send/timeout-middleware'
 import { isNode } from 'browser-or-node'
 
 export function defaultHeadersMiddleware(headers: {

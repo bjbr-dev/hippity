@@ -1,4 +1,4 @@
-import { HippityRequest } from '~/client'
+import { HippityRequest } from '../client'
 
 type RouteValuePrimitive = string | number | boolean
 

@@ -1,5 +1,5 @@
-import { HippityRequest, HippityResponse } from '~/client'
-import { hasHeader, findHeader } from '~/headers/headers'
+import { HippityRequest, HippityResponse } from '../client'
+import { hasHeader, findHeader } from '../headers/headers'
 
 export function bodySerializer(
   contentType: string,

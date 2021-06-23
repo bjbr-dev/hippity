@@ -2,7 +2,7 @@
  * @file Originally copied from Axios under MIT license
  */
 
-import { HippityResponseHeaders } from '~/client'
+import { HippityResponseHeaders } from '../client'
 
 const ignoreDuplicateOf = [
   'age',
